@@ -140,7 +140,7 @@
         //TheTronAnims		=	new	Game.CTronAnims( Game.GameStage );
         TheDeepSea = new Game.CDeepSea(Game.GameStage);
 
-        /*
+        /* test
         //	Attempt to patch in 3D.  The function will return whether or not it's WebGL compatible.
         if(Game.PatchStage3D(Game.BackgroundStage, true, true))
         {
