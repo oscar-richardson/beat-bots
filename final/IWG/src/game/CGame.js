@@ -31,22 +31,8 @@
         TheSpinner = {},
         TheTronAnims = {},
         TheDeepSea = {},
-        TheTicket = {};
-
-    var RobotAsleepArray           = [],
-        RobotDanceArray            = [],
-        RobotWakeUpArray           = [],
-        RobotShadowArray           = [],
-        RobotWakeUpAudioArray      = [ "wakeUp1", "wakeUp7", "wakeUp3", "wakeUp8", "wakeUp9", "wakeUp6" ],
-        RobotSleepAudioArray       = [ "wakeUp2", "wakeUp4", "wakeUp2", "wakeUp5", "wakeUp2", "wakeUp4" ],
-
-        LoopInstance1,
-        LoopInstance2,
-        LoopInstance3,
-        LoopInstance4,
-        LoopInstance5,
-        LoopInstance6,
-        LoopInstanceArray   =[];
+        TheTicket = {},
+        TheRobots = {};
 
     //-----------------------------------------------------------------------------------------------
 
@@ -100,6 +86,7 @@
         Game.Robot6AsleepSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot6_AsleepSS);
         Game.Robot6DanceSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot6_DanceSS);
         Game.Robot6WakeUpSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot6_WakeUpSS);
+        
         /*
         [0].forEach(function(i) {
             // var robot1_asleep_ss 		=   ProjectX.SpriteSheets.Robot1_AsleepSS,
@@ -129,7 +116,7 @@
 
 
         //	Create the game's components.
-        TheBackground = new Game.CBackground(Game.BackgroundStage);
+        // TheBackground = new Game.CBackground(Game.BackgroundStage);
         //TheButton			=	new	Game.CButtonDemo( Game.GameStage );
         //TheGlobe			=	new	Game.C3DGlobe( Game.GameStage );
         //TheScrabbleDemo1	=	new	Game.CScrabbleDemo1( Game.GameStage );
@@ -138,7 +125,8 @@
         //TheTwistTest		=	new	Game.CTwistTest( Game.GameStage );
         //TheSpinner		=	new	Game.CSpinner( Game.GameStage );
         //TheTronAnims		=	new	Game.CTronAnims( Game.GameStage );
-        TheDeepSea = new Game.CDeepSea(Game.GameStage);
+        //TheDeepSea = new Game.CDeepSea(Game.GameStage);
+        TheRobots = new Game.CRobots( Game.GameStage );
 
         /*
         //	Attempt to patch in 3D.  The function will return whether or not it's WebGL compatible.

@@ -127,6 +127,7 @@ var _manifest = [
 	{"src": "src/game/CTronAnims.js",										"id": "CTronAnims" },
 	{"src": "src/game/CDeepSea.js",											"id": "CDeepSea" },
 	{"src": "src/game/CTicket.js",											"id": "CTicket" },
+	{"src": "src/game/CRobots.js",											"id": "CRobots" },
 
 	//  Game source.
 	{"src": "src/game/CCube3D.js",											"id": "CCube3D" },
