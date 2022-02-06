@@ -99,7 +99,7 @@
             // this.Robot1Asleep = new createjs.Sprite(this.Robot1AsleepSpriteSheet, "loop");
             // this.Robot1Asleep.SetPosition( -250, 178 );
             // this.Robot1Asleep.stop();
-            RobotAsleepArray.push(Renderer.CreateSprite(beablib.CreateSpriteSheet(beablib.SpriteSheetPath["Robot1_AsleepSS"]), "Robot"+(i+1)+"_Asleep", {alpha:1, scale:1, position: {X:asleepXposArray[i], Y:asleepYposArray[i]}, parent: self.RobotContainer}));
+            RobotAsleepArray.push(Renderer.CreateSprite(beablib.CreateSpriteSheet(beablib.SpriteSheetPath["Robot"+(i+1)+"_AsleepSS"]), "Robot"+(i+1)+"_Asleep", {alpha:1, scale:1, position: {X:asleepXposArray[i], Y:asleepYposArray[i]}, parent: self.RobotContainer}));
 
             // var robot1_wakeup_ss 		=   ProjectX.SpriteSheets.Robot1_WakeUpSS,
                 // robot1_wakeup	        =	robot1_wakeup_ss.spriteSheet.animations;
@@ -246,7 +246,7 @@
             console.log("CRobots number :: " + number);
 
             RobotAsleepArray[number].alpha = 0;
-            RobotAsleepArray[number].y = RobotAsleepArray[number].y - 60;
+            RobotAsleepArray[number].position.y = RobotAsleepArray[number].position.y - 60;
             RobotWakeUpArray[number].alpha = 1;
 
             gsap.delayedCall(1, function(){LoopInstanceArray[number].volume = 70;}); // ??????????????????????????????????
