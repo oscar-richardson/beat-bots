@@ -100,6 +100,8 @@ var _manifest = [
 	{"src": "src/imports/js/Robot6_WakeUpSS.js",								"id": "Robot6_WakeUp" },
 	{"src": "src/imports/img/Robot6_DanceSS.png",								"id": "Robot6_DanceSS" },
 	{"src": "src/imports/js/Robot6_DanceSS.js",									"id": "Robot6_Dance" },
+	{"src": "src/imports/img/BB_LogoSS.png",								"id": "RBB_LogoSS" },
+	{"src": "src/imports/js/BB_LogoSS.js",									"id": "BB_Logo" },
 
 
 	//-----------------------------------------------------------------------------------------------
@@ -128,6 +130,7 @@ var _manifest = [
 	{"src": "src/game/CDeepSea.js",											"id": "CDeepSea" },
 	{"src": "src/game/CTicket.js",											"id": "CTicket" },
 	{"src": "src/game/CRobots.js",											"id": "CRobots" },
+	{"src": "src/game/CGUI.js",											"id": "CGUI" },
 
 	//  Game source.
 	{"src": "src/game/CCube3D.js",											"id": "CCube3D" },

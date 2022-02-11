@@ -32,7 +32,8 @@
         TheTronAnims = {},
         TheDeepSea = {},
         TheTicket = {},
-        TheRobots = {};
+        TheRobots = {},
+        TheGUI = {};
 
     //-----------------------------------------------------------------------------------------------
 
@@ -57,6 +58,7 @@
 
         //	Create the global sprite sheets.
         Game.BackgroundSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.BackgroundSS);
+        Game.BBLogoSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.BB_LogoSS);
         Game.GUISheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.MainGameSS);
         Game.DemoSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.DemoAssetsSS);
         Game.ScrabbleSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.ScrabbleSS);
@@ -127,6 +129,7 @@
         //TheTronAnims		=	new	Game.CTronAnims( Game.GameStage );
         //TheDeepSea = new Game.CDeepSea(Game.GameStage);
         TheRobots = new Game.CRobots( Game.GameStage );
+        TheGUI = new Game.CGUI( Game.GUIStage );
 
         /*
         //	Attempt to patch in 3D.  The function will return whether or not it's WebGL compatible.

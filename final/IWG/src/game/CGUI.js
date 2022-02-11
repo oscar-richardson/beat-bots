@@ -47,7 +47,8 @@
         this.RobotBtnContainer = Renderer.CreateContainer( { alpha:0 });
 
         //	Add the beehive to the stage...
-        TheStage.addChild( this.LogoContainer, this.RobotBtnContainer );
+        TheStage.addChild( this.LogoContainer);
+        // , this.RobotBtnContainer );
 
         // this.StartBtn			=	new	createjs.Sprite( Game.BackgroundSheet, "Background" );
         // this.StartBtn.SetScale( 0.5 );
@@ -69,7 +70,7 @@
         // this.Logo = new createjs.Sprite(this.LogoSpriteSheet, "loop");
         // this.Logo.SetPosition(0, 0);
         // this.Logo.stop();
-        this.Logo = Renderer.CreateSprite(beablib.CreateSpriteSheet(beablib.SpriteSheetPath.BB_LogoSS), "loop", {alpha:1, scale:1, position: {X:0, Y:0}, parent: this.LogoContainer});
+        this.Logo = Renderer.CreateSprite(Game.BBLogoSheet, "loop", {alpha:1, scale:1, position: {X:0, Y:0}, parent: this.LogoContainer});
 
         // this.LogoContainer.addChild( this.Logo, this.StartBtn );
 
