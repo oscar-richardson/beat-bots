@@ -82,17 +82,18 @@
             // shadow.alpha = 0.66;
             // this.RobotContainer.addChild(shadow);
             var shadow = Renderer.CreateSprite(Game.BackgroundSheet, "ShadowMC", {alpha:0.66, scaleX: 1.08, scaleY: 0.18, position: {X:shadowXposArray[i], Y:shadowYposArray[i]}, parent: this.RobotContainer});
-            
+
             RobotShadowArray.push(shadow);
         }
 
+        var robotOrder = [3, 1, 2, 0, 4, 5];
         var self = this;
 
-        [3, 1, 2, 0, 4, 5].forEach(function(i) {
+        robotOrder.forEach(function(i) {
             // var robot1_asleep_ss 		=   ProjectX.SpriteSheets.Robot1_AsleepSS,
                 // robot1_asleep	        =	robot1_asleep_ss.spriteSheet.animations;
             let roboti_asleep	        =	beablib.SpriteSheetPath["Robot"+(i+1)+"_AsleepSS"].spriteSheet.animations;
-            
+
             roboti_asleep.loop = [roboti_asleep["Robot"+(i+1)+"_Asleep001"][0], roboti_asleep["Robot"+(i+1)+"_Asleep0051"][0], false, 0.7];
 
             // this.Robot1AsleepSpriteSheet  =	ProjectX.CreateSpriteSheet( ProjectX.SpriteSheets.Robot1_AsleepSS );
@@ -170,7 +171,6 @@
         this.RobotContainer.SetScale(scale);
 
         UpdateStage();
-
     };
 
     //-----------------------------------------------------------------------------------------------
@@ -179,6 +179,9 @@
     {
 
         // var update		=	function(){ TheStage.SetDirty(); }.bind(this);
+        /* TweenMax.to( this.RobotContainer, 1, {alpha:1,
+            ease:Quad.easeOut,
+            onUpdate:update}); */
 
         gsap.to( this.RobotContainer, {duration: 1, alpha:1,
             ease:Quad.easeOut, // Quad.easeOut probably deprecated!
@@ -186,12 +189,12 @@
 
         for( var i=0; i<200; i++ ) {
 
-            /* TweenMax.delayedCall(1 + (i*4), this.PlayRobot1Snooze , [], this );
-            TweenMax.delayedCall(0.2 + (i*5), this.PlayRobot2Snooze , [], this );
-            TweenMax.delayedCall(1.4 + (i*3.2), this.PlayRobot3Snooze , [], this );
-            TweenMax.delayedCall(0.6 + (i*4.2), this.PlayRobot4Snooze , [], this );
-            TweenMax.delayedCall(1.6 + (i*5), this.PlayRobot5Snooze , [], this );
-            TweenMax.delayedCall(0.5 + (i*3.8), this.PlayRobot6Snooze , [], this ); */
+            // TweenMax.delayedCall(1 + (i*4), this.PlayRobot1Snooze , [], this );
+            // TweenMax.delayedCall(0.2 + (i*5), this.PlayRobot2Snooze , [], this );
+            // TweenMax.delayedCall(1.4 + (i*3.2), this.PlayRobot3Snooze , [], this );
+            // TweenMax.delayedCall(0.6 + (i*4.2), this.PlayRobot4Snooze , [], this );
+            // TweenMax.delayedCall(1.6 + (i*5), this.PlayRobot5Snooze , [], this );
+            // TweenMax.delayedCall(0.5 + (i*3.8), this.PlayRobot6Snooze , [], this );
             gsap.delayedCall(1 + (i*4), this.PlayRobot1Snooze , [], this );
             gsap.delayedCall(0.2 + (i*5), this.PlayRobot2Snooze , [], this );
             gsap.delayedCall(1.4 + (i*3.2), this.PlayRobot3Snooze , [], this );
@@ -214,13 +217,18 @@
         LoopInstance5 = Audio.Play("Tinkle", {Loop: true}); /// Strings
         LoopInstance6 = Audio.Play("Disco", {Loop: true}); /// Drumbox
 
-
-        LoopInstance1.volume = 0; // ??????????????????????????????????
-        LoopInstance2.volume = 0; // ??????????????????????????????????
-        LoopInstance3.volume = 0; // ??????????????????????????????????
-        LoopInstance4.volume = 0; // ??????????????????????????????????
-        LoopInstance5.volume = 0; // ??????????????????????????????????
-        LoopInstance6.volume = 0; // ??????????????????????????????????
+        // LoopInstance1.volume = 0;
+        // LoopInstance2.volume = 0;
+        // LoopInstance3.volume = 0;
+        // LoopInstance4.volume = 0;
+        // LoopInstance5.volume = 0;
+        // LoopInstance6.volume = 0;
+        LoopInstance1.setVolume(0);
+        LoopInstance2.setVolume(0);
+        LoopInstance3.setVolume(0);
+        LoopInstance4.setVolume(0);
+        LoopInstance5.setVolume(0);
+        LoopInstance6.setVolume(0);
 
         LoopInstanceArray= [LoopInstance1, LoopInstance2, LoopInstance3, LoopInstance4, LoopInstance5, LoopInstance6];
 
@@ -246,14 +254,15 @@
             console.log("CRobots number :: " + number);
 
             RobotAsleepArray[number].alpha = 0;
+            // RobotAsleepArray[number].y = RobotAsleepArray[number].y - 60;
             RobotAsleepArray[number].position.y = RobotAsleepArray[number].position.y - 60;
             RobotWakeUpArray[number].alpha = 1;
 
-            gsap.delayedCall(1, function(){LoopInstanceArray[number].volume = 70;}); // ??????????????????????????????????
+            gsap.delayedCall(1, function(){LoopInstanceArray[number].setVolume(0.7);});
 
 
             ///// set this duration as a variable /////
-            RobotWakeUpArray[number].gotoAndPlayDuration("loop", {duration: 1, stage: TheStage}); // ??????????????????????????????????
+            RobotWakeUpArray[number].gotoAndPlayDuration("loop", {duration: 1, stage: TheStage});
 
             // TweenMax.to(RobotWakeUpArray[number], 0.01, {alpha: 0, delay: 1, ease: Quad.easeOut, onUpdate: update});
             gsap.to(RobotWakeUpArray[number], {duration: 0.01, alpha: 0, delay: 1, ease: Quad.easeOut, onUpdate: update});
@@ -262,7 +271,8 @@
 
             RobotDanceArray[number].play();
 
-            TheStage.SetDirty();
+            //TheStage.SetDirty();
+            UpdateStage();
 
             return;
 
@@ -270,16 +280,18 @@
 
         if( CRobots["RobotDancing" + (number +1)] ) {
 
-            var update = function () {
+            /* var update = function () {
                 TheStage.SetDirty();
-            }.bind(this);
+            }.bind(this); */
 
-            TweenMax.delayedCall(0.3, function(){createjs.Sound.play("thudBounce");});
+            // TweenMax.delayedCall(0.3, function(){createjs.Sound.play("thudBounce");});
+            gsap.delayedCall(0.3, function(){Audio.Play("thudBounce");});
 
-            TweenMax.delayedCall(0.01, function(){createjs.Sound.play(RobotSleepAudioArray[number]);});
+            // TweenMax.delayedCall(0.01, function(){createjs.Sound.play(RobotSleepAudioArray[number]);});
+            gsap.delayedCall(0.01, function(){Audio.Play(RobotSleepAudioArray[number]);});
 
-            TweenMax.delayedCall(0.01, function(){LoopInstanceArray[number].volume = 0;});
-
+            // TweenMax.delayedCall(0.01, function(){LoopInstanceArray[number].volume = 0;});
+            gsap.delayedCall(0.01, function(){LoopInstanceArray[number].setVolume(0);});
 
             CRobots["RobotDancing" + (number + 1)] = false;
 
@@ -290,11 +302,13 @@
             RobotAsleepArray[number].alpha = 1;
             RobotDanceArray[number].alpha = 0;
 
-            TweenMax.to(RobotAsleepArray[number], 0.5, {y:RobotAsleepArray[number].y + 60, delay: 0.1, ease:Bounce.easeOut, onUpdate: update});
+            // TweenMax.to(RobotAsleepArray[number], 0.5, {y:RobotAsleepArray[number].y + 60, delay: 0.1, ease:Bounce.easeOut, onUpdate: update});
+            gsap.to(RobotAsleepArray[number], {duration: 0.5, y:RobotAsleepArray[number].y + 60, delay: 0.1, ease:Bounce.easeOut, onUpdate: update});
 
 
 
-            TheStage.SetDirty();
+            // TheStage.SetDirty();
+            UpdateStage();
 
 
             return;
@@ -302,6 +316,67 @@
         }
     };
 
+    //-----------------------------------------------------------------------------------------------
+
+    CRobots.prototype.PlayRobot1Snooze		=	function()
+    {
+
+        RobotAsleepArray[robotOrder.indexOf(0)].gotoAndPlayDuration( "loop", {duration:2, stage:TheStage} );
+
+    };
+
+    //-----------------------------------------------------------------------------------------------
+
+    CRobots.prototype.PlayRobot2Snooze		=	function()
+    {
+
+        RobotAsleepArray[robotOrder.indexOf(1)].gotoAndPlayDuration( "loop", {duration:2, stage:TheStage} );
+
+    };
+
+    //-----------------------------------------------------------------------------------------------
+
+    CRobots.prototype.PlayRobot3Snooze		=	function()
+    {
+
+        RobotAsleepArray[robotOrder.indexOf(2)].gotoAndPlayDuration( "loop", {duration:2, stage:TheStage} );
+
+    };
+
+    //-----------------------------------------------------------------------------------------------
+
+    CRobots.prototype.PlayRobot4Snooze		=	function()
+    {
+
+        RobotAsleepArray[robotOrder.indexOf(3)].gotoAndPlayDuration( "loop", {duration:2, stage:TheStage} );
+
+    };
+
+    //-----------------------------------------------------------------------------------------------
+
+    CRobots.prototype.PlayRobot5Snooze		=	function()
+    {
+
+        RobotAsleepArray[robotOrder.indexOf(4)].gotoAndPlayDuration( "loop", {duration:2, stage:TheStage} );
+
+    };
+
+    //-----------------------------------------------------------------------------------------------
+
+    CRobots.prototype.PlayRobot6Snooze		=	function()
+    {
+
+        RobotAsleepArray[robotOrder.indexOf(5)].gotoAndPlayDuration( "loop", {duration:2, stage:TheStage} );
+
+    };
+
+
+
+    //-----------------------------------------------------------------------------------------------
+    //	Static variables.
+    //-----------------------------------------------------------------------------------------------
+
+    CRobots.VERSION			=	'0_0_1';
 
     //-----------------------------------------------------------------------------------------------
     //	Public statics.
