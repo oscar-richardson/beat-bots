@@ -92,7 +92,7 @@
         robotOrder.forEach(function(i) {
             // var robot1_asleep_ss 		=   ProjectX.SpriteSheets.Robot1_AsleepSS,
                 // robot1_asleep	        =	robot1_asleep_ss.spriteSheet.animations;
-            let roboti_asleep	        =	beablib.SpriteSheetPath["Robot"+(i+1)+"_AsleepSS"].spriteSheet.animations;
+            var roboti_asleep	        =	beablib.SpriteSheetPath["Robot"+(i+1)+"_AsleepSS"].spriteSheet.animations;
 
             roboti_asleep.loop = [roboti_asleep["Robot"+(i+1)+"_Asleep001"][0], roboti_asleep["Robot"+(i+1)+"_Asleep0051"][0], false, 0.7];
 
@@ -100,11 +100,12 @@
             // this.Robot1Asleep = new createjs.Sprite(this.Robot1AsleepSpriteSheet, "loop");
             // this.Robot1Asleep.SetPosition( -250, 178 );
             // this.Robot1Asleep.stop();
+            // SHOULD LINE BELOW SAY "LOOP" INSTEAD OF "Robot"+(i+1)+"_Asleep"???
             RobotAsleepArray.push(Renderer.CreateSprite(beablib.CreateSpriteSheet(beablib.SpriteSheetPath["Robot"+(i+1)+"_AsleepSS"]), "Robot"+(i+1)+"_Asleep", {alpha:1, scale:1, position: {X:asleepXposArray[i], Y:asleepYposArray[i]}, parent: self.RobotContainer}));
 
             // var robot1_wakeup_ss 		=   ProjectX.SpriteSheets.Robot1_WakeUpSS,
                 // robot1_wakeup	        =	robot1_wakeup_ss.spriteSheet.animations;
-            let roboti_wakeup	        =	beablib.SpriteSheetPath["Robot"+(i+1)+"_WakeUpSS"].spriteSheet.animations;
+            var roboti_wakeup	        =	beablib.SpriteSheetPath["Robot"+(i+1)+"_WakeUpSS"].spriteSheet.animations;
 
             if (i == 2) {
                 roboti_wakeup.loop = [roboti_wakeup["Robot3_WakeUp001"][0], roboti_wakeup["Robot3_WakeUp0051"][0], false, 0.7];
@@ -121,7 +122,7 @@
 
             // var robot1_dance_ss 		=   ProjectX.SpriteSheets.Robot1_DanceSS,
                 // robot1_dance	        =	robot1_dance_ss.spriteSheet.animations;
-            let roboti_dance	        =	beablib.SpriteSheetPath["Robot"+(i+1)+"_DanceSS"].spriteSheet.animations;
+            var roboti_dance	        =	beablib.SpriteSheetPath["Robot"+(i+1)+"_DanceSS"].spriteSheet.animations;
 
             if (i == 2 || i == 4) {
                 roboti_dance.loop = [roboti_dance["Robot"+(i+1)+"_Dance001"][0], roboti_dance["Robot"+(i+1)+"_Dance0026"][0], false, 0.7];
@@ -265,9 +266,9 @@
             RobotWakeUpArray[number].gotoAndPlayDuration("loop", {duration: 1, stage: TheStage});
 
             // TweenMax.to(RobotWakeUpArray[number], 0.01, {alpha: 0, delay: 1, ease: Quad.easeOut, onUpdate: update});
-            gsap.to(RobotWakeUpArray[number], {duration: 0.01, alpha: 0, delay: 1, ease: Quad.easeOut, onUpdate: update});
+            gsap.to(RobotWakeUpArray[number], {duration: 0.01, alpha: 0, delay: 1, ease: Quad.easeOut, onUpdate: UpdateStage});
             // TweenMax.to(RobotDanceArray[number], 0.01, {alpha: 1, delay: 0.99, ease: Quad.easeOut, onUpdate: update});
-            gsap.to(RobotDanceArray[number], {duration: 0.01, alpha: 0, delay: 1, ease: Quad.easeOut, onUpdate: update});
+            gsap.to(RobotDanceArray[number], {duration: 0.01, alpha: 0, delay: 1, ease: Quad.easeOut, onUpdate: UpdateStage});
 
             RobotDanceArray[number].play();
 
@@ -303,7 +304,7 @@
             RobotDanceArray[number].alpha = 0;
 
             // TweenMax.to(RobotAsleepArray[number], 0.5, {y:RobotAsleepArray[number].y + 60, delay: 0.1, ease:Bounce.easeOut, onUpdate: update});
-            gsap.to(RobotAsleepArray[number], {duration: 0.5, y:RobotAsleepArray[number].y + 60, delay: 0.1, ease:Bounce.easeOut, onUpdate: update});
+            gsap.to(RobotAsleepArray[number], {duration: 0.5, y:RobotAsleepArray[number].y + 60, delay: 0.1, ease:Bounce.easeOut, onUpdate: UpdateStage});
 
 
 
