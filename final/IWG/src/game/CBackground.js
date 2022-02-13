@@ -13,8 +13,11 @@
 	//-----------------------------------------------------------------------------------------------
 
 	//	Beablib object aliases.
+	// var Game		=	ProjectX.Game;
 	var	Game		=	beablib.Game,
 		Renderer	=	beablib.Renderer;
+
+	var	TheStage		=	null;
 
 	//-----------------------------------------------------------------------------------------------
 	//	Object definition.
@@ -23,17 +26,25 @@
 	var CBackground	=	function( stage )
 	{
 		//	Make a note of the stage.
-		CBackground.Stage		=	stage;
+		TheStage	=	stage;
 
 		//	Create the background sprite...
-		this.Background			=	Renderer.CreateSprite( Game.DeepSeaSheet, "BG" );
-		this.Background.SrcWidth	=	this.Background.width;
-		this.Background.SrcHeight	=	this.Background.height;
+		// this.Background			=	new	createjs.Sprite( Game.BackgroundSheet, "Background" );
+		this.Background			=	Renderer.CreateSprite( Game.BackgroundSheet, "Background" );
+		// this.GUIDE              =   new	createjs.Sprite( Game.BackgroundSheet, "ActiveGUIDE" );
+		this.GUIDE			=	Renderer.CreateSprite( Game.BackgroundSheet, "ActiveGUIDE" );
+		this.GUIDE.alpha = 0;
+
+		//this.Background.SrcWidth	=	this.Background.width;
+		//this.Background.SrcHeight	=	this.Background.height;
 
 		//	...& add it to the stage.
-		CBackground.Stage.addChild( this.Background );
+		// TheStage.addChild( this.Background, this.GUIDE );
+		TheStage.addChild( this.Background );
+        TheStage.addChild( this.GUIDE );
 
 		//	Make sure we're repositionable.
+		// ProjectX.SetRepositionable( this );
 		beablib.SetRepositionable( this );
 	};
 
@@ -43,15 +54,15 @@
 
 	CBackground.prototype.Reposition		=	function( scale )
 	{
-		//this.Background.SetPosition( CBackground.Stage.View.HalfWidth, CBackground.Stage.View.HalfHeight );
-		//this.Background.SetScale( scale );
+		// var scale	=	ProjectX.MainView.ScaleFactor;
 
-		var xScale = beablib.MainView.Width / this.Background.SrcWidth;
-		var yScale = beablib.MainView.Height / this.Background.SrcHeight;
-		this.Background.SetPosition( CBackground.Stage.View.HalfWidth, CBackground.Stage.View.HalfHeight );
-		this.Background.SetScale( Math.max(xScale, yScale) );
+        this.Background.SetPosition( TheStage.View.HalfWidth, TheStage.View.HalfHeight );
+        this.Background.SetScale( scale );
 
-		CBackground.Stage.SetDirty();
+        this.GUIDE.SetPosition( TheStage.View.HalfWidth, TheStage.View.HalfHeight );
+        this.GUIDE.SetScale( scale );
+
+        TheStage.SetDirty();
 	};
 
 	//-----------------------------------------------------------------------------------------------

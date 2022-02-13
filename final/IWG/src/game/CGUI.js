@@ -48,7 +48,7 @@
 
         //	Add the beehive to the stage...
         TheStage.addChild( this.LogoContainer);
-        // , this.RobotBtnContainer );
+        TheStage.addChild( this.RobotBtnContainer );
 
         // this.StartBtn			=	new	createjs.Sprite( Game.BackgroundSheet, "Background" );
         // this.StartBtn.SetScale( 0.5 );

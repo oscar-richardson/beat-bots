@@ -118,7 +118,7 @@
 
 
         //	Create the game's components.
-        // TheBackground = new Game.CBackground(Game.BackgroundStage);
+        TheBackground = new Game.CBackground(Game.BackgroundStage);
         //TheButton			=	new	Game.CButtonDemo( Game.GameStage );
         //TheGlobe			=	new	Game.C3DGlobe( Game.GameStage );
         //TheScrabbleDemo1	=	new	Game.CScrabbleDemo1( Game.GameStage );
