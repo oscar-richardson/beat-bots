@@ -129,7 +129,7 @@
         //TheTronAnims		=	new	Game.CTronAnims( Game.GameStage );
         //TheDeepSea = new Game.CDeepSea(Game.GameStage);
         TheRobots = new Game.CRobots( Game.GameStage );
-        TheGUI = new Game.CGUI( Game.GUIStage );
+        TheGUI = new Game.CGUI( Game.GameStage );
 
         /*
         //	Attempt to patch in 3D.  The function will return whether or not it's WebGL compatible.
