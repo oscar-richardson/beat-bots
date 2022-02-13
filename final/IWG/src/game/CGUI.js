@@ -13,7 +13,7 @@
 
     //	Beablib object aliases.
     var	Audio		=	beablib.Audio,
-        // Game        = beablib.Game,
+        // Game				=	ProjectX.Game;
         Game        = beablib.Game,
         Renderer    = beablib.Renderer;
 

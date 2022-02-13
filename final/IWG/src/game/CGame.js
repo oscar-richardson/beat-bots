@@ -7,33 +7,42 @@
     //	Const-ish.
     //-----------------------------------------------------------------------------------------------
 
-    var GAME_WIDTH = -1,
-        GAME_HEIGHT = -1;
+    //	Canvas sizes.
+	var	BACK_CANVAS_HEIGHT		=	768,
+    BACK_CANVAS_WIDTH		=	1136,
+    GAME_CANVAS_HEIGHT		=	768,
+    GAME_CANVAS_WIDTH		=	1136,
+    GUI_CANVAS_HEIGHT		=	768,
+    GUI_CANVAS_WIDTH		=	1136;
 
     //-----------------------------------------------------------------------------------------------
     //	Main variables.
     //-----------------------------------------------------------------------------------------------
 
     // Beablib alias.
+    // var Game				=	ProjectX.Game;
     var Game = beablib.Game,
         Renderer = beablib.Renderer;
 
     //	Game aliases.
     var CCube3D = Game.CCube3D;
 
-    var TheBackground = {},
-        TheButton = {},
-        TheGlobe = {},
-        TheScrabbleDemo1 = {},
-        TheScrabbleDemo2 = {},
-        TheDiceTest = {},
-        TheTwistTest = {},
-        TheSpinner = {},
-        TheTronAnims = {},
-        TheDeepSea = {},
-        TheTicket = {},
-        TheRobots = {},
-        TheGUI = {};
+    var MobileDevice,
+        FirstTap 			= true;
+
+    var TheBackground,
+        // TheButton = {},
+        // TheGlobe = {},
+        // TheScrabbleDemo1 = {},
+        // TheScrabbleDemo2 = {},
+        // TheDiceTest = {},
+        // TheTwistTest = {},
+        // TheSpinner = {},
+        // TheTronAnims = {},
+        // TheDeepSea = {},
+        // TheTicket = {},
+        TheRobots,
+        TheGUI;
 
     //-----------------------------------------------------------------------------------------------
 
@@ -49,27 +58,28 @@
         beablib.ResizeEnabled = true;
 
         //	Let's create the ticket...
-        TheTicket = Game.CTicket.CreateTicket();
+        /* TheTicket = Game.CTicket.CreateTicket();
 
         //	...& if it's valid, we can kick off the game.
         if (!TheTicket.CheckTicket()) {
             return;
-        }
+        } */
 
         //	Create the global sprite sheets.
+        // Game.BackgroundSheet		=	ProjectX.CreateSpriteSheet( ProjectX.SpriteSheets.BackgroundSS );
         Game.BackgroundSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.BackgroundSS);
         Game.BBLogoSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.BB_LogoSS);
         Game.GUISheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.MainGameSS);
-        Game.DemoSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.DemoAssetsSS);
-        Game.ScrabbleSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.ScrabbleSS);
-        Game.ScrabbleSplashSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.ScrabbleSplashSS);
-        Game.DiceSplashSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.DiceAssetsSS);
+        // Game.DemoSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.DemoAssetsSS);
+        // Game.ScrabbleSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.ScrabbleSS);
+        // Game.ScrabbleSplashSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.ScrabbleSplashSS);
+        // Game.DiceSplashSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.DiceAssetsSS);
         // Game.BallSheet	    		=	beablib.CreateSpriteSheet( beablib.SpriteSheetPath.BallsSS );
-        Game.BallSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Balls3DSS);
-        Game.TwisterSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.TwisterSS);
-        Game.DeepSeaSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.DeepSeaSS);
-        Game.DeepSea2Sheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.DeepSea2SS);
-        Game.DeepSea3Sheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.DeepSea3SS);
+        // Game.BallSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Balls3DSS);
+        // Game.TwisterSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.TwisterSS);
+        // Game.DeepSeaSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.DeepSeaSS);
+        // Game.DeepSea2Sheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.DeepSea2SS);
+        // Game.DeepSea3Sheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.DeepSea3SS);
         Game.Robot1AsleepSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot1_AsleepSS);
         Game.Robot1DanceSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot1_DanceSS);
         Game.Robot1WakeUpSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot1_WakeUpSS);
@@ -89,35 +99,27 @@
         Game.Robot6DanceSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot6_DanceSS);
         Game.Robot6WakeUpSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot6_WakeUpSS);
         
-        /*
-        [0].forEach(function(i) {
-            // var robot1_asleep_ss 		=   ProjectX.SpriteSheets.Robot1_AsleepSS,
-                // robot1_asleep	        =	robot1_asleep_ss.spriteSheet.animations;
-            let roboti_asleep	        =	beablib.SpriteSheetPath["Robot"+(i+1)+"_AsleepSS"].spriteSheet.animations;
-            
-            roboti_asleep.loop = [roboti_asleep["Robot"+(i+1)+"_Asleep001"][0], roboti_asleep["Robot"+(i+1)+"_Asleep0051"][0], false, 0.7];
-
-            // this.Robot1AsleepSpriteSheet  =	ProjectX.CreateSpriteSheet( ProjectX.SpriteSheets.Robot1_AsleepSS );
-            // this.Robot1Asleep = new createjs.Sprite(this.Robot1AsleepSpriteSheet, "loop");
-            // this.Robot1Asleep.SetPosition( -250, 178 );
-            // this.Robot1Asleep.stop();
-            RobotAsleepArray.push(Renderer.CreateSprite(beablib.CreateSpriteSheet(beablib.SpriteSheetPath["Robot"+(i+1)+"_AsleepSS"]), "Robot"+(i+1)+"_Asleep", {alpha:1, scale:1, position: {X:asleepXposArray[i], Y:asleepYposArray[i]}, parent: this.RobotContainer}));
-        });
-        */
 
         gsap.registerPlugin(CustomBounce, CustomEase, CustomWiggle, MotionPathPlugin, PixiPlugin, Physics2DPlugin);
 
 
 
         //	Create our game's canvases...
-        Game.GameCanvas = beablib.CreateCanvas({ id: "GameCanvas", zIndex: 1, position: "fixed", AddToParent: true });
+        // Game.GameCanvas			=	ProjectX.CreateCanvas( {id:"GameCanvas", zIndex:4, position:"fixed", AddToParent:true });
+        Game.GameCanvas = beablib.CreateCanvas({ id: "GameCanvas", zIndex: 4, position: "fixed", AddToParent: true });
+        // Game.GUICanvas			=	ProjectX.CreateCanvas( {id:"GUICanvas", zIndex:10, position:"fixed", AddToParent:true });
+        Game.GUICanvas = beablib.CreateCanvas( {id:"GUICanvas", zIndex:10, position:"fixed", AddToParent:true });
 
         //	...& stages.
-        Game.BackgroundStage = beablib.CreateStage(beablib.GetBaseCanvasName(), { width: GAME_WIDTH, height: GAME_HEIGHT, anchor_h: "centre", anchor_v: "centre", clamp: true });
-        Game.GameStage = Game.BackgroundStage; //beablib.CreateStage( "GameCanvas", {width:GAME_WIDTH, height:GAME_HEIGHT, anchor_h:"centre", anchor_v:"centre", clamp:true, touch:true } );
-
+        // Game.BackgroundStage	=	ProjectX.CreateStage( ProjectX.GetBaseCanvasName(), {width:BACK_CANVAS_WIDTH, height:BACK_CANVAS_HEIGHT, anchor_h:"centre", anchor_v:"centre", clamp:true} );
+        Game.BackgroundStage = beablib.CreateStage(beablib.GetBaseCanvasName(), {width:BACK_CANVAS_WIDTH, height:BACK_CANVAS_HEIGHT, anchor_h:"centre", anchor_v:"centre", clamp:true});
+        // Game.GameStage			=	ProjectX.CreateStage( "GameCanvas",	{width:GAME_CANVAS_WIDTH, height:GAME_CANVAS_HEIGHT, anchor_h:"centre", anchor_v:"centre"} );
+        Game.GameStage = beablib.CreateStage( "GameCanvas",	{width:GAME_CANVAS_WIDTH, height:GAME_CANVAS_HEIGHT, anchor_h:"centre", anchor_v:"centre"} );
+        // Game.GUIStage			=	ProjectX.CreateStage( "GUICanvas",	{width:GUI_CANVAS_WIDTH, height:GUI_CANVAS_HEIGHT, anchor_h:"centre", anchor_v:"centre", clamp:true, touch:true} );
+        Game.GUIStage = beablib.CreateStage( "GUICanvas",	{width:GUI_CANVAS_WIDTH, height:GUI_CANVAS_HEIGHT, anchor_h:"centre", anchor_v:"centre", clamp:true, touch:true} );
 
         //	Create the game's components.
+        // TheBackground			=	new	Game.Background( Game.BackgroundStage );
         TheBackground = new Game.CBackground(Game.BackgroundStage);
         //TheButton			=	new	Game.CButtonDemo( Game.GameStage );
         //TheGlobe			=	new	Game.C3DGlobe( Game.GameStage );
@@ -128,8 +130,10 @@
         //TheSpinner		=	new	Game.CSpinner( Game.GameStage );
         //TheTronAnims		=	new	Game.CTronAnims( Game.GameStage );
         //TheDeepSea = new Game.CDeepSea(Game.GameStage);
+        // TheRobots			=   new	Game.CRobots( Game.GameStage );
         TheRobots = new Game.CRobots( Game.GameStage );
-        TheGUI = new Game.CGUI( Game.GameStage );
+        // TheGUI				=   new	Game.CGUI( Game.GUIStage );
+        TheGUI = new Game.CGUI( Game.GUIStage );
 
         /*
         //	Attempt to patch in 3D.  The function will return whether or not it's WebGL compatible.
@@ -181,7 +185,9 @@
 
         //	Set the tick handler going.
         beablib.TweenHandler.Enable(true);
-        Game.GameCanvas.EnablePointerEvents(true);
+        // Game.GameCanvas.EnablePointerEvents(true);
+        Game.GUICanvas.EnablePointerEvents( true );
+        Game.GUIStage.nextStage		=	Game.GameStage;
 
         beablib.log("Game::Init::Exit");
     };
@@ -191,6 +197,35 @@
     Game.StartGame = function() {};
 
     //-----------------------------------------------------------------------------------------------
+
+    //-----------------------------------------------------------------------------------------------
+	//	Public.
+	//-----------------------------------------------------------------------------------------------
+
+
+    //-----------------------------------------------------------------------------------------------
+
+    Game.RobotClicked				=	function( number )
+    {
+
+        TheRobots.RobotClicked( number );
+
+        console.log("Game.RobotClicked :: " + number );
+
+    };
+
+    //-----------------------------------------------------------------------------------------------
+
+    Game.InitRobots				=	function(  )
+    {
+
+        TheRobots.InitRobots(  );
+
+    };
+
+
+	//-----------------------------------------------------------------------------------------------
+    
 }());
 
 //-----------------------------------------------------------------------------------------------
