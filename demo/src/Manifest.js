@@ -22,17 +22,6 @@ var	manifest	=	[
 	//// NEW DIAMOND GRAPHIX ////
     {"src": "src/imports/img/BackgroundSS.png", 		"id": "BackgroundSS" },
     {"src": "src/imports/js/BackgroundSS.js",  			"id": "Background" },
-    {"src": "src/imports/img/Prizes_BtnsSS.png", 		"id": "Prizes_BtnsSS" },
-    {"src": "src/imports/js/Prizes_BtnsSS.js",  		"id": "Prizes_Btns" },
-    {"src": "src/imports/img/TimerSS.png", 				"id": "TimerSS" },
-    {"src": "src/imports/js/TimerSS.js",  				"id": "Timer" },
-    {"src": "src/imports/img/DeleteGameSS.png", 		"id": "DeleteGameSS" },
-    {"src": "src/imports/js/DeleteGameSS.js",  			"id": "DeleteGame" },
-    {"src": "src/imports/img/Panels_TextSS.png", 		"id": "Panels_TextSS" },
-    {"src": "src/imports/js/Panels_TextSS.js",  		"id": "Panels_Text" },
-
-    {"src": "src/imports/img/TimerNosSS.png", 			"id": "TimerNosSS" },
-    {"src": "src/imports/js/TimerNosSS.js",  			"id": "TimerNos" },
 
     //// NEW BEATBOT GRAPHIX ////
     {"src": "src/imports/img/BB_LogoSS.png", 				"id": "BB_LogoSS" },
@@ -121,7 +110,6 @@ var	manifest	=	[
 	//-----------------------------------------------------------------------------------------------
 	
     //	Buttons.
-	{"src": "src/Game/SoundToggle.js",					"id": "SoundToggle" },
 
 	//	Game code.
 	{"src": "src/Game/Background.js", 					"id": "Background" },
