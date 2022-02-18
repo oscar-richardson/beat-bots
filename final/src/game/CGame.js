@@ -87,7 +87,7 @@
         //	Set the tick handler going.
         beablib.TweenHandler.Enable(true);
         Game.GameCanvas.EnablePointerEvents(true);
-        Game.GUICanvas.EnablePointerEvents( true );
+        Game.GUICanvas.EnablePointerEvents(true);
         // Game.GUIStage.nextStage		=	Game.GameStage;
 
         beablib.log("Game::Init::Exit");

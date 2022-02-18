@@ -208,7 +208,7 @@
     //-----------------------------------------------------------------------------------------------
 
     CGUI.prototype.RobotAction		=	function( numId ) {
-        
+
         console.log("I clicked Robot number :: " + numId );
 
         Game.RobotClicked( numId );

@@ -32,9 +32,6 @@
 		this.GUIDE			=	Renderer.CreateSprite( Game.BackgroundSheet, "ActiveGUIDE" );
 		this.GUIDE.alpha = 0;
 
-		//this.Background.SrcWidth	=	this.Background.width;
-		//this.Background.SrcHeight	=	this.Background.height;
-
 		//	...& add it to the stage.
 		TheStage.addChild( this.Background );
         TheStage.addChild( this.GUIDE );
