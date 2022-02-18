@@ -44,8 +44,6 @@
         //	Create the global sprite sheets.
         Game.BackgroundSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.BackgroundSS);
 
-        Game.BBLogoSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.BB_LogoSS);
-
         Game.Robot1AsleepSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot1_AsleepSS);
         Game.Robot1DanceSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot1_DanceSS);
         Game.Robot1WakeUpSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot1_WakeUpSS);
@@ -89,7 +87,7 @@
         //	Set the tick handler going.
         beablib.TweenHandler.Enable(true);
         Game.GameCanvas.EnablePointerEvents(true);
-        // Game.GUICanvas.EnablePointerEvents( true );
+        Game.GUICanvas.EnablePointerEvents( true );
         // Game.GUIStage.nextStage		=	Game.GameStage;
 
         beablib.log("Game::Init::Exit");

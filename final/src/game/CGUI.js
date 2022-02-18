@@ -13,7 +13,6 @@
 
     //	Beablib object aliases.
     var	Audio		=	beablib.Audio,
-        // Game				=	ProjectX.Game;
         Game        = beablib.Game,
         Renderer    = beablib.Renderer;
 
@@ -38,39 +37,27 @@
         TheStage = stage;
 
         //	Let's start with a container...
-        // this.LogoContainer = new createjs.Container();
-        // this.LogoContainer.alpha = 1;
-        this.LogoContainer = Renderer.CreateContainer( { alpha:0 });
+        this.LogoContainer = Renderer.CreateContainer( { alpha:1 });
 
-        // this.RobotBtnContainer = new createjs.Container();
-        // this.RobotBtnContainer.alpha = 1;
-        this.RobotBtnContainer = Renderer.CreateContainer( { alpha:0 });
+        this.RobotBtnContainer = Renderer.CreateContainer( { alpha:1 });
 
-        //	Add the beehive to the stage...
+        //	...& add it to the stage.
         TheStage.addChild( this.LogoContainer);
         TheStage.addChild( this.RobotBtnContainer );
 
-        // this.StartBtn			=	new	createjs.Sprite( Game.BackgroundSheet, "Background" );
-        // this.StartBtn.SetScale( 0.5 );
-        // this.StartBtn.alpha = 0.01;
-        this.StartBtn = Renderer.CreateSprite(Game.BackgroundSheet, "Background", {alpha: 0.01, scale:0.5, parent: this.LogoContainer}); // SORT OUT BACKGROUND SHEET!!!
+        this.StartBtn = Renderer.CreateSprite(Game.BackgroundSheet, "Background", {alpha: 0.01, scale:0.5, parent: this.LogoContainer});
 
         //// Logo ////
 
-
-        // var logo_anim_ss 		=   ProjectX.SpriteSheets.BB_LogoSS,
-            // logo_anim	        =	logo_anim_ss.spriteSheet.animations;
-        let logo_anim = beablib.SpriteSheetPath.BB_LogoSS.spriteSheet.animations; // SORT OUT LOGO SHEET!!!
-
+        var logo_anim_ss 		=   beablib.SpriteSheetPath.BB_LogoSS,
+            logo_anim	        =	logo_anim_ss.spriteSheet.animations;
 
         logo_anim.static = [logo_anim["logoMC0001"][0], logo_anim["logoMC0001"][0], false, 0.7];
         logo_anim.loop = [logo_anim["logoMC0001"][0], logo_anim["logoMC0080"][0], false, 0.7];
 
-        // this.LogoSpriteSheet  =	ProjectX.CreateSpriteSheet( ProjectX.SpriteSheets.BB_LogoSS );
-        // this.Logo = new createjs.Sprite(this.LogoSpriteSheet, "loop");
-        // this.Logo.SetPosition(0, 0);
-        // this.Logo.stop();
-        this.Logo = Renderer.CreateSprite(Game.BBLogoSheet, "loop", {alpha:1, scale:1, position: {X:0, Y:0}, parent: this.LogoContainer});
+        this.LogoAnimSpriteSheet = beablib.CreateSpriteSheet(logo_anim_ss);
+
+        this.Logo = Renderer.CreateSprite(this.LogoAnimSpriteSheet, "loop", {alpha:1, scale:1, position: {X:0, Y:0}, parent: this.LogoContainer});
 
         // this.LogoContainer.addChild( this.Logo, this.StartBtn );
 
@@ -189,7 +176,7 @@
 
         // TheStage.SetDirty();
         UpdateStage();
-        
+
     };
 
     //-----------------------------------------------------------------------------------------------
@@ -244,7 +231,7 @@
     //-----------------------------------------------------------------------------------------------
 
     CGUI.prototype.RobotAction		=	function( numId ) {
-        
+
         console.log("I clicked Robot number :: " + numId );
 
         Game.RobotClicked( numId );
