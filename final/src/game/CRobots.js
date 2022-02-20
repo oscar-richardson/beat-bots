@@ -107,9 +107,9 @@
                 robot_dance	        =	robot_dance_ss.spriteSheet.animations;
 
             if (i == 2 || i == 4) {
-                robot_dance.loop = [robot_dance["Robot"+(i+1)+"_Dance001"][0], robot_dance["Robot"+(i+1)+"_Dance0026"][0], true, danceDurationArray[i]];
+                robot_dance.loop = [robot_dance["Robot"+(i+1)+"_Dance001"][0], robot_dance["Robot"+(i+1)+"_Dance0026"][0], "loop", danceDurationArray[i]];
             } else {
-                robot_dance.loop = [robot_dance["Robot"+(i+1)+"_Dance001"][0], robot_dance["Robot"+(i+1)+"_Dance0051"][0], true, danceDurationArray[i]];
+                robot_dance.loop = [robot_dance["Robot"+(i+1)+"_Dance001"][0], robot_dance["Robot"+(i+1)+"_Dance0051"][0], "loop", danceDurationArray[i]];
             }
 
             self.RobotDanceSpriteSheet = beablib.CreateSpriteSheet(robot_dance_ss);
