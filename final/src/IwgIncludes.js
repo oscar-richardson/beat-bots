@@ -73,6 +73,32 @@ var _manifest = [
     {"src": "src/imports/js/Robot6_WakeUpSS.js",  			"id": "Robot6_WakeUp" },
 
 
+    //-----------------------------------------------------------------------------------------------
+	//	Sounds
+	//-----------------------------------------------------------------------------------------------
+
+
+    {"src": "src/imports/audio/CleanTines_1.wav", 					"id": "Arpegio" },
+	{"src": "src/imports/audio/EightiesBass_1.wav", 				"id": "Bass" },
+	{"src": "src/imports/audio/IndieDisco_1.wav", 				    "id": "Disco" },
+	{"src": "src/imports/audio/SweetElectricPad_1.wav", 			"id": "Tinkle" },
+	{"src": "src/imports/audio/SynthPopStrings_1.wav", 				"id": "Strings" },
+	{"src": "src/imports/audio/Techno808_1.wav", 					"id": "Drumbox" },
+
+	{"src": "src/imports/audio/wakeUp1.mp3", 					    "id": "wakeUp1" },
+	{"src": "src/imports/audio/wakeUp2.mp3", 					    "id": "wakeUp2" },
+	{"src": "src/imports/audio/wakeUp3.mp3", 					    "id": "wakeUp3" },
+	{"src": "src/imports/audio/wakeUp4.mp3", 					    "id": "wakeUp4" },
+	{"src": "src/imports/audio/wakeUp5.mp3", 					    "id": "wakeUp5" },
+	{"src": "src/imports/audio/wakeUp6.mp3", 					    "id": "wakeUp6" },
+	{"src": "src/imports/audio/wakeUp7.mp3", 					    "id": "wakeUp7" },
+	{"src": "src/imports/audio/wakeUp8.mp3", 					    "id": "wakeUp8" },
+	{"src": "src/imports/audio/wakeUp9.mp3", 					    "id": "wakeUp9" },
+
+	{"src": "src/imports/audio/thudBounce.mp3", 					"id": "thudBounce" },
+	{"src": "src/imports/audio/intro.mp3", 					        "id": "intro" },
+
+
 	//-----------------------------------------------------------------------------------------------
 	//  BeabLib.
 	//-----------------------------------------------------------------------------------------------

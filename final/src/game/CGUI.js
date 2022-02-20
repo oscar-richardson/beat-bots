@@ -122,8 +122,8 @@
 
         Game.InitRobots();
 
-        // gsap.delayedCall(0.01, function(){Audio.Play("intro");}); // SOUND CURRENTLY NOT WORKING
-        // gsap.delayedCall(0.03, function(){Audio.Play("wakeUp2");});
+        gsap.delayedCall(0.01, function(){Audio.Play("intro");});
+        gsap.delayedCall(0.03, function(){Audio.Play("wakeUp2");});
 
         UpdateStage();
     };
