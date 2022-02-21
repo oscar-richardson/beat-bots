@@ -1,23 +1,11 @@
-/*jslint nomen: true, browser: true, plusplus: true, devel: true, vars:true, eqeq: true*/
-/*global com, camelot*/
-
-/*Generated from TexturePacker*/
-/* Trimmed */
-
-
-(function (window) {
+ProjectX	=	window.ProjectX || {};
+(function (window)
+{
 	"use strict";
-	//set local paths to external files
-	var camelot = window.com.camelot,
-	iwg = camelot.iwg,
-	images = window.com.camelot.core.iwgLoadQ.images,
-	BackgroundSS= function () {
-	};
-
-	//add and set "next":false to stop on last frame
+	var BackgroundSS = function(){};
 
 	BackgroundSS.spriteSheet	=	{
-		"images":	[images.BackgroundSS],
+		"images":	["BackgroundSS"],
 		"frames":	[
 
 			[1, 771, 961, 641,0, 480.5, 320.5],
@@ -33,5 +21,6 @@
 			"ShadowMC":[3]
 		}
 	};
-	iwg._class("iwg.imports.js.BackgroundSS", BackgroundSS);
+	ProjectX.SpriteSheets	=	ProjectX.SpriteSheets || {};
+	ProjectX.SpriteSheets.BackgroundSS	=	BackgroundSS;
 }(window));
