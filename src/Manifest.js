@@ -121,14 +121,14 @@ var	manifest	=	[
 	//-----------------------------------------------------------------------------------------------
 
     //	Buttons.
-	{"src": "src/Game/SoundToggle.js",					"id": "SoundToggle" },
+	{"src": "src/game/SoundToggle.js",					"id": "SoundToggle" },
 
 	//	Game code.
-	{"src": "src/Game/Background.js", 					"id": "Background" },
-	{"src": "src/Game/CGUI.js", 						"id": "CGUI" },
-	{"src": "src/Game/CRobots.js", 					"id": "CRobots" },
+	{"src": "src/game/Background.js", 					"id": "Background" },
+	{"src": "src/game/CGUI.js", 						"id": "CGUI" },
+	{"src": "src/game/CRobots.js", 					"id": "CRobots" },
 
-	{"src": "src/Game/CGame.js", 						"id": "CGame" }
+	{"src": "src/game/CGame.js", 						"id": "CGame" }
 
 
 ];
