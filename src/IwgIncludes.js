@@ -78,12 +78,12 @@ var _manifest = [
 	//-----------------------------------------------------------------------------------------------
 
 
-    {"src": "src/imports/audio/CleanTines_1.m4a", 					"id": "Arpegio" },
-	{"src": "src/imports/audio/EightiesBass_1.m4a", 				"id": "Bass" },
-	{"src": "src/imports/audio/IndieDisco_1.m4a", 				    "id": "Disco" },
-	{"src": "src/imports/audio/SweetElectricPad_1.m4a", 			"id": "Tinkle" },
-	{"src": "src/imports/audio/SynthPopStrings_1.m4a", 				"id": "Strings" },
-	{"src": "src/imports/audio/Techno808_1.m4a", 					"id": "Drumbox" },
+    {"src": "src/imports/audio/CleanTines_1.wav", 					"id": "Arpegio" },
+	{"src": "src/imports/audio/EightiesBass_1.wav", 				"id": "Bass" },
+	{"src": "src/imports/audio/IndieDisco_1.wav", 				    "id": "Disco" },
+	{"src": "src/imports/audio/SweetElectricPad_1.wav", 			"id": "Tinkle" },
+	{"src": "src/imports/audio/SynthPopStrings_1.wav", 				"id": "Strings" },
+	{"src": "src/imports/audio/Techno808_1.wav", 					"id": "Drumbox" },
 
 	{"src": "src/imports/audio/wakeUp1.mp3", 					    "id": "wakeUp1" },
 	{"src": "src/imports/audio/wakeUp2.mp3", 					    "id": "wakeUp2" },
