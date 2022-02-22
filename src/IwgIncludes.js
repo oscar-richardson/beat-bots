@@ -1,43 +1,34 @@
-//-----------------------------------------------------------------------------------------------
-//	Inchinn library core - In House Host.
-//-----------------------------------------------------------------------------------------------
-
-ProjectX			=	window.ProjectX || {};
-ProjectX.Core		=	ProjectX.Core	|| {};
-
-//-----------------------------------------------------------------------------------------------
-
-var	manifest	=	[
+var _manifest = [
 	//-----------------------------------------------------------------------------------------------
 	// 	Third party.
 	//-----------------------------------------------------------------------------------------------
 
-	{"src": "src/thirdParty/TweenMax.min.js",								"id": "TweenMax" },
+	// Essential.
+	{"src": "src/thirdParty/custom-pixi.js",								"id": "pixijs"},
+	{"src": "src/thirdParty/gsap.js",										"id": "gsap" },
+
+	// Non-essential?
+	{"src": "src/thirdParty/CustomBounce.min.js",							"id": "CustomBounce" },
+	{"src": "src/thirdParty/CustomEase.min.js",								"id": "CustomEase" },
+	{"src": "src/thirdParty/CustomWiggle.min.js",							"id": "CustomWiggle" },
+	{"src": "src/thirdParty/EasePack.min.js",								"id": "EasePack" },
+	{"src": "src/thirdParty/MotionPathHelper.min.js",						"id": "MotionPathHelper" },
+	{"src": "src/thirdParty/MotionPathPlugin.min.js",						"id": "MotionPathPlugin" },
+	{"src": "src/thirdParty/Physics2DPlugin.min.js",						"id": "Physics2DPlugin" },
+	{"src": "src/thirdParty/pixi-filters.min.js",							"id": "pixi-filters"},
+	{"src": "src/thirdParty/PixiPlugin.min.js",								"id": "PixiPlugin" },
+	{"src": "src/thirdParty/shockwave.min.js",								"id": "shockwavejs"},
 
 
 	//-----------------------------------------------------------------------------------------------
 	//	Graphics.
 	//-----------------------------------------------------------------------------------------------
 
-	//// NEW DIAMOND GRAPHIX ////
-    {"src": "src/imports/img/BackgroundSS.png", 		"id": "BackgroundSS" },
+	{"src": "src/imports/img/BackgroundSS.png", 		"id": "BackgroundSS" },
     {"src": "src/imports/js/BackgroundSS.js",  			"id": "Background" },
-    {"src": "src/imports/img/Prizes_BtnsSS.png", 		"id": "Prizes_BtnsSS" },
-    {"src": "src/imports/js/Prizes_BtnsSS.js",  		"id": "Prizes_Btns" },
-    {"src": "src/imports/img/TimerSS.png", 				"id": "TimerSS" },
-    {"src": "src/imports/js/TimerSS.js",  				"id": "Timer" },
-    {"src": "src/imports/img/DeleteGameSS.png", 		"id": "DeleteGameSS" },
-    {"src": "src/imports/js/DeleteGameSS.js",  			"id": "DeleteGame" },
-    {"src": "src/imports/img/Panels_TextSS.png", 		"id": "Panels_TextSS" },
-    {"src": "src/imports/js/Panels_TextSS.js",  		"id": "Panels_Text" },
 
-    {"src": "src/imports/img/TimerNosSS.png", 			"id": "TimerNosSS" },
-    {"src": "src/imports/js/TimerNosSS.js",  			"id": "TimerNos" },
-
-    //// NEW BEATBOT GRAPHIX ////
-    {"src": "src/imports/img/BB_LogoSS.png", 				"id": "BB_LogoSS" },
+	{"src": "src/imports/img/BB_LogoSS.png", 				"id": "BB_LogoSS" },
     {"src": "src/imports/js/BB_LogoSS.js",  				"id": "BB_Logo" },
-
 
     {"src": "src/imports/img/Robot1_AsleepSS.png", 			"id": "Robot1_AsleepSS" },
     {"src": "src/imports/js/Robot1_AsleepSS.js",  			"id": "Robot1_Asleep" },
@@ -82,24 +73,17 @@ var	manifest	=	[
     {"src": "src/imports/js/Robot6_WakeUpSS.js",  			"id": "Robot6_WakeUp" },
 
 
-
-	//-----------------------------------------------------------------------------------------------
-	//	Fonts
-	//-----------------------------------------------------------------------------------------------
-
-
-
-	//-----------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------
 	//	Sounds
 	//-----------------------------------------------------------------------------------------------
 
 
-    {"src": "src/imports/audio/CleanTines_1.wav", 					"id": "Arpegio" },
-	{"src": "src/imports/audio/EightiesBass_1.wav", 				"id": "Bass" },
-	{"src": "src/imports/audio/IndieDisco_1.wav", 				    "id": "Disco" },
-	{"src": "src/imports/audio/SweetElectricPad_1.wav", 			"id": "Tinkle" },
-	{"src": "src/imports/audio/SynthPopStrings_1.wav", 				"id": "Strings" },
-	{"src": "src/imports/audio/Techno808_1.wav", 					"id": "Drumbox" },
+    {"src": "src/imports/audio/CleanTines_1.m4a", 					"id": "Arpegio" },
+	{"src": "src/imports/audio/EightiesBass_1.m4a", 				"id": "Bass" },
+	{"src": "src/imports/audio/IndieDisco_1.m4a", 				    "id": "Disco" },
+	{"src": "src/imports/audio/SweetElectricPad_1.m4a", 			"id": "Tinkle" },
+	{"src": "src/imports/audio/SynthPopStrings_1.m4a", 				"id": "Strings" },
+	{"src": "src/imports/audio/Techno808_1.m4a", 					"id": "Drumbox" },
 
 	{"src": "src/imports/audio/wakeUp1.mp3", 					    "id": "wakeUp1" },
 	{"src": "src/imports/audio/wakeUp2.mp3", 					    "id": "wakeUp2" },
@@ -115,43 +99,40 @@ var	manifest	=	[
 	{"src": "src/imports/audio/intro.mp3", 					        "id": "intro" },
 
 
+	//-----------------------------------------------------------------------------------------------
+	//  BeabLib.
+	//-----------------------------------------------------------------------------------------------
 
-    //-----------------------------------------------------------------------------------------------
+	{"src": "src/beablib/beablib_Camelot.js",	        					"id": "game_baseClass" },
+
+
+	//-----------------------------------------------------------------------------------------------
 	//	Game source.
 	//-----------------------------------------------------------------------------------------------
 
-    //	Buttons.
-	{"src": "src/game/SoundToggle.js",					"id": "SoundToggle" },
-
-	//	Game code.
-	{"src": "src/game/Background.js", 					"id": "Background" },
+	//	Base classes.
+	{"src": "src/game/CBackground.js", 					"id": "CBackground" },
 	{"src": "src/game/CGUI.js", 						"id": "CGUI" },
 	{"src": "src/game/CRobots.js", 					"id": "CRobots" },
 
+	//	Core game.
 	{"src": "src/game/CGame.js", 						"id": "CGame" }
 
-
+	//-----------------------------------------------------------------------------------------------
 ];
 
 //-----------------------------------------------------------------------------------------------
 
-ProjectX.Core.GetManifest	=	function()
-{
-	//-----------------------------------------------------------------------------------------------
-
-	"use strict";
-
-	//-----------------------------------------------------------------------------------------------
-	//	Conditional includes
-
-	/**
-	 *   if ({your condition is met})
-	 *   {
-     *   manifest.unshift({"src": "pathToFile", "id": "fileID"})
+miwgdefine(function () {
+    "use strict";
+    //conditional statements can be added here
+    //com.camelot.core.IWG.ame('get', 'UA') is loaded and can be used.
+    /**
+     *   if ({your condition is met}) {
+     *   _manifest.unshift({"src": "pathToFile", "id": "fileID"})
      *   }
-	 */
-
-	return	manifest;
-};
+     */
+    return _manifest;
+});
 
 //-----------------------------------------------------------------------------------------------

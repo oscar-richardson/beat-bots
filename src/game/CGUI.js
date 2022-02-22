@@ -1,106 +1,92 @@
 //-----------------------------------------------------------------------------------------------
 
-(function()
-{
+(function() {
     "use strict";
 
     //-----------------------------------------------------------------------------------------------
-    //	const-ish.
+    //	Const-ish.
     //-----------------------------------------------------------------------------------------------
 
-    var Game			=	ProjectX.Game;		//	Game object shortcut.
+    //-----------------------------------------------------------------------------------------------
+    //	Private statics.
+    //-----------------------------------------------------------------------------------------------
 
-    var	TheStage		=	null;
+    //	Beablib object aliases.
+    var	Audio		=	beablib.Audio,
+        Game        = beablib.Game,
+        Renderer    = beablib.Renderer;
 
-
-    var LOGO_XPOS               = 0,
+    //	Data.
+    var TheStage = null,
+        LOGO_XPOS               = 0,
         LOGO_YPOS               = 0,
         LOGO_SCALE              = 1.22,
         RobotBtnArray           = [];
 
-
+    //	Functions.
+    var UpdateStage = function () {
+        TheStage.SetDirty();
+    };
 
     //-----------------------------------------------------------------------------------------------
+    //	Object definition.
+    //-----------------------------------------------------------------------------------------------
 
-    //	Set local paths to external objects.
-    var CGUI	=	function( stage )
-    {
-
+    var CGUI = function (stage) {
+        //	Make a note of the stage.
         TheStage = stage;
 
-
-
         //	Let's start with a container...
-        this.LogoContainer = new createjs.Container();
-        this.LogoContainer.alpha = 1;
+        this.LogoContainer = Renderer.CreateContainer( { alpha:1 });
 
-        this.RobotBtnContainer = new createjs.Container();
-        this.RobotBtnContainer.alpha = 1;
+        this.RobotBtnContainer = Renderer.CreateContainer( { alpha:1 });
 
-        //	Add the beehive to the stage...
-        TheStage.addChild( this.LogoContainer, this.RobotBtnContainer );
+        //	...& add it to the stage.
+        TheStage.addChild( this.LogoContainer);
+        TheStage.addChild( this.RobotBtnContainer );
 
-        this.StartBtn			=	new	createjs.Sprite( Game.BackgroundSheet, "Background" );
-        this.StartBtn.SetScale( 0.5 );
-        this.StartBtn.alpha = 0.01;
+        this.StartBtn = Renderer.CreateSprite(Game.BackgroundSheet, "Background", {alpha: 0.01, scale:0.5, parent: this.LogoContainer});
 
         //// Logo ////
 
-
-        var logo_anim_ss 		=   ProjectX.SpriteSheets.BB_LogoSS,
+        var logo_anim_ss 		=   beablib.SpriteSheetPath.BB_LogoSS,
             logo_anim	        =	logo_anim_ss.spriteSheet.animations;
-
 
         logo_anim.static = [logo_anim["logoMC0001"][0], logo_anim["logoMC0001"][0], false, 0.7];
         logo_anim.loop = [logo_anim["logoMC0001"][0], logo_anim["logoMC0080"][0], false, 0.7];
 
-        this.LogoSpriteSheet  =	ProjectX.CreateSpriteSheet( ProjectX.SpriteSheets.BB_LogoSS );
+        this.LogoAnimSpriteSheet = beablib.CreateSpriteSheet(logo_anim_ss);
 
-        this.Logo = new createjs.Sprite(this.LogoSpriteSheet, "loop");
-        this.Logo.SetPosition(0, 0);
-        this.Logo.stop();
+        this.Logo = Renderer.CreateSprite(this.LogoAnimSpriteSheet, "loop", {alpha:1, scale:1, position: {X:0, Y:0}, parent: this.LogoContainer});
 
-        this.LogoContainer.addChild( this.Logo, this.StartBtn );
-
-
-
-
-        var update		=	function(){ TheStage.SetDirty(); }.bind(this);
-
-        TweenLite.to(CGUI, 500, { onUpdate:update } );
+        gsap.to(CGUI, { duration:500, onUpdate:UpdateStage } );
 
         for( var i=0; i<200; i++ ) {
 
-            TweenMax.delayedCall(1 + (i*5), this.PlayLogoAnim , [], this );
+            gsap.delayedCall(1 + (i*5), this.PlayLogoAnim , [], this );
 
         };
 
-        this.StartBtn.on ("click", this.StartClicked, this, true );
-        this.StartBtn.cursor = "pointer";
+        this.StartBtn.SetButtonMode(true, this.StartClicked, this, true);
+        // this.StartBtn.cursor = "pointer"; // WORK OUT HOW TO DO!!!
 
         //	...& make sure we're repositionable.
-        ProjectX.SetRepositionable( this );
-
-
+        beablib.SetRepositionable(this);
     };
 
     //-----------------------------------------------------------------------------------------------
+    //	Public members.
+    //-----------------------------------------------------------------------------------------------
 
-    CGUI.prototype.Reposition		=	function()
-    {
+    CGUI.prototype.Reposition = function (scale) {
 
-        var half_width              =   TheStage.View.HalfWidth,
-            half_height             =   TheStage.View.HalfHeight,
-            scale                   =   ProjectX.MainView.ScaleFactor;
+        this.LogoContainer.SetPosition((LOGO_XPOS * scale) + TheStage.View.HalfWidth, (LOGO_YPOS * scale) + TheStage.View.HalfHeight);
+        this.LogoContainer.SetScale(LOGO_SCALE * scale);
 
-        this.LogoContainer.SetPosition(( LOGO_XPOS * scale) + half_width, (LOGO_YPOS * scale) + half_height);
-        this.LogoContainer.SetScale( LOGO_SCALE * scale );
+        this.RobotBtnContainer.SetPosition(TheStage.View.HalfWidth, TheStage.View.HalfHeight);
+        this.RobotBtnContainer.SetScale(scale);
 
-        this.RobotBtnContainer.SetPosition( half_width,  half_height);
-        this.RobotBtnContainer.SetScale( scale );
-
-
-        TheStage.SetDirty();
+        UpdateStage();
     };
 
     //-----------------------------------------------------------------------------------------------
@@ -110,11 +96,7 @@
 
         console.log("PlayLogoAnim");
 
-
-
         this.Logo.gotoAndPlayDuration( "loop", {duration:2.3, stage:TheStage} );
-
-
     };
 
     //-----------------------------------------------------------------------------------------------
@@ -126,34 +108,24 @@
 
         this.LogoContainer.removeChild( this.StartBtn );
 
-        //TweenMax.killDelayedCallsTo( this.PlayLogoAnim );
-
         var half_width              =   TheStage.View.HalfWidth,
             half_height             =   TheStage.View.HalfHeight,
-            scale                   =   ProjectX.MainView.ScaleFactor;
+            scale = beablib.MainView.ScaleFactor;
 
         LOGO_XPOS = -280;
         LOGO_YPOS = -254;
         LOGO_SCALE = 0.72;
 
-        TweenMax.to( this.LogoContainer, 1, {x:(LOGO_XPOS * scale) + half_width,
-            y:(LOGO_YPOS * scale) + half_height,
-            scaleX:LOGO_SCALE * scale,
-            scaleY:LOGO_SCALE * scale,
-            //rotation:-12,
-            ease:Quad.easeOut,
-            onUpdate:update});
+        gsap.to(this.LogoContainer, {duration: 1, x:(LOGO_XPOS * scale) + half_width, y:(LOGO_YPOS * scale) + half_height, scaleX:LOGO_SCALE * scale, scaleY:LOGO_SCALE * scale, ease:Quad.easeOut, onUpdate:update});
 
         this.SetUpRobotBtns();
 
         Game.InitRobots();
 
+        gsap.delayedCall(0.01, function(){Audio.Play("intro");});
+        gsap.delayedCall(0.03, function(){Audio.Play("wakeUp2");});
 
-        TweenMax.delayedCall(0.01, function(){createjs.Sound.play("intro");});
-        TweenMax.delayedCall(0.03, function(){createjs.Sound.play("wakeUp2");});
-
-
-        TheStage.SetDirty();
+        UpdateStage();
     };
 
     //-----------------------------------------------------------------------------------------------
@@ -167,32 +139,27 @@
 
         for( var i=0; i<6; i++ ){
 
-            var btn =	new	createjs.Sprite( Game.BackgroundSheet, "RobotBtn" );
-            btn.alpha = 0.01;
-            btn.SetPosition( BtnXposArray[i], BtnYposArray[i] );
+            var btn = Renderer.CreateSprite(Game.BackgroundSheet, "RobotBtn", {alpha: 0.01, position: {X:BtnXposArray[i], Y:BtnYposArray[i]}, parent: this.RobotBtnContainer});
             btn.numId = i;
 
             RobotBtnArray.push( btn );
 
-            this.RobotBtnContainer.addChild( btn );
-
             var dataObjSym = new Object();
             dataObjSym.numId = RobotBtnArray[i].numId;
 
-            RobotBtnArray[i].on("click", this.RobotClicked, this, false, dataObjSym);
-            RobotBtnArray[i].cursor = "pointer";
+            RobotBtnArray[i].SetButtonMode(true, this.RobotClicked, this, false, dataObjSym);
+            // RobotBtnArray[i].cursor = "pointer"; // WORK OUT HOW TO DO!!!
             RobotBtnArray[i].delayActive = false;
 
         }
 
-        TheStage.SetDirty();
+        UpdateStage();
 
     };
 
     //-----------------------------------------------------------------------------------------------
 
-    CGUI.prototype.RobotClicked		=	function(event, data ) {
-
+    CGUI.prototype.RobotClicked		=	function(event, data ) { // MAY NEED TO CHANGE NO. OF ARGS
 
         var numId       = data.numId;
 
@@ -201,9 +168,7 @@
             RobotBtnArray[numId].delayActive = true;
         }
 
-
     };
-
 
     //-----------------------------------------------------------------------------------------------
 
@@ -213,7 +178,7 @@
 
         Game.RobotClicked( numId );
 
-        TweenMax.delayedCall(1.2, this.ReActivateRobot, [numId], this );
+        gsap.delayedCall(1.2, this.ReActivateRobot, [numId], this ); // 'THIS' ARG MIGHT NOT WORK (EASY FIX)
 
     };
 
@@ -225,7 +190,6 @@
 
     };
 
-
     //-----------------------------------------------------------------------------------------------
     //	Static variables.
     //-----------------------------------------------------------------------------------------------
@@ -233,8 +197,16 @@
     CGUI.VERSION			=	'0_0_1';
 
     //-----------------------------------------------------------------------------------------------
+    //	Public statics.
+    //-----------------------------------------------------------------------------------------------
+
+    //-----------------------------------------------------------------------------------------------
     //	Namespace path.
     //-----------------------------------------------------------------------------------------------
 
-    Game.CGUI		=	CGUI;
+    Game.CGUI	=	CGUI;
+
+    //-----------------------------------------------------------------------------------------------
 }());
+
+//-----------------------------------------------------------------------------------------------
