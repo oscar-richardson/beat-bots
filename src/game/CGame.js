@@ -44,30 +44,6 @@
         //	Create the global sprite sheets.
         Game.BackgroundSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.BackgroundSS);
 
-        Game.Robot1AsleepSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot1_AsleepSS);
-        Game.Robot1DanceSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot1_DanceSS);
-        Game.Robot1WakeUpSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot1_WakeUpSS);
-
-        Game.Robot2AsleepSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot2_AsleepSS);
-        Game.Robot2DanceSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot2_DanceSS);
-        Game.Robot2WakeUpSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot2_WakeUpSS);
-
-        Game.Robot3AsleepSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot3_AsleepSS);
-        Game.Robot3DanceSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot3_DanceSS);
-        Game.Robot3WakeUpSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot3_WakeUpSS);
-
-        Game.Robot4AsleepSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot4_AsleepSS);
-        Game.Robot4DanceSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot4_DanceSS);
-        Game.Robot4WakeUpSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot4_WakeUpSS);
-
-        Game.Robot5AsleepSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot5_AsleepSS);
-        Game.Robot5DanceSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot5_DanceSS);
-        Game.Robot5WakeUpSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot5_WakeUpSS);
-
-        Game.Robot6AsleepSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot6_AsleepSS);
-        Game.Robot6DanceSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot6_DanceSS);
-        Game.Robot6WakeUpSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.Robot6_WakeUpSS);
-
         gsap.registerPlugin(CustomBounce, CustomEase, CustomWiggle, MotionPathPlugin, PixiPlugin, Physics2DPlugin);
 
         //	Create our game's canvases...

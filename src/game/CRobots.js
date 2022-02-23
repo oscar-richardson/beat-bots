@@ -34,13 +34,6 @@
         LoopInstance5,
         LoopInstance6,
         LoopInstanceArray   =[],
-        LooopInstance1,
-        LooopInstance2,
-        LooopInstance3,
-        LooopInstance4,
-        LooopInstance5,
-        LooopInstance6,
-        LooopInstanceArray   =[],
         robotOrder = [3, 1, 2, 0, 4, 5];
 
     //	Functions.
@@ -182,22 +175,6 @@
 
         LoopInstanceArray= [LoopInstance1, LoopInstance2, LoopInstance3, LoopInstance4, LoopInstance5, LoopInstance6];
 
-        LooopInstance1 = Audio.Play("Drumbox", {Loop: true});  // Arpeggio
-        LooopInstance2 = Audio.Play("Arpegio", {Loop: true});   /// Bass
-        LooopInstance3 = Audio.Play("Strings", {Loop: true});  /// Disco
-        LooopInstance4 = Audio.Play("Bass", {Loop: true}); /// Tinkle
-        LooopInstance5 = Audio.Play("Tinkle", {Loop: true}); /// Strings
-        LooopInstance6 = Audio.Play("Disco", {Loop: true}); /// Drumbox
-
-        LooopInstance1.setVolume(0);
-        LooopInstance2.setVolume(0);
-        LooopInstance3.setVolume(0);
-        LooopInstance4.setVolume(0);
-        LooopInstance5.setVolume(0);
-        LooopInstance6.setVolume(0);
-
-        LooopInstanceArray= [LooopInstance1, LooopInstance2, LooopInstance3, LooopInstance4, LooopInstance5, LooopInstance6];
-
     };
 
     //-----------------------------------------------------------------------------------------------
@@ -221,7 +198,7 @@
             RobotAsleepArray[number].position.y = RobotAsleepArray[number].position.y - 60;
             RobotWakeUpArray[number].alpha = 1;
 
-            gsap.delayedCall(1, function(){LoopInstanceArray[number].setVolume(0.35); LooopInstanceArray[number].setVolume(0.35);});
+            gsap.delayedCall(1, function(){LoopInstanceArray[number].setVolume(0.7);});
 
             ///// set this duration as a variable /////
             RobotWakeUpArray[number].gotoAndPlayDuration("loop", {duration: 1, stage: TheStage});
@@ -247,7 +224,7 @@
 
             gsap.delayedCall(0.01, function(){Audio.Play(RobotSleepAudioArray[number]);});
 
-            gsap.delayedCall(0.01, function(){LoopInstanceArray[number].setVolume(0); LooopInstanceArray[number].setVolume(0);});
+            gsap.delayedCall(0.01, function(){LoopInstanceArray[number].setVolume(0);});
 
             CRobots["RobotDancing" + (number + 1)] = false;
 

@@ -15,6 +15,16 @@
     <script src="https://www.macguffinandshemp.com/dev/client/camelot/CamelotHTML5Loader/v2/iwg_0_2_0.js"></script>
 
     <script>
+        var queue = new createjs.LoadQueue();
+        queue.loadManifest([
+            {"src": "src/imports/audio/CleanTines_1.wav", 					"id": "Arpegio" },
+	        {"src": "src/imports/audio/EightiesBass_1.wav", 				"id": "Bass" },
+	        {"src": "src/imports/audio/IndieDisco_1.wav", 				    "id": "Disco" },
+	        {"src": "src/imports/audio/SweetElectricPad_1.wav", 			"id": "Tinkle" },
+	        {"src": "src/imports/audio/SynthPopStrings_1.wav", 				"id": "Strings" },
+	        {"src": "src/imports/audio/Techno808_1.wav", 					"id": "Drumbox" }
+        ]);
+
         var params = {};
         params.orientation = 'L';
         params.isWager = false;
