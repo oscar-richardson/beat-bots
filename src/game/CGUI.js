@@ -21,7 +21,8 @@
         LOGO_XPOS               = 0,
         LOGO_YPOS               = 0,
         LOGO_SCALE              = 1.22,
-        RobotBtnArray           = [];
+        RobotBtnArray           = [],
+        recordModeOn            = false;
 
     //	Functions.
     var UpdateStage = function () {
@@ -43,10 +44,13 @@
 
         this.ModeBtnContainer = Renderer.CreateContainer( { alpha:1 });
 
+        this.RecordingBtnContainer = Renderer.CreateContainer( { alpha:1 });
+
         //	...& add it to the stage.
         TheStage.addChild( this.LogoContainer);
         TheStage.addChild( this.RobotBtnContainer );
         TheStage.addChild( this.ModeBtnContainer );
+        TheStage.addChild( this.RecordingBtnContainer );
 
         this.StartBtn = Renderer.CreateSprite(Game.BackgroundSheet, "Background", {alpha: 0.01, scale:0.5, parent: this.LogoContainer});
 
@@ -92,6 +96,10 @@
         this.ModeBtnContainer.SetPosition(TheStage.View.HalfWidth, TheStage.View.HalfHeight);
         this.ModeBtnContainer.SetScale(scale);
 
+        this.RecordingBtnContainer.SetPosition(TheStage.View.HalfWidth, TheStage.View.HalfHeight);
+        this.RecordingBtnContainer.SetScale(scale);
+
+
         UpdateStage();
     };
 
@@ -126,6 +134,7 @@
 
         this.SetUpRobotBtns();
         this.SetUpModeBtns();
+        this.SetUpRecordingBtns();
 
         Game.InitRobots();
 
@@ -183,26 +192,54 @@
 
     //-----------------------------------------------------------------------------------------------
 
+    CGUI.prototype.SetUpRecordingBtns		=	function()
+    {
+
+
+        var revertBtn = Renderer.CreateSprite(beablib.CreateSpriteSheet(beablib.SpriteSheetPath["Robot4_AsleepSS"]), "Robot4_Asleep001", {alpha: 1, position: {X:0, Y:-275}, parent: this.RecordingBtnContainer});
+        var recordBtn = Renderer.CreateSprite(beablib.CreateSpriteSheet(beablib.SpriteSheetPath["Robot6_AsleepSS"]), "Robot6_Asleep001", {alpha: 1, position: {X:320, Y:-275}, parent: this.RecordingBtnContainer});
+
+        // exitBtn.SetButtonMode(true, this.ExitClicked, this, false);
+        // recordModeBtn.SetButtonMode(true, this.RecordModeClicked, this, false);
+
+
+        UpdateStage();
+
+    };
+
+    //-----------------------------------------------------------------------------------------------
+
     CGUI.prototype.RobotClicked		=	function(event, data ) { // MAY NEED TO CHANGE NO. OF ARGS
+        if (recordModeOn) {
 
-        var numId       = data.numId;
+        } else {
+            var numId       = data.numId;
 
-        if( !RobotBtnArray[numId].delayActive){
-            this.RobotAction(numId);
-            RobotBtnArray[numId].delayActive = true;
+            if  ( !RobotBtnArray[numId].delayActive)    {
+                this.RobotAction(numId);
+                RobotBtnArray[numId].delayActive = true;
+            }
         }
-
     };
 
     //-----------------------------------------------------------------------------------------------
 
     CGUI.prototype.ExitClicked		=	function(event) {
 
-        var numId       = data.numId;
+        if (recordModeOn) {
+            recordModeOn = false;
+            console.log(recordModeOn)
+        }
 
-        if( !RobotBtnArray[numId].delayActive){
-            this.RobotAction(numId);
-            RobotBtnArray[numId].delayActive = true;
+    };
+
+    //-----------------------------------------------------------------------------------------------
+
+    CGUI.prototype.RecordModeClicked		=	function(event) {
+
+        if (!recordModeOn) {
+            recordModeOn = true;
+            console.log(recordModeOn)
         }
 
     };
