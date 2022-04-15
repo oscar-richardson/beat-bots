@@ -335,6 +335,10 @@
                 const audioURL = window.URL.createObjectURL(blob);
                 console.log("recorder stopped");
                 console.log(audioURL);
+                createjs.Sound.alternateExtensions = ["mp3", "ogg"];
+                createjs.Sound.registerSound(audioURL, "sound");
+                createjs.Sound.play("sound");
+
             }
 
             mediaRecorder.ondataavailable = function(e) {
