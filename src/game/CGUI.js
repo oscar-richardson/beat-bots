@@ -22,7 +22,9 @@
         LOGO_YPOS               = 0,
         LOGO_SCALE              = 1.22,
         RobotBtnArray           = [],
-        recordModeOn            = false;
+        recordModeOn            = false,
+        robotRecording;
+
 
     //	Functions.
     var UpdateStage = function () {
@@ -199,8 +201,8 @@
         var revertBtn = Renderer.CreateSprite(beablib.CreateSpriteSheet(beablib.SpriteSheetPath["Robot4_AsleepSS"]), "Robot4_Asleep001", {alpha: 1, position: {X:0, Y:-275}, parent: this.RecordingBtnContainer});
         var recordBtn = Renderer.CreateSprite(beablib.CreateSpriteSheet(beablib.SpriteSheetPath["Robot6_AsleepSS"]), "Robot6_Asleep001", {alpha: 1, position: {X:320, Y:-275}, parent: this.RecordingBtnContainer});
 
-        // exitBtn.SetButtonMode(true, this.ExitClicked, this, false);
-        // recordModeBtn.SetButtonMode(true, this.RecordModeClicked, this, false);
+        revertBtn.SetButtonMode(true, this.RevertClicked, this, false);
+        recordBtn.SetButtonMode(true, this.RecordClicked, this, false);
 
 
         UpdateStage();
@@ -210,11 +212,11 @@
     //-----------------------------------------------------------------------------------------------
 
     CGUI.prototype.RobotClicked		=	function(event, data ) { // MAY NEED TO CHANGE NO. OF ARGS
+        var numId       = data.numId;
         if (recordModeOn) {
-
+            robotRecording = numId;
+            console.log(robotRecording);
         } else {
-            var numId       = data.numId;
-
             if  ( !RobotBtnArray[numId].delayActive)    {
                 this.RobotAction(numId);
                 RobotBtnArray[numId].delayActive = true;
@@ -240,6 +242,26 @@
         if (!recordModeOn) {
             recordModeOn = true;
             console.log(recordModeOn)
+        }
+
+    };
+
+    //-----------------------------------------------------------------------------------------------
+
+    CGUI.prototype.RevertClicked		=	function(event) {
+
+        if (recordModeOn) {
+
+        }
+
+    };
+
+    //-----------------------------------------------------------------------------------------------
+
+    CGUI.prototype.RecordClicked		=	function(event) {
+
+        if (recordModeOn) {
+
         }
 
     };
