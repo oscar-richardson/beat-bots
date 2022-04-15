@@ -41,9 +41,12 @@
 
         this.RobotBtnContainer = Renderer.CreateContainer( { alpha:1 });
 
+        this.ModeBtnContainer = Renderer.CreateContainer( { alpha:1 });
+
         //	...& add it to the stage.
         TheStage.addChild( this.LogoContainer);
         TheStage.addChild( this.RobotBtnContainer );
+        TheStage.addChild( this.ModeBtnContainer );
 
         this.StartBtn = Renderer.CreateSprite(Game.BackgroundSheet, "Background", {alpha: 0.01, scale:0.5, parent: this.LogoContainer});
 
@@ -86,6 +89,9 @@
         this.RobotBtnContainer.SetPosition(TheStage.View.HalfWidth, TheStage.View.HalfHeight);
         this.RobotBtnContainer.SetScale(scale);
 
+        this.ModeBtnContainer.SetPosition(TheStage.View.HalfWidth, TheStage.View.HalfHeight);
+        this.ModeBtnContainer.SetScale(scale);
+
         UpdateStage();
     };
 
@@ -119,6 +125,7 @@
         gsap.to(this.LogoContainer, {duration: 1, x:(LOGO_XPOS * scale) + half_width, y:(LOGO_YPOS * scale) + half_height, scaleX:LOGO_SCALE * scale, scaleY:LOGO_SCALE * scale, ease:Quad.easeOut, onUpdate:update});
 
         this.SetUpRobotBtns();
+        this.SetUpModeBtns();
 
         Game.InitRobots();
 
@@ -159,7 +166,37 @@
 
     //-----------------------------------------------------------------------------------------------
 
+    CGUI.prototype.SetUpModeBtns		=	function()
+    {
+
+
+        var exitBtn = Renderer.CreateSprite(beablib.CreateSpriteSheet(beablib.SpriteSheetPath["Robot4_AsleepSS"]), "Robot4_Asleep001", {alpha: 1, position: {X:-480, Y:0}, parent: this.ModeBtnContainer});
+        var recordModeBtn = Renderer.CreateSprite(beablib.CreateSpriteSheet(beablib.SpriteSheetPath["Robot6_AsleepSS"]), "Robot6_Asleep001", {alpha: 1, position: {X:480, Y:0}, parent: this.ModeBtnContainer});
+
+        exitBtn.SetButtonMode(true, this.ExitClicked, this, false);
+        recordModeBtn.SetButtonMode(true, this.RecordModeClicked, this, false);
+
+
+        UpdateStage();
+
+    };
+
+    //-----------------------------------------------------------------------------------------------
+
     CGUI.prototype.RobotClicked		=	function(event, data ) { // MAY NEED TO CHANGE NO. OF ARGS
+
+        var numId       = data.numId;
+
+        if( !RobotBtnArray[numId].delayActive){
+            this.RobotAction(numId);
+            RobotBtnArray[numId].delayActive = true;
+        }
+
+    };
+
+    //-----------------------------------------------------------------------------------------------
+
+    CGUI.prototype.ExitClicked		=	function(event) {
 
         var numId       = data.numId;
 
