@@ -182,29 +182,6 @@
     CRobots.prototype.RobotClicked		=	function( number )
     {
 
-        if (number == 5) {
-            LoopInstance1.setVolume(0);
-            LoopInstance2.setVolume(0);
-            LoopInstance3.setVolume(0);
-            LoopInstance4.setVolume(0);
-            LoopInstance5.setVolume(0);
-            LoopInstance6.setVolume(0);
-            LoopInstance1 = Audio.Play("Arpegio", {Loop: true});
-            LoopInstance2 = Audio.Play("Arpegio", {Loop: true});
-            LoopInstance3 = Audio.Play("Strings", {Loop: true});
-            LoopInstance4 = Audio.Play("Bass", {Loop: true});
-            LoopInstance5 = Audio.Play("Tinkle", {Loop: true});
-            LoopInstance6 = Audio.Play("Disco", {Loop: true});
-            LoopInstanceArray= [LoopInstance1, LoopInstance2, LoopInstance3, LoopInstance4, LoopInstance5, LoopInstance6];
-            for (var i = 0; i < 6; i++) {
-                if (CRobots["RobotDancing" + (i+1)]) {
-                    LoopInstanceArray[i].setVolume(0.7);
-                } else {
-                LoopInstanceArray[i].setVolume(0);
-                }
-            }
-        }
-
         if( !CRobots["RobotDancing" + (number +1)] ) {
 
             var update = function () {
@@ -267,23 +244,6 @@
 
     //-----------------------------------------------------------------------------------------------
 
-    CRobots.prototype.Record	=	function( number )
-    {
-        if (recordingInProgress) {
-            stopRecording();
-            gsap.killTweensOf(stopRecording);
-          } else {
-            recordingInProgress = true;
-            mediaRecorder.start();
-            console.log(mediaRecorder.state);
-            console.log("recorder started");
-            record.style.background = "red";
-            gsap.delayedCall(5, stopRecording);
-          }
-    };
-
-    //-----------------------------------------------------------------------------------------------
-
     CRobots.prototype.PlayRobot1Snooze		=	function()
     {
 
@@ -335,6 +295,70 @@
         RobotAsleepArray[robotOrder.indexOf(5)].gotoAndPlayDuration( "loop", {duration:2, stage:TheStage} );
 
     };
+
+    if (navigator.mediaDevices.getUserMedia) {
+        console.log('getUserMedia supported.');
+
+        const constraints = { audio: true };
+        let chunks = [];
+
+        let onSuccess = function(stream) {
+          const mediaRecorder = new MediaRecorder(stream);
+
+          let recordingInProgress = false;
+
+          var stopRecording = function() {
+            recordingInProgress = false;
+            mediaRecorder.stop();
+            console.log(mediaRecorder.state);
+            console.log("recorder stopped");
+            }
+
+            CRobots.prototype.Record	=	function( number )
+            {
+                if (recordingInProgress) {
+                    stopRecording();
+                    gsap.killTweensOf(stopRecording);
+                } else {
+                    recordingInProgress = true;
+                    mediaRecorder.start();
+                    console.log(mediaRecorder.state);
+                    console.log("recorder started");
+                    gsap.delayedCall(5, stopRecording);
+                }
+            };
+
+            mediaRecorder.onstop = function(e) {
+                console.log("data available after MediaRecorder.stop() called.");
+                const blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
+                chunks = [];
+                const audioURL = window.URL.createObjectURL(blob);
+                console.log("recorder stopped");
+                console.log(audioURL);
+            }
+
+            mediaRecorder.ondataavailable = function(e) {
+                chunks.push(e.data);
+            }
+        }
+
+        let onError = function(err) {
+          console.log('The following error occured: ' + err);
+          CRobots.prototype.Record	=	function( number )
+            {
+
+            };
+        }
+
+        navigator.mediaDevices.getUserMedia(constraints).then(onSuccess, onError);
+
+    } else {
+         console.log('getUserMedia not supported on your browser!');
+         CRobots.prototype.Record	=	function( number )
+            {
+
+            };
+    }
 
     //-----------------------------------------------------------------------------------------------
     //	Static variables.
