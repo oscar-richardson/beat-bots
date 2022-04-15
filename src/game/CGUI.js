@@ -23,7 +23,7 @@
         LOGO_SCALE              = 1.22,
         RobotBtnArray           = [],
         recordModeOn            = false,
-        robotRecording;
+        robotSelected;
 
 
     //	Functions.
@@ -214,8 +214,8 @@
     CGUI.prototype.RobotClicked		=	function(event, data ) { // MAY NEED TO CHANGE NO. OF ARGS
         var numId       = data.numId;
         if (recordModeOn) {
-            robotRecording = numId;
-            console.log(robotRecording);
+            robotSelected = numId;
+            console.log("The selected Robot is Robot number :: " + robotSelected);
         } else {
             if  ( !RobotBtnArray[numId].delayActive)    {
                 this.RobotAction(numId);
@@ -230,7 +230,7 @@
 
         if (recordModeOn) {
             recordModeOn = false;
-            console.log(recordModeOn)
+            console.log("Record Mode :: " + recordModeOn)
         }
 
     };
@@ -261,7 +261,8 @@
     CGUI.prototype.RecordClicked		=	function(event) {
 
         if (recordModeOn) {
-
+            console.log("Recording onto Robot number :: " + robotSelected)
+            Game.Record(robotSelected);
         }
 
     };

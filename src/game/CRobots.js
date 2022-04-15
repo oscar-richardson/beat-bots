@@ -267,6 +267,23 @@
 
     //-----------------------------------------------------------------------------------------------
 
+    CRobots.prototype.Record	=	function( number )
+    {
+        if (recordingInProgress) {
+            stopRecording();
+            gsap.killTweensOf(stopRecording);
+          } else {
+            recordingInProgress = true;
+            mediaRecorder.start();
+            console.log(mediaRecorder.state);
+            console.log("recorder started");
+            record.style.background = "red";
+            gsap.delayedCall(5, stopRecording);
+          }
+    };
+
+    //-----------------------------------------------------------------------------------------------
+
     CRobots.prototype.PlayRobot1Snooze		=	function()
     {
 
