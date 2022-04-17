@@ -332,11 +332,12 @@
                 console.log("data available after MediaRecorder.stop() called.");
                 const blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
                 chunks = [];
+                console.log(blob.type);
                 const audioURL = window.URL.createObjectURL(blob);
                 console.log("recorder stopped");
                 console.log(audioURL);
                 createjs.Sound.alternateExtensions = ["mp3", "ogg"];
-                createjs.Sound.registerSound(audioURL, "sound");
+                createjs.Sound.registerSound({ src: { ogg: audioURL }, type: "sound" }, "sound");
                 createjs.Sound.play("sound");
 
             }
