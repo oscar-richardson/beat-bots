@@ -12,8 +12,7 @@
     //-----------------------------------------------------------------------------------------------
 
     //	Beablib object aliases.
-    var	Audio		=	beablib.Audio,
-        Game        = beablib.Game,
+    var	Game        = beablib.Game,
         Renderer    = beablib.Renderer;
 
     //	Data.
@@ -27,6 +26,7 @@
         RobotWakeUpAudioArray      = [ "wakeUp1", "wakeUp7", "wakeUp3", "wakeUp8", "wakeUp9", "wakeUp6" ],
         RobotSleepAudioArray       = [ "wakeUp2", "wakeUp4", "wakeUp2", "wakeUp5", "wakeUp2", "wakeUp4" ],
 
+        LoopInstance0,
         LoopInstance1,
         LoopInstance2,
         LoopInstance3,
@@ -34,7 +34,8 @@
         LoopInstance5,
         LoopInstance6,
         LoopInstanceArray   =[],
-        robotOrder = [3, 1, 2, 0, 4, 5];
+        robotOrder = [3, 1, 2, 0, 4, 5],
+        recordings = [];
 
     //	Functions.
     var UpdateStage = function () {
@@ -129,6 +130,27 @@
     //	Public members.
     //-----------------------------------------------------------------------------------------------
 
+    CRobots.prototype.playRecordings = function () {
+        console.log("loop!");
+        LoopInstance1 = beablib.Audio.Play("Drumbox");
+        LoopInstance2 = beablib.Audio.Play("Arpegio");
+        LoopInstance3 = beablib.Audio.Play("Strings");
+        LoopInstance4 = beablib.Audio.Play("Bass");
+        LoopInstance5 = beablib.Audio.Play("Tinkle");
+        LoopInstance6 = beablib.Audio.Play("Disco");
+        LoopInstanceArray= [LoopInstance1, LoopInstance2, LoopInstance3, LoopInstance4, LoopInstance5, LoopInstance6];
+        for (var i = 0; i < 6; i++) {
+            if (!CRobots["RobotDancing" + (i+1)]) {
+                LoopInstanceArray[i].setVolume(0);
+            }
+        }
+
+
+        /* for (var i = 0; i < recordings.length; i++) {
+            recordings[i].play();
+        } */
+    };
+
     CRobots.prototype.Reposition = function (scale) {
 
         this.RobotContainer.SetPosition(TheStage.View.HalfWidth, TheStage.View.HalfHeight);
@@ -159,21 +181,23 @@
 
         }
 
-        LoopInstance1 = Audio.Play("Drumbox", {Loop: true});
-        LoopInstance2 = Audio.Play("Arpegio", {Loop: true});
-        LoopInstance3 = Audio.Play("Strings", {Loop: true});
-        LoopInstance4 = Audio.Play("Bass", {Loop: true});
-        LoopInstance5 = Audio.Play("Tinkle", {Loop: true});
-        LoopInstance6 = Audio.Play("Disco", {Loop: true});
+        LoopInstance0 = beablib.Audio.Play("Drumbox", {Loop: true});
+        LoopInstance0.on("loop", this.playRecordings);
+        /* LoopInstance2 = beablib.Audio.Play("Arpegio", {Loop: true});
+        LoopInstance3 = beablib.Audio.Play("Strings", {Loop: true});
+        LoopInstance4 = beablib.Audio.Play("Bass", {Loop: true});
+        LoopInstance5 = beablib.Audio.Play("Tinkle", {Loop: true});
+        LoopInstance6 = beablib.Audio.Play("Disco", {Loop: true}); */
+        LoopInstance0.setVolume(0);
 
-        LoopInstance1.setVolume(0);
-        LoopInstance2.setVolume(0);
-        LoopInstance3.setVolume(0);
-        LoopInstance4.setVolume(0);
-        LoopInstance5.setVolume(0);
-        LoopInstance6.setVolume(0);
+        // LoopInstance1.setVolume(0);
+        // LoopInstance2.setVolume(0);
+        // LoopInstance3.setVolume(0);
+        // LoopInstance4.setVolume(0);
+        // LoopInstance5.setVolume(0);
+        // LoopInstance6.setVolume(0);
 
-        LoopInstanceArray= [LoopInstance1, LoopInstance2, LoopInstance3, LoopInstance4, LoopInstance5, LoopInstance6];
+        // LoopInstanceArray= [LoopInstance1, LoopInstance2, LoopInstance3, LoopInstance4, LoopInstance5, LoopInstance6];
 
     };
 
@@ -188,7 +212,7 @@
                 TheStage.SetDirty();
             }.bind(this);
 
-            Audio.Play(RobotWakeUpAudioArray[number]);
+            beablib.Audio.Play(RobotWakeUpAudioArray[number]);
 
             CRobots["RobotDancing" + (number + 1)] = true;
 
@@ -220,9 +244,9 @@
                 TheStage.SetDirty();
             }.bind(this);
 
-            gsap.delayedCall(0.3, function(){Audio.Play("thudBounce");});
+            gsap.delayedCall(0.3, function(){beablib.Audio.Play("thudBounce");});
 
-            gsap.delayedCall(0.01, function(){Audio.Play(RobotSleepAudioArray[number]);});
+            gsap.delayedCall(0.01, function(){beablib.Audio.Play(RobotSleepAudioArray[number]);});
 
             gsap.delayedCall(0.01, function(){LoopInstanceArray[number].setVolume(0);});
 
@@ -329,16 +353,28 @@
             };
 
             mediaRecorder.onstop = function(e) {
-                console.log("data available after MediaRecorder.stop() called.");
                 const blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
                 chunks = [];
                 console.log(blob.type);
                 const audioURL = window.URL.createObjectURL(blob);
                 console.log("recorder stopped");
                 console.log(audioURL);
-                createjs.Sound.alternateExtensions = ["mp3", "ogg"];
-                createjs.Sound.registerSound({ src: { ogg: audioURL }, type: "sound" }, "sound");
-                createjs.Sound.play("sound");
+                const audio = new Audio("src/imports/audio/EightiesBass_1.wav");
+                recordings.push(audio);
+                /*
+                reader.onload = function(e) {
+                    const srcUrl = e.target.result;
+                    console.log(srcUrl);
+                };
+                reader.readAsDataURL(blob);
+                createjs.Sound.alternateExtensions = ["mp3", "ogg", "wav"];
+                createjs.Sound.registerSound({ src: { ogg: audioURL }, type: "sound" }, "sound2");
+                var instance = createjs.Sound.play(audioURL);
+                console.log(instance.playState);
+                console.log(instance.src);
+                const reader = new FileReader();
+                instance.on("complete", function() {console.log('Sound has finished playing!')}, this);
+                */
 
             }
 
