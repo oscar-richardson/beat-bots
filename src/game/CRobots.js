@@ -34,8 +34,13 @@
         LoopInstance5,
         LoopInstance6,
         LoopInstanceArray   =[],
+        RobotDancing = [false, false, false, false, false, false],
         robotOrder = [3, 1, 2, 0, 4, 5],
-        recordings = [];
+        mediaRecorder,
+        robotSelected,
+        aboutToRecord = false,
+        recordings = [false, false, false, false, false, false],
+        recordingInProgress = false;
 
     //	Functions.
     var UpdateStage = function () {
@@ -50,13 +55,6 @@
     {
         //	Make a note of the stage.
         TheStage = stage;
-
-        CRobots.RobotDancing1              =  false;
-        CRobots.RobotDancing2              =  false;
-        CRobots.RobotDancing3              =  false;
-        CRobots.RobotDancing4              =  false;
-        CRobots.RobotDancing5              =  false;
-        CRobots.RobotDancing6              =  false;
 
         this.RobotContainer = Renderer.CreateContainer( { alpha:0 });
 
@@ -130,8 +128,53 @@
     //	Public members.
     //-----------------------------------------------------------------------------------------------
 
-    CRobots.prototype.playRecordings = function () {
-        console.log("loop!");
+    if (navigator.mediaDevices.getUserMedia) {
+        const constraints = { audio: true };
+        let chunks = [];
+
+        let onSuccess = function(stream) {
+            mediaRecorder = new MediaRecorder(stream);
+
+            CRobots.prototype.Record	=	function( number )
+            {
+                robotSelected = number;
+                aboutToRecord = true;
+            };
+
+            mediaRecorder.onstop = function(e) {
+                const blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
+                chunks = [];
+                const audioURL = window.URL.createObjectURL(blob);
+                recordings[robotSelected] = audioURL;
+                LoopInstanceArray[robotSelected].volume = 0;
+                LoopInstanceArray[robotSelected] = new Audio(audioURL);
+                LoopInstanceArray[robotSelected].play();
+                if (!RobotDancing[robotSelected]) {
+                    LoopInstanceArray[robotSelected].volume = 0;
+                }
+            }
+
+            mediaRecorder.ondataavailable = function(e) {
+                chunks.push(e.data);
+            }
+        }
+
+        let onError = function(err) {
+          console.log('The following error occured: ' + err);
+          CRobots.prototype.Record	=	function( number )
+            {};
+        }
+
+        navigator.mediaDevices.getUserMedia(constraints).then(onSuccess, onError);
+
+    } else {
+         console.log('getUserMedia not supported on your browser!');
+         CRobots.prototype.Record	=	function( number )
+            {};
+    }
+
+    CRobots.prototype.DoLoop = function () {
+
         LoopInstance1 = beablib.Audio.Play("Drumbox");
         LoopInstance2 = beablib.Audio.Play("Arpegio");
         LoopInstance3 = beablib.Audio.Play("Strings");
@@ -139,17 +182,55 @@
         LoopInstance5 = beablib.Audio.Play("Tinkle");
         LoopInstance6 = beablib.Audio.Play("Disco");
         LoopInstanceArray= [LoopInstance1, LoopInstance2, LoopInstance3, LoopInstance4, LoopInstance5, LoopInstance6];
+
+        if (recordingInProgress) {
+            mediaRecorder.stop();
+            recordingInProgress = false;
+            Game.ReActivateRecordButton();
+            console.log(mediaRecorder.state);
+            console.log("recorder stopped");
+        }
+
+        if (aboutToRecord) {
+            LoopInstanceArray[robotSelected].volume = 0;
+            LoopInstanceArray[robotSelected] = beablib.Audio.Play("");
+            mediaRecorder.start();
+            aboutToRecord = false;
+            recordingInProgress = true;
+            console.log(mediaRecorder.state);
+            console.log("recorder started");
+        }
+
         for (var i = 0; i < 6; i++) {
-            if (!CRobots["RobotDancing" + (i+1)]) {
-                LoopInstanceArray[i].setVolume(0);
+            if (recordings[i]) {
+                LoopInstanceArray[i].volume = 0;
+                LoopInstanceArray[i] = new Audio(recordings[i]);
+                LoopInstanceArray[i].play();
+                LoopInstanceArray[i].volume = 1;
             }
         }
 
-
-        /* for (var i = 0; i < recordings.length; i++) {
-            recordings[i].play();
-        } */
+        for (var i = 0; i < 6; i++) {
+            if (!RobotDancing[i]) {
+                LoopInstanceArray[i].volume = 0;
+            }
+        }
+        console.log("Loop!");
     };
+
+    //-----------------------------------------------------------------------------------------------
+
+    CRobots.prototype.Revert	=	function( number )
+    {
+        LoopInstanceArray[number].volume = 0;
+        recordings[number] = false;
+        let position = LoopInstance1.getPosition();
+        LoopInstanceArray[number] = beablib.Audio.Play(["Drumbox", "Arpegio", "Strings", "Bass", "Tinkle", "Disco"][number]);
+        LoopInstanceArray[number].setPosition(position);
+        if (RobotDancing[number]) {
+            LoopInstanceArray[number].volume = 1;
+        }
+    }
 
     CRobots.prototype.Reposition = function (scale) {
 
@@ -182,22 +263,9 @@
         }
 
         LoopInstance0 = beablib.Audio.Play("Drumbox", {Loop: true});
-        LoopInstance0.on("loop", this.playRecordings);
-        /* LoopInstance2 = beablib.Audio.Play("Arpegio", {Loop: true});
-        LoopInstance3 = beablib.Audio.Play("Strings", {Loop: true});
-        LoopInstance4 = beablib.Audio.Play("Bass", {Loop: true});
-        LoopInstance5 = beablib.Audio.Play("Tinkle", {Loop: true});
-        LoopInstance6 = beablib.Audio.Play("Disco", {Loop: true}); */
-        LoopInstance0.setVolume(0);
-
-        // LoopInstance1.setVolume(0);
-        // LoopInstance2.setVolume(0);
-        // LoopInstance3.setVolume(0);
-        // LoopInstance4.setVolume(0);
-        // LoopInstance5.setVolume(0);
-        // LoopInstance6.setVolume(0);
-
-        // LoopInstanceArray= [LoopInstance1, LoopInstance2, LoopInstance3, LoopInstance4, LoopInstance5, LoopInstance6];
+        LoopInstance0.volume = 0;
+        LoopInstance0.on("loop", this.DoLoop);
+        LoopInstance0.setPosition(LoopInstance0.getDuration());
 
     };
 
@@ -206,7 +274,7 @@
     CRobots.prototype.RobotClicked		=	function( number )
     {
 
-        if( !CRobots["RobotDancing" + (number +1)] ) {
+        if( !RobotDancing[number] ) {
 
             var update = function () {
                 TheStage.SetDirty();
@@ -214,7 +282,7 @@
 
             beablib.Audio.Play(RobotWakeUpAudioArray[number]);
 
-            CRobots["RobotDancing" + (number + 1)] = true;
+            RobotDancing[number] = true;
 
             console.log("CRobots number :: " + number);
 
@@ -222,7 +290,7 @@
             RobotAsleepArray[number].position.y = RobotAsleepArray[number].position.y - 60;
             RobotWakeUpArray[number].alpha = 1;
 
-            gsap.delayedCall(1, function(){LoopInstanceArray[number].setVolume(0.7);});
+            gsap.delayedCall(1, function(){LoopInstanceArray[number].volume = 1;});
 
             ///// set this duration as a variable /////
             RobotWakeUpArray[number].gotoAndPlayDuration("loop", {duration: 1, stage: TheStage});
@@ -238,7 +306,7 @@
 
         }
 
-        if( CRobots["RobotDancing" + (number +1)] ) {
+        if( RobotDancing[number] ) {
 
             var update = function () {
                 TheStage.SetDirty();
@@ -248,9 +316,9 @@
 
             gsap.delayedCall(0.01, function(){beablib.Audio.Play(RobotSleepAudioArray[number]);});
 
-            gsap.delayedCall(0.01, function(){LoopInstanceArray[number].setVolume(0);});
+            gsap.delayedCall(0.01, function(){LoopInstanceArray[number].volume = 0;});
 
-            CRobots["RobotDancing" + (number + 1)] = false;
+            RobotDancing[number] = false;
 
             console.log("CRobots number :: " + number);
 
@@ -320,86 +388,7 @@
 
     };
 
-    if (navigator.mediaDevices.getUserMedia) {
-        console.log('getUserMedia supported.');
 
-        const constraints = { audio: true };
-        let chunks = [];
-
-        let onSuccess = function(stream) {
-          const mediaRecorder = new MediaRecorder(stream);
-
-          let recordingInProgress = false;
-
-          var stopRecording = function() {
-            recordingInProgress = false;
-            mediaRecorder.stop();
-            console.log(mediaRecorder.state);
-            console.log("recorder stopped");
-            }
-
-            CRobots.prototype.Record	=	function( number )
-            {
-                if (recordingInProgress) {
-                    stopRecording();
-                    gsap.killTweensOf(stopRecording);
-                } else {
-                    recordingInProgress = true;
-                    mediaRecorder.start();
-                    console.log(mediaRecorder.state);
-                    console.log("recorder started");
-                    gsap.delayedCall(5, stopRecording);
-                }
-            };
-
-            mediaRecorder.onstop = function(e) {
-                const blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
-                chunks = [];
-                console.log(blob.type);
-                const audioURL = window.URL.createObjectURL(blob);
-                console.log("recorder stopped");
-                console.log(audioURL);
-                const audio = new Audio("src/imports/audio/EightiesBass_1.wav");
-                recordings.push(audio);
-                /*
-                reader.onload = function(e) {
-                    const srcUrl = e.target.result;
-                    console.log(srcUrl);
-                };
-                reader.readAsDataURL(blob);
-                createjs.Sound.alternateExtensions = ["mp3", "ogg", "wav"];
-                createjs.Sound.registerSound({ src: { ogg: audioURL }, type: "sound" }, "sound2");
-                var instance = createjs.Sound.play(audioURL);
-                console.log(instance.playState);
-                console.log(instance.src);
-                const reader = new FileReader();
-                instance.on("complete", function() {console.log('Sound has finished playing!')}, this);
-                */
-
-            }
-
-            mediaRecorder.ondataavailable = function(e) {
-                chunks.push(e.data);
-            }
-        }
-
-        let onError = function(err) {
-          console.log('The following error occured: ' + err);
-          CRobots.prototype.Record	=	function( number )
-            {
-
-            };
-        }
-
-        navigator.mediaDevices.getUserMedia(constraints).then(onSuccess, onError);
-
-    } else {
-         console.log('getUserMedia not supported on your browser!');
-         CRobots.prototype.Record	=	function( number )
-            {
-
-            };
-    }
 
     //-----------------------------------------------------------------------------------------------
     //	Static variables.
