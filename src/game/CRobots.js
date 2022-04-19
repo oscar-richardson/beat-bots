@@ -1,4 +1,5 @@
 //-----------------------------------------------------------------------------------------------
+var instance;
 
 (function() {
     "use strict";
@@ -144,14 +145,33 @@
             mediaRecorder.onstop = function(e) {
                 const blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
                 chunks = [];
-                const audioURL = window.URL.createObjectURL(blob);
+                const audioURL = (URL || webkitURL).createObjectURL(blob);
+                console.log(audioURL);
                 recordings[robotSelected] = audioURL;
                 LoopInstanceArray[robotSelected].volume = 0;
-                LoopInstanceArray[robotSelected] = new Audio(audioURL);
-                LoopInstanceArray[robotSelected].play();
+                var queue = new createjs.LoadQueue();
+                queue.installPlugin(createjs.Sound);
+                queue.on("fileload", handleComplete);
+                queue.on("error", handleError);
+                queue.loadFile({id:"myID", src: "src/imports/audio/EightiesBass_1.wav"});
+                // LoopInstanceArray[robotSelected] = new Audio(audioURL);
+                // LoopInstanceArray[robotSelected].play();
+                // createjs.Sound.alternateExtensions = ["ogg"];
+                // createjs.Sound.on("fileload", loadHandler);
+                // createjs.Sound.registerSound({ src: { ogg: audioURL }, type: "sound" }, "myID", 3);
+                function handleComplete(event) {
+                    console.log("file loaded!");
+                    instance = createjs.Sound.play("myID");
+                }
+                function handleError(event) {
+                    console.log(event.target);
+                    console.log(event.type);
+                }
+/*
+                { src: { mp3: URL.createObjectURL(blob) }, type: "sound" }
                 if (!RobotDancing[robotSelected]) {
                     LoopInstanceArray[robotSelected].volume = 0;
-                }
+                } */
             }
 
             mediaRecorder.ondataavailable = function(e) {
@@ -193,10 +213,10 @@
 
         for (var i = 0; i < 6; i++) {
             if (recordings[i]) {
-                LoopInstanceArray[i].volume = 0;
+                /* LoopInstanceArray[i].volume = 0;
                 LoopInstanceArray[i] = new Audio(recordings[i]);
                 LoopInstanceArray[i].play();
-                LoopInstanceArray[i].volume = 1;
+                LoopInstanceArray[i].volume = 1; */
             }
         }
 
@@ -271,7 +291,7 @@
         gsap.ticker.add(tick);
 
         function tick() {
-            console.log(LoopInstance0.position);
+            // console.log(LoopInstance0.position);
         }
 
     };
