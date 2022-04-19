@@ -26,7 +26,7 @@
         revertBtn,
         recordBtn,
         recordModeOn            = false,
-        robotSelected;
+        robotSelected           = 0;
 
 
     //	Functions.

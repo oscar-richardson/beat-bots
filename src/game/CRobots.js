@@ -191,16 +191,6 @@
             console.log("recorder stopped");
         }
 
-        if (aboutToRecord) {
-            LoopInstanceArray[robotSelected].volume = 0;
-            LoopInstanceArray[robotSelected] = beablib.Audio.Play("");
-            mediaRecorder.start();
-            aboutToRecord = false;
-            recordingInProgress = true;
-            console.log(mediaRecorder.state);
-            console.log("recorder started");
-        }
-
         for (var i = 0; i < 6; i++) {
             if (recordings[i]) {
                 LoopInstanceArray[i].volume = 0;
@@ -208,6 +198,17 @@
                 LoopInstanceArray[i].play();
                 LoopInstanceArray[i].volume = 1;
             }
+        }
+
+        if (aboutToRecord) {
+            console.log(LoopInstanceArray[robotSelected]);
+            LoopInstanceArray[robotSelected].volume = 0;
+            LoopInstanceArray[robotSelected] = beablib.Audio.Play("");
+            mediaRecorder.start();
+            aboutToRecord = false;
+            recordingInProgress = true;
+            console.log(mediaRecorder.state);
+            console.log("recorder started");
         }
 
         for (var i = 0; i < 6; i++) {
