@@ -268,6 +268,12 @@
         LoopInstance0.on("loop", this.DoLoop);
         LoopInstance0.setPosition(LoopInstance0.getDuration());
 
+        gsap.ticker.add(tick);
+
+        function tick() {
+            console.log(LoopInstance0.position);
+        }
+
     };
 
     //-----------------------------------------------------------------------------------------------
