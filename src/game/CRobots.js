@@ -143,34 +143,20 @@ var instance;
             };
 
             mediaRecorder.onstop = function(e) {
-                const blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
+                const blob = new Blob(chunks, { 'type' : 'audio/wav; codecs=opus' });
                 chunks = [];
                 const audioURL = (URL || webkitURL).createObjectURL(blob);
                 console.log(audioURL);
                 recordings[robotSelected] = audioURL;
-                LoopInstanceArray[robotSelected].volume = 0;
-                var queue = new createjs.LoadQueue();
-                queue.installPlugin(createjs.Sound);
-                queue.on("fileload", handleComplete);
-                queue.on("error", handleError);
-                queue.loadFile({id:"myID", src: "src/imports/audio/EightiesBass_1.wav"});
-                // LoopInstanceArray[robotSelected] = new Audio(audioURL);
-                // LoopInstanceArray[robotSelected].play();
-                // createjs.Sound.alternateExtensions = ["ogg"];
-                // createjs.Sound.on("fileload", loadHandler);
-                // createjs.Sound.registerSound({ src: { ogg: audioURL }, type: "sound" }, "myID", 3);
-                function handleComplete(event) {
-                    console.log("file loaded!");
-                    instance = createjs.Sound.play("myID");
-                }
-                function handleError(event) {
-                    console.log(event.target);
-                    console.log(event.type);
-                }
-/*
-                { src: { mp3: URL.createObjectURL(blob) }, type: "sound" }
-                if (!RobotDancing[robotSelected]) {
-                    LoopInstanceArray[robotSelected].volume = 0;
+                LoopInstanceArray[robotSelected].setVolume(0);
+                LoopInstanceArray[robotSelected] = new Howl({
+                    src: ["src/imports/audio/CleanTines_2.ogg"],
+                    format: ['ogg']
+                }).play();
+                /* if (LoopInstanceArray[robotSelected].hasOwnProperty('setVolume')) {
+                    LoopInstanceArray[robotSelected].setVolume(1);
+                } else {
+                    LoopInstanceArray[robotSelected].volume(1);
                 } */
             }
 
@@ -213,16 +199,22 @@ var instance;
 
         for (var i = 0; i < 6; i++) {
             if (recordings[i]) {
-                /* LoopInstanceArray[i].volume = 0;
-                LoopInstanceArray[i] = new Audio(recordings[i]);
-                LoopInstanceArray[i].play();
-                LoopInstanceArray[i].volume = 1; */
+                LoopInstanceArray[i].setVolume(0);
+                LoopInstanceArray[i] = new Howl({
+                    src: ["src/imports/audio/CleanTines_2.ogg"],
+                    format: ['ogg']
+                }).play();
+                /* if (LoopInstanceArray[i].hasOwnProperty('setVolume')) {
+                    LoopInstanceArray[i].setVolume(1);
+                } else {
+                    LoopInstanceArray[i].volume(1);
+                } */
             }
         }
 
         if (aboutToRecord) {
             console.log(LoopInstanceArray[robotSelected]);
-            LoopInstanceArray[robotSelected].volume = 0;
+            LoopInstanceArray[robotSelected].setVolume(0);
             LoopInstanceArray[robotSelected] = beablib.Audio.Play("");
             mediaRecorder.start();
             aboutToRecord = false;
@@ -233,7 +225,11 @@ var instance;
 
         for (var i = 0; i < 6; i++) {
             if (!RobotDancing[i]) {
-                LoopInstanceArray[i].volume = 0;
+                if (LoopInstanceArray[i].hasOwnProperty('setVolume')) {
+                    LoopInstanceArray[i].setVolume(0);
+                } else {
+                    LoopInstanceArray[i].volume(0);
+                }
             }
         }
         console.log("Loop!");
@@ -243,14 +239,27 @@ var instance;
 
     CRobots.prototype.Revert	=	function( number )
     {
-        LoopInstanceArray[number].volume = 0;
-        recordings[number] = false;
-        let position = LoopInstance1.getPosition();
-        LoopInstanceArray[number] = beablib.Audio.Play(["Drumbox", "Arpegio", "Strings", "Bass", "Tinkle", "Disco"][number]);
-        LoopInstanceArray[number].setPosition(position);
-        if (RobotDancing[number]) {
-            LoopInstanceArray[number].volume = 1;
+        if (LoopInstanceArray[number].hasOwnProperty('setVolume')) {
+            LoopInstanceArray[number].setVolume(0);
+        } else {
+            LoopInstanceArray[number].volume(0);
         }
+        recordings[number] = false;
+        LoopInstanceArray[number] = new Howl({
+            src: [["src/imports/audio/Techno808_1.wav", "src/imports/audio/CleanTines_1.wav", "src/imports/audio/SynthPopStrings_1.wav", "src/imports/audio/EightiesBass_1.wav", "src/imports/audio/SweetElectricPad_1.wav", "src/imports/audio/IndieDisco_1.wav"][number]]
+        });
+        LoopInstanceArray[number].play();
+        LoopInstanceArray[number].seek(LoopInstance1.getPosition()/1000);
+        LoopInstanceArray[number].volume(1);
+        LoopInstanceArray[number].seek(LoopInstance1.getPosition()/1000);
+        /*
+        if (RobotDancing[number]) {
+            if (LoopInstanceArray[number].hasOwnProperty('setVolume')) {
+                LoopInstanceArray[number].setVolume(1);
+            } else {
+                LoopInstanceArray[number].volume(1);
+            }
+        }*/
     }
 
     CRobots.prototype.Reposition = function (scale) {
@@ -284,7 +293,7 @@ var instance;
         }
 
         LoopInstance0 = beablib.Audio.Play("Drumbox", {Loop: true});
-        LoopInstance0.volume = 0;
+        LoopInstance0.setVolume(0);
         LoopInstance0.on("loop", this.DoLoop);
         LoopInstance0.setPosition(LoopInstance0.getDuration());
 
@@ -317,7 +326,12 @@ var instance;
             RobotAsleepArray[number].position.y = RobotAsleepArray[number].position.y - 60;
             RobotWakeUpArray[number].alpha = 1;
 
-            gsap.delayedCall(1, function(){LoopInstanceArray[number].volume = 1;});
+            gsap.delayedCall(1, function(){
+                if (LoopInstanceArray[number].hasOwnProperty('setVolume')) {
+                    LoopInstanceArray[number].setVolume(1);
+                } else {
+                    LoopInstanceArray[number].volume(1);
+            }});
 
             ///// set this duration as a variable /////
             RobotWakeUpArray[number].gotoAndPlayDuration("loop", {duration: 1, stage: TheStage});
@@ -343,7 +357,12 @@ var instance;
 
             gsap.delayedCall(0.01, function(){beablib.Audio.Play(RobotSleepAudioArray[number]);});
 
-            gsap.delayedCall(0.01, function(){LoopInstanceArray[number].volume = 0;});
+            gsap.delayedCall(0.01, function(){
+                if (LoopInstanceArray[number].hasOwnProperty('setVolume')) {
+                    LoopInstanceArray[number].setVolume(0);
+                } else {
+                    LoopInstanceArray[number].volume(0);
+            }});
 
             RobotDancing[number] = false;
 
