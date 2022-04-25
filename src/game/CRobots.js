@@ -27,13 +27,12 @@ var before;
         RobotWakeUpAudioArray      = [ "wakeUp1", "wakeUp7", "wakeUp3", "wakeUp8", "wakeUp9", "wakeUp6" ],
         RobotSleepAudioArray       = [ "wakeUp2", "wakeUp4", "wakeUp2", "wakeUp5", "wakeUp2", "wakeUp4" ],
 
-        LoopInstance0,
-        LoopInstance1,
-        LoopInstance2,
-        LoopInstance3,
-        LoopInstance4,
-        LoopInstance5,
-        LoopInstance6,
+        Drumbox,
+        Arpegio,
+        Strings,
+        Bass,
+        Tinkle,
+        Disco,
         LoopInstanceArray   =[],
         RobotDancing = [false, false, false, false, false, false],
         robotOrder = [3, 1, 2, 0, 4, 5],
@@ -47,6 +46,13 @@ var before;
     var UpdateStage = function () {
         TheStage.SetDirty();
     };
+
+    function playSoundAtPosition(sound, pos) {
+        sound.once("play", () => {
+          sound.seek(pos);
+        });
+        sound.play();
+    }
 
     //-----------------------------------------------------------------------------------------------
     //	Object definition.
@@ -143,67 +149,23 @@ var before;
             };
 
             mediaRecorder.onstart = function(e) {
-                LoopInstance1 = beablib.Audio.Play("Drumbox");
-                LoopInstance2 = beablib.Audio.Play("Arpegio");
-                LoopInstance3 = beablib.Audio.Play("Strings");
-                LoopInstance4 = beablib.Audio.Play("Bass");
-                LoopInstance5 = beablib.Audio.Play("Tinkle");
-                LoopInstance6 = beablib.Audio.Play("Disco");
-                LoopInstanceArray= [LoopInstance1, LoopInstance2, LoopInstance3, LoopInstance4, LoopInstance5, LoopInstance6];
+                console.log("Drumbox.position: " + Drumbox.position);
                 LoopInstanceArray[robotSelected].setVolume(0);
                 LoopInstanceArray[robotSelected] = beablib.Audio.Play("");
-
-                for (var i = 0; i < 6; i++) {
-                    if (recordings[i]) {
-                        LoopInstanceArray[i].setVolume(0);
-                        LoopInstanceArray[i] = new Howl({
-                            src: [recordings[i]],
-                            format: ['ogg']
-                        });
-                        LoopInstanceArray[i].play();
-                        LoopInstanceArray[i].seek(0.25);
-                        /* if (LoopInstanceArray[i].hasOwnProperty('setVolume')) {
-                            LoopInstanceArray[i].setVolume(1);
-                        } else {
-                            LoopInstanceArray[i].volume(1);
-                        } */
-                    }
-                }
-
-                for (var i = 0; i < 6; i++) {
-                    if (!RobotDancing[i]) {
-                        if (LoopInstanceArray[i].hasOwnProperty('setVolume')) {
-                            LoopInstanceArray[i].setVolume(0);
-                        } else {
-                            LoopInstanceArray[i].volume(0);
-                        }
-                    }
-                }
-
-                let after = LoopInstance0.getPosition()
-                let timeTaken = after-before;
-                console.log("Media Recorder took " + timeTaken + " ms to start");
             }
 
             mediaRecorder.onstop = function(e) {
+                LoopInstanceArray[robotSelected].setVolume(0);
+                console.log(chunks);
                 const blob = new Blob(chunks, { 'type' : 'audio/wav; codecs=opus' });
                 chunks = [];
                 const audioURL = (URL || webkitURL).createObjectURL(blob);
-                console.log(audioURL);
-                recordings[robotSelected] = audioURL;
-                LoopInstanceArray[robotSelected].setVolume(0);
                 LoopInstanceArray[robotSelected] = new Howl({
                     src: [audioURL],
                     format: ['ogg']
                 });
-                LoopInstanceArray[robotSelected].play();
-                LoopInstanceArray[robotSelected].seek(0.25);
-                instance = LoopInstanceArray[robotSelected];
-                /* if (LoopInstanceArray[robotSelected].hasOwnProperty('setVolume')) {
-                    LoopInstanceArray[robotSelected].setVolume(1);
-                } else {
-                    LoopInstanceArray[robotSelected].volume(1);
-                } */
+                playSoundAtPosition(LoopInstanceArray[robotSelected],0.25);
+                recordings[robotSelected] = audioURL;
             }
 
             mediaRecorder.ondataavailable = function(e) {
@@ -228,53 +190,27 @@ var before;
     CRobots.prototype.DoLoop = function () {
 
         if (aboutToRecord) {
-            before = LoopInstance0.getPosition()
             mediaRecorder.start();
             aboutToRecord = false;
             recordingInProgress = true;
-        } else {
-            if (recordingInProgress) {
-                mediaRecorder.stop();
-                Game.ReActivateRecordButton();
-                recordingInProgress = false;
-            }
+        } else if (recordingInProgress) {
+            mediaRecorder.stop();
+            Game.ReActivateRecordButton();
+            recordingInProgress = false;
+        }
 
-            LoopInstance1 = beablib.Audio.Play("Drumbox");
-            LoopInstance2 = beablib.Audio.Play("Arpegio");
-            LoopInstance3 = beablib.Audio.Play("Strings");
-            LoopInstance4 = beablib.Audio.Play("Bass");
-            LoopInstance5 = beablib.Audio.Play("Tinkle");
-            LoopInstance6 = beablib.Audio.Play("Disco");
-            LoopInstanceArray= [LoopInstance1, LoopInstance2, LoopInstance3, LoopInstance4, LoopInstance5, LoopInstance6];
-
-            for (var i = 0; i < 6; i++) {
-                if (recordings[i]) {
-                    LoopInstanceArray[i].setVolume(0);
-                    LoopInstanceArray[i] = new Howl({
-                        src: [recordings[i]],
-                        format: ['ogg']
-                    });
-                    LoopInstanceArray[i].play();
-                    LoopInstanceArray[i].seek(0.25);
-                    /* if (LoopInstanceArray[i].hasOwnProperty('setVolume')) {
-                        LoopInstanceArray[i].setVolume(1);
-                    } else {
-                        LoopInstanceArray[i].volume(1);
-                    } */
-                }
-            }
-
-            for (var i = 0; i < 6; i++) {
-                if (!RobotDancing[i]) {
-                    if (LoopInstanceArray[i].hasOwnProperty('setVolume')) {
-                        LoopInstanceArray[i].setVolume(0);
-                    } else {
-                        LoopInstanceArray[i].volume(0);
-                    }
-                }
+        for (var i = 0; i < 6; i++) {
+            if (recordings[i]) {
+                LoopInstanceArray[i] = new Howl({
+                    src: [recordings[i]],
+                    format: ['ogg']
+                });
+                playSoundAtPosition(LoopInstanceArray[i],0.15);
             }
         }
+
         console.log("Loop!");
+
     };
 
     //-----------------------------------------------------------------------------------------------
@@ -334,15 +270,28 @@ var before;
 
         }
 
-        LoopInstance0 = beablib.Audio.Play("Drumbox", {Loop: true});
-        LoopInstance0.setVolume(0);
-        LoopInstance0.on("loop", this.DoLoop);
-        LoopInstance0.setPosition(LoopInstance0.getDuration());
+        Drumbox = beablib.Audio.Play("Drumbox", {Loop: true});
+        Arpegio = beablib.Audio.Play("Arpegio", {Loop: true});
+        Strings = beablib.Audio.Play("Strings", {Loop: true});
+        Bass = beablib.Audio.Play("Bass", {Loop: true});
+        Tinkle = beablib.Audio.Play("Tinkle", {Loop: true});
+        Disco = beablib.Audio.Play("Disco", {Loop: true});
+
+        Drumbox.setVolume(0);
+        Arpegio.setVolume(0);
+        Strings.setVolume(0);
+        Bass.setVolume(0);
+        Tinkle.setVolume(0);
+        Disco.setVolume(0);
+
+        LoopInstanceArray= [Drumbox, Arpegio, Strings, Bass, Tinkle, Disco];
+
+        Drumbox.on("loop", this.DoLoop);
 
         gsap.ticker.add(tick);
 
         function tick() {
-            // console.log(LoopInstance0.position);
+            // console.log(Drumbox.position);
         }
 
     };
