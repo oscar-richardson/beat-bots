@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------------------------
 var instance;
-
+var before;
 (function() {
     "use strict";
 
@@ -142,6 +142,49 @@ var instance;
                 aboutToRecord = true;
             };
 
+            mediaRecorder.onstart = function(e) {
+                LoopInstance1 = beablib.Audio.Play("Drumbox");
+                LoopInstance2 = beablib.Audio.Play("Arpegio");
+                LoopInstance3 = beablib.Audio.Play("Strings");
+                LoopInstance4 = beablib.Audio.Play("Bass");
+                LoopInstance5 = beablib.Audio.Play("Tinkle");
+                LoopInstance6 = beablib.Audio.Play("Disco");
+                LoopInstanceArray= [LoopInstance1, LoopInstance2, LoopInstance3, LoopInstance4, LoopInstance5, LoopInstance6];
+                LoopInstanceArray[robotSelected].setVolume(0);
+                LoopInstanceArray[robotSelected] = beablib.Audio.Play("");
+
+                for (var i = 0; i < 6; i++) {
+                    if (recordings[i]) {
+                        LoopInstanceArray[i].setVolume(0);
+                        LoopInstanceArray[i] = new Howl({
+                            src: [recordings[i]],
+                            format: ['ogg']
+                        });
+                        LoopInstanceArray[i].play();
+                        LoopInstanceArray[i].seek(0.25);
+                        /* if (LoopInstanceArray[i].hasOwnProperty('setVolume')) {
+                            LoopInstanceArray[i].setVolume(1);
+                        } else {
+                            LoopInstanceArray[i].volume(1);
+                        } */
+                    }
+                }
+
+                for (var i = 0; i < 6; i++) {
+                    if (!RobotDancing[i]) {
+                        if (LoopInstanceArray[i].hasOwnProperty('setVolume')) {
+                            LoopInstanceArray[i].setVolume(0);
+                        } else {
+                            LoopInstanceArray[i].volume(0);
+                        }
+                    }
+                }
+
+                let after = LoopInstance0.getPosition()
+                let timeTaken = after-before;
+                console.log("Media Recorder took " + timeTaken + " ms to start");
+            }
+
             mediaRecorder.onstop = function(e) {
                 const blob = new Blob(chunks, { 'type' : 'audio/wav; codecs=opus' });
                 chunks = [];
@@ -150,9 +193,12 @@ var instance;
                 recordings[robotSelected] = audioURL;
                 LoopInstanceArray[robotSelected].setVolume(0);
                 LoopInstanceArray[robotSelected] = new Howl({
-                    src: ["src/imports/audio/CleanTines_2.ogg"],
+                    src: [audioURL],
                     format: ['ogg']
-                }).play();
+                });
+                LoopInstanceArray[robotSelected].play();
+                LoopInstanceArray[robotSelected].seek(0.25);
+                instance = LoopInstanceArray[robotSelected];
                 /* if (LoopInstanceArray[robotSelected].hasOwnProperty('setVolume')) {
                     LoopInstanceArray[robotSelected].setVolume(1);
                 } else {
@@ -181,54 +227,50 @@ var instance;
 
     CRobots.prototype.DoLoop = function () {
 
-        LoopInstance1 = beablib.Audio.Play("Drumbox");
-        LoopInstance2 = beablib.Audio.Play("Arpegio");
-        LoopInstance3 = beablib.Audio.Play("Strings");
-        LoopInstance4 = beablib.Audio.Play("Bass");
-        LoopInstance5 = beablib.Audio.Play("Tinkle");
-        LoopInstance6 = beablib.Audio.Play("Disco");
-        LoopInstanceArray= [LoopInstance1, LoopInstance2, LoopInstance3, LoopInstance4, LoopInstance5, LoopInstance6];
-
-        if (recordingInProgress) {
-            mediaRecorder.stop();
-            recordingInProgress = false;
-            Game.ReActivateRecordButton();
-            console.log(mediaRecorder.state);
-            console.log("recorder stopped");
-        }
-
-        for (var i = 0; i < 6; i++) {
-            if (recordings[i]) {
-                LoopInstanceArray[i].setVolume(0);
-                LoopInstanceArray[i] = new Howl({
-                    src: ["src/imports/audio/CleanTines_2.ogg"],
-                    format: ['ogg']
-                }).play();
-                /* if (LoopInstanceArray[i].hasOwnProperty('setVolume')) {
-                    LoopInstanceArray[i].setVolume(1);
-                } else {
-                    LoopInstanceArray[i].volume(1);
-                } */
-            }
-        }
-
         if (aboutToRecord) {
-            console.log(LoopInstanceArray[robotSelected]);
-            LoopInstanceArray[robotSelected].setVolume(0);
-            LoopInstanceArray[robotSelected] = beablib.Audio.Play("");
+            before = LoopInstance0.getPosition()
             mediaRecorder.start();
             aboutToRecord = false;
             recordingInProgress = true;
-            console.log(mediaRecorder.state);
-            console.log("recorder started");
-        }
+        } else {
+            if (recordingInProgress) {
+                mediaRecorder.stop();
+                Game.ReActivateRecordButton();
+                recordingInProgress = false;
+            }
 
-        for (var i = 0; i < 6; i++) {
-            if (!RobotDancing[i]) {
-                if (LoopInstanceArray[i].hasOwnProperty('setVolume')) {
+            LoopInstance1 = beablib.Audio.Play("Drumbox");
+            LoopInstance2 = beablib.Audio.Play("Arpegio");
+            LoopInstance3 = beablib.Audio.Play("Strings");
+            LoopInstance4 = beablib.Audio.Play("Bass");
+            LoopInstance5 = beablib.Audio.Play("Tinkle");
+            LoopInstance6 = beablib.Audio.Play("Disco");
+            LoopInstanceArray= [LoopInstance1, LoopInstance2, LoopInstance3, LoopInstance4, LoopInstance5, LoopInstance6];
+
+            for (var i = 0; i < 6; i++) {
+                if (recordings[i]) {
                     LoopInstanceArray[i].setVolume(0);
-                } else {
-                    LoopInstanceArray[i].volume(0);
+                    LoopInstanceArray[i] = new Howl({
+                        src: [recordings[i]],
+                        format: ['ogg']
+                    });
+                    LoopInstanceArray[i].play();
+                    LoopInstanceArray[i].seek(0.25);
+                    /* if (LoopInstanceArray[i].hasOwnProperty('setVolume')) {
+                        LoopInstanceArray[i].setVolume(1);
+                    } else {
+                        LoopInstanceArray[i].volume(1);
+                    } */
+                }
+            }
+
+            for (var i = 0; i < 6; i++) {
+                if (!RobotDancing[i]) {
+                    if (LoopInstanceArray[i].hasOwnProperty('setVolume')) {
+                        LoopInstanceArray[i].setVolume(0);
+                    } else {
+                        LoopInstanceArray[i].volume(0);
+                    }
                 }
             }
         }
