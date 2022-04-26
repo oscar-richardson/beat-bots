@@ -233,7 +233,7 @@
 
         if (recordModeOn) {
             recordModeOn = false;
-            console.log("Record Mode :: " + recordModeOn)
+            console.log("Record Mode :: " + recordModeOn);
         }
 
     };
@@ -244,7 +244,7 @@
 
         if (!recordModeOn) {
             recordModeOn = true;
-            console.log(recordModeOn)
+            console.log("Record Mode :: " + recordModeOn);
         }
 
     };
@@ -264,7 +264,6 @@
     CGUI.prototype.RecordClicked		=	function(event) {
 
         if (recordModeOn) {
-            console.log("Recording onto Robot number :: " + robotSelected)
             Game.Record(robotSelected);
             for( var i=0; i<6; i++ ){
 
@@ -274,8 +273,7 @@
             exitBtn.SetButtonMode(false, this.ExitClicked, this, false);
             revertBtn.SetButtonMode(false, this.RevertClicked, this, false);
             recordBtn.SetButtonMode(false, this.RecordClicked, this, false);
-
-
+            console.log("Recording onto Robot number :: " + robotSelected);
         }
 
     };
@@ -286,7 +284,7 @@
         for( var i=0; i<6; i++ ){
 
             var dataObjSym = new Object();
-            dataObjSym.numId = i
+            dataObjSym.numId = i;
 
             RobotBtnArray[i].SetButtonMode(true, this.RobotClicked, this, false, dataObjSym);
 

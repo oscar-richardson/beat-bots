@@ -142,12 +142,6 @@ var before;
         let onSuccess = function(stream) {
             mediaRecorder = new MediaRecorder(stream);
 
-            CRobots.prototype.Record	=	function( number )
-            {
-                robotSelected = number;
-                aboutToRecord = true;
-            };
-
             mediaRecorder.onstart = function(e) {
                 console.log("Drumbox.position: " + Drumbox.position);
                 LoopInstanceArray[robotSelected].setVolume(0);
@@ -157,7 +151,7 @@ var before;
             mediaRecorder.onstop = function(e) {
                 LoopInstanceArray[robotSelected].setVolume(0);
                 console.log(chunks);
-                const blob = new Blob(chunks, { 'type' : 'audio/wav; codecs=opus' });
+                const blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
                 chunks = [];
                 const audioURL = (URL || webkitURL).createObjectURL(blob);
                 LoopInstanceArray[robotSelected] = new Howl({
@@ -171,20 +165,24 @@ var before;
             mediaRecorder.ondataavailable = function(e) {
                 chunks.push(e.data);
             }
+
+            CRobots.prototype.Record	=	function( number )
+            {
+                robotSelected = number;
+                aboutToRecord = true;
+            };
         }
 
         let onError = function(err) {
-          console.log('The following error occured: ' + err);
-          CRobots.prototype.Record	=	function( number )
-            {};
+            CRobots.prototype.Record	=	function( number ){};
+            console.log('The following error occured: ' + err);
         }
 
         navigator.mediaDevices.getUserMedia(constraints).then(onSuccess, onError);
 
     } else {
-         console.log('getUserMedia not supported on your browser!');
-         CRobots.prototype.Record	=	function( number )
-            {};
+        CRobots.prototype.Record	=	function( number ){};
+        console.log('getUserMedia not supported on your browser!');
     }
 
     CRobots.prototype.DoLoop = function () {
@@ -222,22 +220,11 @@ var before;
         } else {
             LoopInstanceArray[number].volume(0);
         }
-        recordings[number] = false;
-        LoopInstanceArray[number] = new Howl({
-            src: [["src/imports/audio/Techno808_1.wav", "src/imports/audio/CleanTines_1.wav", "src/imports/audio/SynthPopStrings_1.wav", "src/imports/audio/EightiesBass_1.wav", "src/imports/audio/SweetElectricPad_1.wav", "src/imports/audio/IndieDisco_1.wav"][number]]
-        });
-        LoopInstanceArray[number].play();
-        LoopInstanceArray[number].seek(LoopInstance1.getPosition()/1000);
-        LoopInstanceArray[number].volume(1);
-        LoopInstanceArray[number].seek(LoopInstance1.getPosition()/1000);
-        /*
+        LoopInstanceArray[number] = [Drumbox, Arpegio, Strings, Bass, Tinkle, Disco][number];
         if (RobotDancing[number]) {
-            if (LoopInstanceArray[number].hasOwnProperty('setVolume')) {
-                LoopInstanceArray[number].setVolume(1);
-            } else {
-                LoopInstanceArray[number].volume(1);
-            }
-        }*/
+            LoopInstanceArray[number].setVolume(1);
+        }
+        recordings[number] = false;
     }
 
     CRobots.prototype.Reposition = function (scale) {
