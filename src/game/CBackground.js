@@ -1,71 +1,71 @@
 //-----------------------------------------------------------------------------------------------
 
-(function()
-{
-	"use strict";
+(function () {
+  "use strict";
 
-	//-----------------------------------------------------------------------------------------------
-	//	Const-ish.
-	//-----------------------------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------
+  //	Const-ish.
+  //-----------------------------------------------------------------------------------------------
 
-	//-----------------------------------------------------------------------------------------------
-	//	Private statics.
-	//-----------------------------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------
+  //	Private statics.
+  //-----------------------------------------------------------------------------------------------
 
-	//	Beablib object aliases.
-	var	Game		=	beablib.Game,
-		Renderer	=	beablib.Renderer;
+  //	Beablib object aliases.
+  var Game = beablib.Game,
+    Renderer = beablib.Renderer;
 
-	var	TheStage		=	null;
+  var TheStage = null;
 
-	//-----------------------------------------------------------------------------------------------
-	//	Object definition.
-	//-----------------------------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------
+  //	Object definition.
+  //-----------------------------------------------------------------------------------------------
 
-	var CBackground	=	function( stage )
-	{
-		//	Make a note of the stage.
-		TheStage	=	stage;
+  var CBackground = function (stage) {
+    //	Make a note of the stage.
+    TheStage = stage;
 
-		//	Create the background sprite...
-		this.Background			=	Renderer.CreateSprite( Game.BackgroundSheet, "Background" );
-		this.GUIDE			=	Renderer.CreateSprite( Game.BackgroundSheet, "ActiveGUIDE" );
-		this.GUIDE.alpha = 0;
+    //	Create the background sprite...
+    this.Background = Renderer.CreateSprite(Game.BackgroundSheet, "Background");
+    this.GUIDE = Renderer.CreateSprite(Game.BackgroundSheet, "ActiveGUIDE");
+    this.GUIDE.alpha = 0;
 
-		//	...& add it to the stage.
-		TheStage.addChild( this.Background );
-        TheStage.addChild( this.GUIDE );
+    //	...& add it to the stage.
+    TheStage.addChild(this.Background);
+    TheStage.addChild(this.GUIDE);
 
-		//	Make sure we're repositionable.
-		beablib.SetRepositionable( this );
-	};
+    //	Make sure we're repositionable.
+    beablib.SetRepositionable(this);
+  };
 
-	//-----------------------------------------------------------------------------------------------
-	//	Public.
-	//-----------------------------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------
+  //	Public.
+  //-----------------------------------------------------------------------------------------------
 
-	CBackground.prototype.Reposition		=	function( scale )
-	{
-        this.Background.SetPosition( TheStage.View.HalfWidth, TheStage.View.HalfHeight );
-        this.Background.SetScale( scale );
+  CBackground.prototype.Reposition = function (scale) {
+    this.Background.SetPosition(
+      TheStage.View.HalfWidth,
+      TheStage.View.HalfHeight
+    );
+    this.Background.SetScale(scale);
 
-        this.GUIDE.SetPosition( TheStage.View.HalfWidth, TheStage.View.HalfHeight );
-        this.GUIDE.SetScale( scale );
+    this.GUIDE.SetPosition(TheStage.View.HalfWidth, TheStage.View.HalfHeight);
+    this.GUIDE.SetScale(scale);
 
-        TheStage.SetDirty();
-	};
+    TheStage.SetDirty();
+  };
 
-	//-----------------------------------------------------------------------------------------------
-	//	Statics.
-	//-----------------------------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------
+  //	Statics.
+  //-----------------------------------------------------------------------------------------------
 
-	//-----------------------------------------------------------------------------------------------
-	//	Namespace path.
-	//-----------------------------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------
+  //	Namespace path.
+  //-----------------------------------------------------------------------------------------------
 
-	Game.CBackground	=	CBackground;
+  Game.CBackground = CBackground;
 
-	//-----------------------------------------------------------------------------------------------
-}());
+  //-----------------------------------------------------------------------------------------------
+})();
 
 //-----------------------------------------------------------------------------------------------

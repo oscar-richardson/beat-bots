@@ -1,131 +1,156 @@
 //-----------------------------------------------------------------------------------------------
 
-(function() {
-    "use strict";
+(function () {
+  "use strict";
 
-    //-----------------------------------------------------------------------------------------------
-    //	Const-ish.
-    //-----------------------------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------
+  //	Const-ish.
+  //-----------------------------------------------------------------------------------------------
 
-    //	Canvas sizes.
-	var	BACK_CANVAS_HEIGHT		=	768,
-    BACK_CANVAS_WIDTH		=	1136,
-    GAME_CANVAS_HEIGHT		=	768,
-    GAME_CANVAS_WIDTH		=	1136,
-    GUI_CANVAS_HEIGHT		=	768,
-    GUI_CANVAS_WIDTH		=	1136;
+  //	Canvas sizes.
+  var BACK_CANVAS_HEIGHT = 768,
+    BACK_CANVAS_WIDTH = 1136,
+    GAME_CANVAS_HEIGHT = 768,
+    GAME_CANVAS_WIDTH = 1136,
+    GUI_CANVAS_HEIGHT = 768,
+    GUI_CANVAS_WIDTH = 1136;
 
-    //-----------------------------------------------------------------------------------------------
-    //	Main variables.
-    //-----------------------------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------
+  //	Main variables.
+  //-----------------------------------------------------------------------------------------------
 
-    // Beablib alias.
-    var Game = beablib.Game,
-        Renderer = beablib.Renderer;
+  // Beablib alias.
+  var Game = beablib.Game,
+    Renderer = beablib.Renderer;
 
-    //	Game aliases.
-    var TheBackground = {},
-        TheRobots = {},
-        TheGUI = {};
+  //	Game aliases.
+  var TheBackground = {},
+    TheRobots = {},
+    TheGUI = {};
 
-    //-----------------------------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------
 
-    Game.FontDefinitions = [];
+  Game.FontDefinitions = [];
 
-    //-----------------------------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------
 
-    Game.Init = function() {
-        beablib.log("Game::Init::Enter");
+  Game.Init = function () {
+    beablib.log("Game::Init::Enter");
 
-        //	Configure beablib.
-        beablib.PauseEnabled = true;
-        beablib.ResizeEnabled = true;
+    //	Configure beablib.
+    beablib.PauseEnabled = true;
+    beablib.ResizeEnabled = true;
 
-        //	Create the global sprite sheets.
-        Game.BackgroundSheet = beablib.CreateSpriteSheet(beablib.SpriteSheetPath.BackgroundSS);
+    //	Create the global sprite sheets.
+    Game.BackgroundSheet = beablib.CreateSpriteSheet(
+      beablib.SpriteSheetPath.BackgroundSS
+    );
 
-        gsap.registerPlugin(CustomBounce, CustomEase, CustomWiggle, MotionPathPlugin, PixiPlugin, Physics2DPlugin);
+    gsap.registerPlugin(
+      CustomBounce,
+      CustomEase,
+      CustomWiggle,
+      MotionPathPlugin,
+      PixiPlugin,
+      Physics2DPlugin
+    );
 
-        //	Create our game's canvases...
-        Game.GameCanvas = beablib.CreateCanvas({ id: "GameCanvas", zIndex: 4, position: "fixed", AddToParent: true });
-        Game.GUICanvas = beablib.CreateCanvas( {id:"GUICanvas", zIndex:10, position:"fixed", AddToParent:true });
+    //	Create our game's canvases...
+    Game.GameCanvas = beablib.CreateCanvas({
+      id: "GameCanvas",
+      zIndex: 4,
+      position: "fixed",
+      AddToParent: true,
+    });
+    Game.GUICanvas = beablib.CreateCanvas({
+      id: "GUICanvas",
+      zIndex: 10,
+      position: "fixed",
+      AddToParent: true,
+    });
 
-        //	...& stages.
-        Game.BackgroundStage = beablib.CreateStage(beablib.GetBaseCanvasName(), {width:BACK_CANVAS_WIDTH, height:BACK_CANVAS_HEIGHT, anchor_h:"centre", anchor_v:"centre", clamp:true});
-        Game.GameStage = beablib.CreateStage( "GameCanvas",	{width:GAME_CANVAS_WIDTH, height:GAME_CANVAS_HEIGHT, anchor_h:"centre", anchor_v:"centre"} );
-        Game.GUIStage = beablib.CreateStage( "GUICanvas",	{width:GUI_CANVAS_WIDTH, height:GUI_CANVAS_HEIGHT, anchor_h:"centre", anchor_v:"centre", clamp:true, touch:true} );
+    //	...& stages.
+    Game.BackgroundStage = beablib.CreateStage(beablib.GetBaseCanvasName(), {
+      width: BACK_CANVAS_WIDTH,
+      height: BACK_CANVAS_HEIGHT,
+      anchor_h: "centre",
+      anchor_v: "centre",
+      clamp: true,
+    });
+    Game.GameStage = beablib.CreateStage("GameCanvas", {
+      width: GAME_CANVAS_WIDTH,
+      height: GAME_CANVAS_HEIGHT,
+      anchor_h: "centre",
+      anchor_v: "centre",
+    });
+    Game.GUIStage = beablib.CreateStage("GUICanvas", {
+      width: GUI_CANVAS_WIDTH,
+      height: GUI_CANVAS_HEIGHT,
+      anchor_h: "centre",
+      anchor_v: "centre",
+      clamp: true,
+      touch: true,
+    });
 
-        //	Create the game's components.
-        TheBackground = new Game.CBackground(Game.BackgroundStage);
-        TheRobots = new Game.CRobots( Game.GameStage );
-        TheGUI = new Game.CGUI( Game.GUIStage );
+    //	Create the game's components.
+    TheBackground = new Game.CBackground(Game.BackgroundStage);
+    TheRobots = new Game.CRobots(Game.GameStage);
+    TheGUI = new Game.CGUI(Game.GUIStage);
 
-        //	Set the tick handler going.
-        beablib.TweenHandler.Enable(true);
-        Game.GameCanvas.EnablePointerEvents(true);
-        Game.GUICanvas.EnablePointerEvents(true);
-        // Game.GUIStage.nextStage		=	Game.GameStage;
+    //	Set the tick handler going.
+    beablib.TweenHandler.Enable(true);
+    Game.GameCanvas.EnablePointerEvents(true);
+    Game.GUICanvas.EnablePointerEvents(true);
+    // Game.GUIStage.nextStage		=	Game.GameStage;
 
-        beablib.log("Game::Init::Exit");
-    };
+    beablib.log("Game::Init::Exit");
+  };
 
-    //-----------------------------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------
 
-    Game.StartGame = function() {};
+  Game.StartGame = function () {};
 
-    //-----------------------------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------
 
-    //-----------------------------------------------------------------------------------------------
-	//	Public.
-	//-----------------------------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------
+  //	Public.
+  //-----------------------------------------------------------------------------------------------
 
-    //-----------------------------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------
 
-    Game.RobotClicked				=	function( number )
-    {
+  Game.RobotClicked = function (number) {
+    TheRobots.RobotClicked(number);
 
-        TheRobots.RobotClicked( number );
+    console.log("Game.RobotClicked :: " + number);
+  };
 
-        console.log("Game.RobotClicked :: " + number );
+  //-----------------------------------------------------------------------------------------------
 
-    };
+  Game.Record = function (number) {
+    TheRobots.Record(number);
 
-    //-----------------------------------------------------------------------------------------------
+    console.log("Game.Record :: " + number);
+  };
 
-    Game.Record				=	function( number )
-    {
+  //-----------------------------------------------------------------------------------------------
 
-        TheRobots.Record( number );
+  Game.ReActivateRecordButton = function (number) {
+    TheGUI.ReActivateRecordButton();
+  };
 
-        console.log("Game.Record :: " + number );
+  //-----------------------------------------------------------------------------------------------
 
-    };
+  Game.Revert = function (number) {
+    TheRobots.Revert(number);
+  };
 
-    //-----------------------------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------
 
-    Game.ReActivateRecordButton				=	function( number )
-    {
-        TheGUI.ReActivateRecordButton();
-    };
+  Game.InitRobots = function () {
+    TheRobots.InitRobots();
+  };
 
-    //-----------------------------------------------------------------------------------------------
-
-    Game.Revert			=	function( number )
-    {
-        TheRobots.Revert( number );
-    };
-
-    //-----------------------------------------------------------------------------------------------
-
-    Game.InitRobots				=	function(  )
-    {
-
-        TheRobots.InitRobots(  );
-
-    };
-
-	//-----------------------------------------------------------------------------------------------
-
-}());
+  //-----------------------------------------------------------------------------------------------
+})();
 
 //-----------------------------------------------------------------------------------------------

@@ -4,7 +4,7 @@
     <params/>
     <games>
         <game name="demo">
-            <turn name="t0" value="0.00"/>   
+            <turn name="t0" value="0.00"/>
         </game>
     </games>
 </ticket>
