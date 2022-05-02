@@ -57,8 +57,7 @@ var before;
     AboutToRecord = false,
     Recordings = [false, false, false, false, false, false],
     RecordingInProgress = false,
-    RobotDancing = [false, false, false, false, false, false],
-    input;
+    RobotDancing = [false, false, false, false, false, false];
 
   //	Functions.
   var UpdateStage = function () {
@@ -203,15 +202,8 @@ var before;
   //-----------------------------------------------------------------------------------------------
 
   if (navigator.mediaDevices.getUserMedia) {
-    const constraints = { audio: true };
-
     let onSuccess = function (stream) {
-      console.log(
-        "getUserMedia() success, stream created, initializing Recorder.js ..."
-      );
-      /* use the stream */
-      input = audioContext.createMediaStreamSource(stream);
-      /* Create the Recorder object and configure to record mono sound (1 channel) Recording 2 channels will double the file size */
+      let input = audioContext.createMediaStreamSource(stream);
       Rec = new Recorder(input, {
         numChannels: 1,
       });
@@ -226,37 +218,33 @@ var before;
       console.log("The following error occured: " + err);
     };
 
-    console.log("Calling getUserMedia...");
-    navigator.mediaDevices.getUserMedia(constraints).then(onSuccess, onError);
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then(onSuccess, onError);
   } else {
     CRobots.prototype.Record = function (number) {};
     console.log("getUserMedia not supported on your browser!");
   }
 
-  CRobots.prototype.DoLoop = function () {
+  CRobots.prototype.OnLoop = function () {
     for (var i = 0; i < 6; i++) {
       if (Recordings[i]) {
         LoopInstanceArray[i] = new Howl({
           src: [Recordings[i]],
           format: ["wav"],
         });
-        playSoundAtPosition(LoopInstanceArray[i], 0);
+        LoopInstanceArray[i].play();
       }
     }
 
     if (AboutToRecord) {
-      //start the recording process
-      console.log("Drumbox.position: " + Drumbox.position);
-      gsap.delayedCall(0.15, function () {
-        console.log("Drumbox.position before: " + Drumbox.position);
-        rec.record();
-        console.log("Drumbox.position after: " + Drumbox.position);
-      });
-      console.log("Recording started");
-      AboutToRecord = false;
-      RecordingInProgress = true;
+      console.log("Before: " + Drumbox.position);
+      Rec.record();
+      console.log("After: " + Drumbox.position);
       LoopInstanceArray[RobotSelected].setVolume(0);
       LoopInstanceArray[RobotSelected] = beablib.Audio.Play("");
+      AboutToRecord = false;
+      RecordingInProgress = true;
     } else if (RecordingInProgress) {
       Rec.stop();
       Rec.exportWAV(function (blob) {
@@ -269,7 +257,7 @@ var before;
         Recordings[RobotSelected] = audioURL;
         console.log(audioURL);
       });
-      Game.ReActivateRecordButton();
+      Game.ReActivateRecordButton(); //change name
       RecordingInProgress = false;
     }
 
@@ -347,7 +335,7 @@ var before;
 
     LoopInstanceArray = [Drumbox, Arpegio, Strings, Bass, Tinkle, Disco];
 
-    Drumbox.on("loop", this.DoLoop);
+    Drumbox.on("loop", this.OnLoop);
 
     gsap.ticker.add(tick);
 
