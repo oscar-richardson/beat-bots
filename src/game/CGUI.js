@@ -226,14 +226,14 @@
       "Robot4_Asleep001",
       { alpha: 1, position: { X: -480, Y: 0 }, parent: this.ModeBtnContainer }
     );
-    var recordModeBtn = Renderer.CreateSprite(
+    var RecordModeBtn = Renderer.CreateSprite(
       beablib.CreateSpriteSheet(beablib.SpriteSheetPath["Robot6_AsleepSS"]),
       "Robot6_Asleep001",
       { alpha: 1, position: { X: 480, Y: 0 }, parent: this.ModeBtnContainer }
     );
 
     ExitBtn.SetButtonMode(true, this.ExitClicked, this, false);
-    recordModeBtn.SetButtonMode(true, this.RecordModeClicked, this, false);
+    RecordModeBtn.SetButtonMode(true, this.RecordModeClicked, this, false);
 
     UpdateStage();
   };
@@ -273,13 +273,29 @@
     var numId = data.numId;
     if (RecordModeOn) {
       RobotSelected = numId;
-      console.log("The selected Robot is Robot number :: " + RobotSelected);
+      console.log("The selected Robot is :: " + RobotSelected);
     } else {
       if (!RobotBtnArray[numId].delayActive) {
         this.RobotAction(numId);
         RobotBtnArray[numId].delayActive = true;
       }
     }
+  };
+
+  //-----------------------------------------------------------------------------------------------
+
+  CGUI.prototype.RobotAction = function (numId) {
+    console.log("I clicked Robot number :: " + numId);
+
+    Game.RobotClicked(numId);
+
+    gsap.delayedCall(1.2, this.ReActivateRobot, [numId], this); // 'THIS' ARG MIGHT NOT WORK (EASY FIX)
+  };
+
+  //-----------------------------------------------------------------------------------------------
+
+  CGUI.prototype.ReActivateRobot = function (numId) {
+    RobotBtnArray[numId].delayActive = false;
   };
 
   //-----------------------------------------------------------------------------------------------
@@ -341,22 +357,6 @@
     ExitBtn.SetButtonMode(true, this.ExitClicked, this, false);
     RevertBtn.SetButtonMode(true, this.RevertClicked, this, false);
     RecordBtn.SetButtonMode(true, this.RecordClicked, this, false);
-  };
-
-  //-----------------------------------------------------------------------------------------------
-
-  CGUI.prototype.RobotAction = function (numId) {
-    console.log("I clicked Robot number :: " + numId);
-
-    Game.RobotClicked(numId);
-
-    gsap.delayedCall(1.2, this.ReActivateRobot, [numId], this); // 'THIS' ARG MIGHT NOT WORK (EASY FIX)
-  };
-
-  //-----------------------------------------------------------------------------------------------
-
-  CGUI.prototype.ReActivateRobot = function (numId) {
-    RobotBtnArray[numId].delayActive = false;
   };
 
   //-----------------------------------------------------------------------------------------------
