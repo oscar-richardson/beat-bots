@@ -17,16 +17,16 @@
     Renderer = beablib.Renderer;
 
   //	Data.
-  var TheStage = null,
+  var ExitBtn,
+    LOGO_SCALE = 1.22,
     LOGO_XPOS = 0,
     LOGO_YPOS = 0,
-    LOGO_SCALE = 1.22,
-    RobotBtnArray = [],
-    ExitBtn,
-    RevertBtn,
     RecordBtn,
     RecordModeOn = false,
-    RobotSelected = 0;
+    RevertBtn,
+    RobotBtnArray = [],
+    RobotSelected = 0,
+    TheStage = null;
 
   //	Functions.
   var UpdateStage = function () {
