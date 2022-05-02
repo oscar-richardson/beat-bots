@@ -255,6 +255,7 @@ var before;
         });
         LoopInstanceArray[RobotSelected].play();
         Recordings[RobotSelected] = audioURL;
+        Rec.clear();
         console.log(audioURL);
       });
       Game.ReActivateRecordButton(); //change name
@@ -285,6 +286,8 @@ var before;
     }
     Recordings[number] = false;
   };
+
+  //-----------------------------------------------------------------------------------------------
 
   CRobots.prototype.Reposition = function (scale) {
     this.RobotContainer.SetPosition(
