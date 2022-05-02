@@ -47,17 +47,17 @@ var before;
     Tinkle,
     Disco,
     LoopInstanceArray = [],
-    RobotDancing = [false, false, false, false, false, false],
-    robotOrder = [3, 1, 2, 0, 4, 5],
-    rec,
-    robotSelected,
-    aboutToRecord = false,
-    recordings = [false, false, false, false, false, false],
-    recordingInProgress = false,
-    gumStream,
-    input,
+    RobotOrder = [3, 1, 2, 0, 4, 5],
     AudioContext = window.AudioContext || window.webkitAudioContext,
-    audioContext = new AudioContext();
+    audioContext = new AudioContext(),
+    Rec,
+    RobotSelected,
+    AboutToRecord = false,
+    Recordings = [false, false, false, false, false, false],
+    RecordingInProgress = false,
+    RobotDancing = [false, false, false, false, false, false],
+    gumStream,
+    input;
 
   //	Functions.
   var UpdateStage = function () {
@@ -108,7 +108,7 @@ var before;
 
     var self = this;
 
-    robotOrder.forEach(function (i) {
+    RobotOrder.forEach(function (i) {
       var robot_asleep_ss =
           beablib.SpriteSheetPath["Robot" + (i + 1) + "_AsleepSS"],
         robot_asleep = robot_asleep_ss.spriteSheet.animations;
@@ -220,12 +220,12 @@ var before;
       /* use the stream */
       input = audioContext.createMediaStreamSource(stream);
       /* Create the Recorder object and configure to record mono sound (1 channel) Recording 2 channels will double the file size */
-      rec = new Recorder(input, {
+      Rec = new Recorder(input, {
         numChannels: 1,
       });
       CRobots.prototype.Record = function (number) {
-        robotSelected = number;
-        aboutToRecord = true;
+        RobotSelected = number;
+        AboutToRecord = true;
       };
     };
 
@@ -243,16 +243,16 @@ var before;
 
   CRobots.prototype.DoLoop = function () {
     for (var i = 0; i < 6; i++) {
-      if (recordings[i]) {
+      if (Recordings[i]) {
         LoopInstanceArray[i] = new Howl({
-          src: [recordings[i]],
+          src: [Recordings[i]],
           format: ["wav"],
         });
         playSoundAtPosition(LoopInstanceArray[i], 0);
       }
     }
 
-    if (aboutToRecord) {
+    if (AboutToRecord) {
       //start the recording process
       console.log("Drumbox.position: " + Drumbox.position);
       gsap.delayedCall(0.15, function () {
@@ -261,24 +261,24 @@ var before;
         console.log("Drumbox.position after: " + Drumbox.position);
       });
       console.log("Recording started");
-      aboutToRecord = false;
-      recordingInProgress = true;
-      LoopInstanceArray[robotSelected].setVolume(0);
-      LoopInstanceArray[robotSelected] = beablib.Audio.Play("");
-    } else if (recordingInProgress) {
-      rec.stop();
-      rec.exportWAV(function (blob) {
+      AboutToRecord = false;
+      RecordingInProgress = true;
+      LoopInstanceArray[RobotSelected].setVolume(0);
+      LoopInstanceArray[RobotSelected] = beablib.Audio.Play("");
+    } else if (RecordingInProgress) {
+      Rec.stop();
+      Rec.exportWAV(function (blob) {
         const audioURL = (URL || webkitURL).createObjectURL(blob);
-        LoopInstanceArray[robotSelected] = new Howl({
+        LoopInstanceArray[RobotSelected] = new Howl({
           src: [audioURL],
           format: ["wav"],
         });
-        LoopInstanceArray[robotSelected].play();
-        recordings[robotSelected] = audioURL;
+        LoopInstanceArray[RobotSelected].play();
+        Recordings[RobotSelected] = audioURL;
         console.log(audioURL);
       });
       Game.ReActivateRecordButton();
-      recordingInProgress = false;
+      RecordingInProgress = false;
     }
 
     console.log("Loop!");
@@ -303,7 +303,7 @@ var before;
     if (RobotDancing[number]) {
       LoopInstanceArray[number].setVolume(1);
     }
-    recordings[number] = false;
+    Recordings[number] = false;
   };
 
   CRobots.prototype.Reposition = function (scale) {
@@ -464,7 +464,7 @@ var before;
   //-----------------------------------------------------------------------------------------------
 
   CRobots.prototype.PlayRobot1Snooze = function () {
-    RobotAsleepArray[robotOrder.indexOf(0)].gotoAndPlayDuration("loop", {
+    RobotAsleepArray[RobotOrder.indexOf(0)].gotoAndPlayDuration("loop", {
       duration: 2,
       stage: TheStage,
     });
@@ -473,7 +473,7 @@ var before;
   //-----------------------------------------------------------------------------------------------
 
   CRobots.prototype.PlayRobot2Snooze = function () {
-    RobotAsleepArray[robotOrder.indexOf(1)].gotoAndPlayDuration("loop", {
+    RobotAsleepArray[RobotOrder.indexOf(1)].gotoAndPlayDuration("loop", {
       duration: 2,
       stage: TheStage,
     });
@@ -482,7 +482,7 @@ var before;
   //-----------------------------------------------------------------------------------------------
 
   CRobots.prototype.PlayRobot3Snooze = function () {
-    RobotAsleepArray[robotOrder.indexOf(2)].gotoAndPlayDuration("loop", {
+    RobotAsleepArray[RobotOrder.indexOf(2)].gotoAndPlayDuration("loop", {
       duration: 2,
       stage: TheStage,
     });
@@ -491,7 +491,7 @@ var before;
   //-----------------------------------------------------------------------------------------------
 
   CRobots.prototype.PlayRobot4Snooze = function () {
-    RobotAsleepArray[robotOrder.indexOf(3)].gotoAndPlayDuration("loop", {
+    RobotAsleepArray[RobotOrder.indexOf(3)].gotoAndPlayDuration("loop", {
       duration: 2,
       stage: TheStage,
     });
@@ -500,7 +500,7 @@ var before;
   //-----------------------------------------------------------------------------------------------
 
   CRobots.prototype.PlayRobot5Snooze = function () {
-    RobotAsleepArray[robotOrder.indexOf(4)].gotoAndPlayDuration("loop", {
+    RobotAsleepArray[RobotOrder.indexOf(4)].gotoAndPlayDuration("loop", {
       duration: 2,
       stage: TheStage,
     });
@@ -509,7 +509,7 @@ var before;
   //-----------------------------------------------------------------------------------------------
 
   CRobots.prototype.PlayRobot6Snooze = function () {
-    RobotAsleepArray[robotOrder.indexOf(5)].gotoAndPlayDuration("loop", {
+    RobotAsleepArray[RobotOrder.indexOf(5)].gotoAndPlayDuration("loop", {
       duration: 2,
       stage: TheStage,
     });
