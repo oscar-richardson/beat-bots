@@ -1,6 +1,8 @@
 //-----------------------------------------------------------------------------------------------
+
 var instance;
 var before;
+
 (function () {
   "use strict";
 
@@ -56,20 +58,12 @@ var before;
     Recordings = [false, false, false, false, false, false],
     RecordingInProgress = false,
     RobotDancing = [false, false, false, false, false, false],
-    gumStream,
     input;
 
   //	Functions.
   var UpdateStage = function () {
     TheStage.SetDirty();
   };
-
-  function playSoundAtPosition(sound, pos) {
-    sound.once("play", () => {
-      sound.seek(pos);
-    });
-    sound.play();
-  }
 
   //-----------------------------------------------------------------------------------------------
   //	Object definition.
@@ -215,8 +209,6 @@ var before;
       console.log(
         "getUserMedia() success, stream created, initializing Recorder.js ..."
       );
-      /* assign to gumStream for later use */
-      gumStream = stream;
       /* use the stream */
       input = audioContext.createMediaStreamSource(stream);
       /* Create the Recorder object and configure to record mono sound (1 channel) Recording 2 channels will double the file size */
