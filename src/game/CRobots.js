@@ -22,18 +22,23 @@ var before;
   var TheStage = null;
 
   //  Game data.
-  var RobotAsleepArray = [],
+  var AboutToRecord = false,
+    Arpegio,
+    AudioContext = window.AudioContext || window.webkitAudioContext,
+    audioContext = new AudioContext(),
+    Bass,
+    Disco,
+    Drumbox,
+    LoopInstanceArray = [],
+    Rec,
+    RecordingInProgress = false,
+    Recordings = [false, false, false, false, false, false],
+    RobotAsleepArray = [],
     RobotDanceArray = [],
-    RobotWakeUpArray = [],
+    RobotDancing = [false, false, false, false, false, false],
+    RobotOrder = [3, 1, 2, 0, 4, 5],
+    RobotSelected,
     RobotShadowArray = [],
-    RobotWakeUpAudioArray = [
-      "wakeUp1",
-      "wakeUp7",
-      "wakeUp3",
-      "wakeUp8",
-      "wakeUp9",
-      "wakeUp6",
-    ],
     RobotSleepAudioArray = [
       "wakeUp2",
       "wakeUp4",
@@ -42,22 +47,17 @@ var before;
       "wakeUp2",
       "wakeUp4",
     ],
-    Drumbox,
-    Arpegio,
+    RobotWakeUpArray = [],
+    RobotWakeUpAudioArray = [
+      "wakeUp1",
+      "wakeUp7",
+      "wakeUp3",
+      "wakeUp8",
+      "wakeUp9",
+      "wakeUp6",
+    ],
     Strings,
-    Bass,
-    Tinkle,
-    Disco,
-    LoopInstanceArray = [],
-    RobotOrder = [3, 1, 2, 0, 4, 5],
-    AudioContext = window.AudioContext || window.webkitAudioContext,
-    audioContext = new AudioContext(),
-    Rec,
-    RobotSelected,
-    AboutToRecord = false,
-    Recordings = [false, false, false, false, false, false],
-    RecordingInProgress = false,
-    RobotDancing = [false, false, false, false, false, false];
+    Tinkle;
 
   //	Functions.
   var UpdateStage = function () {
