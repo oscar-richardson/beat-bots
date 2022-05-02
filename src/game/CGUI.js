@@ -22,11 +22,11 @@
     LOGO_YPOS = 0,
     LOGO_SCALE = 1.22,
     RobotBtnArray = [],
-    exitBtn,
-    revertBtn,
-    recordBtn,
-    recordModeOn = false,
-    robotSelected = 0;
+    ExitBtn,
+    RevertBtn,
+    RecordBtn,
+    RecordModeOn = false,
+    RobotSelected = 0;
 
   //	Functions.
   var UpdateStage = function () {
@@ -221,7 +221,7 @@
   //-----------------------------------------------------------------------------------------------
 
   CGUI.prototype.SetUpModeBtns = function () {
-    exitBtn = Renderer.CreateSprite(
+    ExitBtn = Renderer.CreateSprite(
       beablib.CreateSpriteSheet(beablib.SpriteSheetPath["Robot4_AsleepSS"]),
       "Robot4_Asleep001",
       { alpha: 1, position: { X: -480, Y: 0 }, parent: this.ModeBtnContainer }
@@ -232,7 +232,7 @@
       { alpha: 1, position: { X: 480, Y: 0 }, parent: this.ModeBtnContainer }
     );
 
-    exitBtn.SetButtonMode(true, this.ExitClicked, this, false);
+    ExitBtn.SetButtonMode(true, this.ExitClicked, this, false);
     recordModeBtn.SetButtonMode(true, this.RecordModeClicked, this, false);
 
     UpdateStage();
@@ -241,7 +241,7 @@
   //-----------------------------------------------------------------------------------------------
 
   CGUI.prototype.SetUpRecordingBtns = function () {
-    revertBtn = Renderer.CreateSprite(
+    RevertBtn = Renderer.CreateSprite(
       beablib.CreateSpriteSheet(beablib.SpriteSheetPath["Robot4_AsleepSS"]),
       "Robot4_Asleep001",
       {
@@ -250,7 +250,7 @@
         parent: this.RecordingBtnContainer,
       }
     );
-    recordBtn = Renderer.CreateSprite(
+    RecordBtn = Renderer.CreateSprite(
       beablib.CreateSpriteSheet(beablib.SpriteSheetPath["Robot6_AsleepSS"]),
       "Robot6_Asleep001",
       {
@@ -260,8 +260,8 @@
       }
     );
 
-    revertBtn.SetButtonMode(true, this.RevertClicked, this, false);
-    recordBtn.SetButtonMode(true, this.RecordClicked, this, false);
+    RevertBtn.SetButtonMode(true, this.RevertClicked, this, false);
+    RecordBtn.SetButtonMode(true, this.RecordClicked, this, false);
 
     UpdateStage();
   };
@@ -271,9 +271,9 @@
   CGUI.prototype.RobotClicked = function (event, data) {
     // MAY NEED TO CHANGE NO. OF ARGS
     var numId = data.numId;
-    if (recordModeOn) {
-      robotSelected = numId;
-      console.log("The selected Robot is Robot number :: " + robotSelected);
+    if (RecordModeOn) {
+      RobotSelected = numId;
+      console.log("The selected Robot is Robot number :: " + RobotSelected);
     } else {
       if (!RobotBtnArray[numId].delayActive) {
         this.RobotAction(numId);
@@ -285,41 +285,41 @@
   //-----------------------------------------------------------------------------------------------
 
   CGUI.prototype.ExitClicked = function (event) {
-    if (recordModeOn) {
-      recordModeOn = false;
-      console.log("Record Mode :: " + recordModeOn);
+    if (RecordModeOn) {
+      RecordModeOn = false;
+      console.log("Record Mode :: " + RecordModeOn);
     }
   };
 
   //-----------------------------------------------------------------------------------------------
 
   CGUI.prototype.RecordModeClicked = function (event) {
-    if (!recordModeOn) {
-      recordModeOn = true;
-      console.log("Record Mode :: " + recordModeOn);
+    if (!RecordModeOn) {
+      RecordModeOn = true;
+      console.log("Record Mode :: " + RecordModeOn);
     }
   };
 
   //-----------------------------------------------------------------------------------------------
 
   CGUI.prototype.RevertClicked = function (event) {
-    if (recordModeOn) {
-      Game.Revert(robotSelected);
+    if (RecordModeOn) {
+      Game.Revert(RobotSelected);
     }
   };
 
   //-----------------------------------------------------------------------------------------------
 
   CGUI.prototype.RecordClicked = function (event) {
-    if (recordModeOn) {
-      Game.Record(robotSelected);
+    if (RecordModeOn) {
+      Game.Record(RobotSelected);
       for (var i = 0; i < 6; i++) {
         RobotBtnArray[i].SetButtonMode(false, this.RobotClicked, this, false);
       }
-      exitBtn.SetButtonMode(false, this.ExitClicked, this, false);
-      revertBtn.SetButtonMode(false, this.RevertClicked, this, false);
-      recordBtn.SetButtonMode(false, this.RecordClicked, this, false);
-      console.log("Recording onto Robot number :: " + robotSelected);
+      ExitBtn.SetButtonMode(false, this.ExitClicked, this, false);
+      RevertBtn.SetButtonMode(false, this.RevertClicked, this, false);
+      RecordBtn.SetButtonMode(false, this.RecordClicked, this, false);
+      console.log("Recording onto Robot number :: " + RobotSelected);
     }
   };
 
@@ -338,9 +338,9 @@
         dataObjSym
       );
     }
-    exitBtn.SetButtonMode(true, this.ExitClicked, this, false);
-    revertBtn.SetButtonMode(true, this.RevertClicked, this, false);
-    recordBtn.SetButtonMode(true, this.RecordClicked, this, false);
+    ExitBtn.SetButtonMode(true, this.ExitClicked, this, false);
+    RevertBtn.SetButtonMode(true, this.RevertClicked, this, false);
+    RecordBtn.SetButtonMode(true, this.RecordClicked, this, false);
   };
 
   //-----------------------------------------------------------------------------------------------
