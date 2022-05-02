@@ -226,6 +226,8 @@ var before;
     console.log("getUserMedia not supported on your browser!");
   }
 
+  //-----------------------------------------------------------------------------------------------
+
   CRobots.prototype.OnLoop = function () {
     for (var i = 0; i < 6; i++) {
       if (Recordings[i]) {
@@ -241,7 +243,11 @@ var before;
       console.log("Before: " + Drumbox.position);
       Rec.record();
       console.log("After: " + Drumbox.position);
-      LoopInstanceArray[RobotSelected].setVolume(0);
+      if (LoopInstanceArray[RobotSelected].hasOwnProperty("setVolume")) {
+        LoopInstanceArray[RobotSelected].setVolume(0);
+      } else {
+        LoopInstanceArray[RobotSelected].volume(0);
+      }
       LoopInstanceArray[RobotSelected] = beablib.Audio.Play("");
       AboutToRecord = false;
       RecordingInProgress = true;
