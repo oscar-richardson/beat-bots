@@ -229,43 +229,48 @@ var before;
   //-----------------------------------------------------------------------------------------------
 
   CRobots.prototype.OnLoop = function () {
-    for (var i = 0; i < 6; i++) {
-      if (Recordings[i]) {
-        LoopInstanceArray[i] = new Howl({
-          src: [Recordings[i]],
-          format: ["wav"],
-        });
-        LoopInstanceArray[i].play();
-      }
-    }
-
-    if (AboutToRecord) {
-      console.log("Before: " + Drumbox.position);
-      Rec.record();
-      console.log("After: " + Drumbox.position);
-      if (LoopInstanceArray[RobotSelected].hasOwnProperty("setVolume")) {
-        LoopInstanceArray[RobotSelected].setVolume(0);
-      } else {
-        LoopInstanceArray[RobotSelected].volume(0);
-      }
-      LoopInstanceArray[RobotSelected] = beablib.Audio.Play("");
-      AboutToRecord = false;
-      RecordingInProgress = true;
-    } else if (RecordingInProgress) {
+    if (RecordingInProgress) {
       Rec.stop();
       Rec.exportWAV(function (blob) {
         const audioURL = (URL || webkitURL).createObjectURL(blob);
-        LoopInstanceArray[RobotSelected] = new Howl({
-          src: [audioURL],
-          format: ["wav"],
-        });
-        LoopInstanceArray[RobotSelected].play();
         Recordings[RobotSelected] = audioURL;
+        GetRecordings();
         Rec.clear();
         console.log(audioURL);
       });
       Game.ReActivateRecordButton(); //change name
       RecordingInProgress = false;
+    } else {
+      if (AboutToRecord) {
+        console.log("Before: " + Drumbox.position);
+        Rec.record();
+        console.log("After: " + Drumbox.position);
+        if (LoopInstanceArray[RobotSelected].hasOwnProperty("setVolume")) {
+          LoopInstanceArray[RobotSelected].setVolume(0);
+        } else {
+          LoopInstanceArray[RobotSelected].volume(0);
+        }
+        LoopInstanceArray[RobotSelected] = beablib.Audio.Play("");
+        AboutToRecord = false;
+        RecordingInProgress = true;
+      }
+      GetRecordings();
+    }
+
+    function GetRecordings() {
+      console.log(Recordings);
+      for (var i = 0; i < 6; i++) {
+        if (Recordings[i]) {
+          LoopInstanceArray[i] = new Howl({
+            src: [Recordings[i]],
+            format: ["wav"],
+          });
+          LoopInstanceArray[i].play();
+          if (!RobotDancing[i]) {
+            LoopInstanceArray[i].volume(0);
+          }
+        }
+      }
     }
 
     console.log("Loop!");
