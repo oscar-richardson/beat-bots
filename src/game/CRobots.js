@@ -238,7 +238,7 @@ var before;
         Rec.clear();
         console.log(audioURL);
       });
-      Game.ReActivateRecordButton(); //change name
+      Game.ReActivateRecord();
       RecordingInProgress = false;
     } else {
       if (AboutToRecord) {

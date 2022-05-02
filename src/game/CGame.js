@@ -134,8 +134,8 @@
 
   //-----------------------------------------------------------------------------------------------
 
-  Game.ReActivateRecordButton = function (number) {
-    TheGUI.ReActivateRecordButton();
+  Game.ReActivateRecord = function (number) {
+    TheGUI.ReActivateRecord();
   };
 
   //-----------------------------------------------------------------------------------------------

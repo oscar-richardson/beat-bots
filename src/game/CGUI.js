@@ -325,7 +325,7 @@
 
   //-----------------------------------------------------------------------------------------------
 
-  CGUI.prototype.ReActivateRecordButton = function (event) {
+  CGUI.prototype.ReActivateRecord = function (event) {
     for (var i = 0; i < 6; i++) {
       var dataObjSym = new Object();
       dataObjSym.numId = i;
