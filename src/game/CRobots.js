@@ -1,7 +1,5 @@
 //-----------------------------------------------------------------------------------------------
 
-var instance;
-
 (function () {
   "use strict";
 
@@ -26,6 +24,7 @@ var instance;
     Bass,
     Disco,
     Drumbox,
+    Limit = 0.05,
     LoopInstanceArray = [],
     Rec,
     RecordingInProgress = false,
@@ -70,6 +69,7 @@ var instance;
           format: ["wav"],
         });
         LoopInstanceArray[i].play();
+        LoopInstanceArray[i].seek(Math.min(Drumbox.position / 1000, Limit));
         if (!RobotDancing[i]) {
           LoopInstanceArray[i].volume(0);
         }
@@ -221,7 +221,17 @@ var instance;
         let chunks = [];
         Rec = new MediaRecorder(stream);
         Rec.onstart = function (e) {
-          console.log("After: " + Drumbox.position);
+          Drumbox.setPosition(0);
+          Arpegio.setPosition(0);
+          Strings.setPosition(0);
+          Bass.setPosition(0);
+          Tinkle.setPosition(0);
+          Disco.setPosition(0);
+          for (var i = 0; i < 6; i++) {
+            if (Recordings[i]) {
+              LoopInstanceArray[i].seek(0);
+            }
+          }
         };
         Rec.ondataavailable = function (e) {
           chunks.push(e.data);
@@ -232,6 +242,7 @@ var instance;
           const audioURL = window.URL.createObjectURL(blob);
           Recordings[RobotSelected] = audioURL;
           GetRecordings();
+          RecordingInProgress = false;
           console.log(audioURL);
         };
         CRobots.prototype.Record = function (number) {
@@ -254,13 +265,11 @@ var instance;
     if (RecordingInProgress) {
       Rec.stop();
       Game.ReActivateRecord();
-      RecordingInProgress = false;
     } else {
       GetRecordings();
       if (AboutToRecord) {
         console.log("Before: " + Drumbox.position);
         Rec.start();
-        instance = LoopInstanceArray[RobotSelected];
         if (LoopInstanceArray[RobotSelected].hasOwnProperty("setVolume")) {
           LoopInstanceArray[RobotSelected].setVolume(0);
         } else {
