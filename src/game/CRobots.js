@@ -1,7 +1,6 @@
 //-----------------------------------------------------------------------------------------------
 
 var instance;
-var before;
 
 (function () {
   "use strict";
@@ -24,8 +23,6 @@ var before;
   //  Game data.
   var AboutToRecord = false,
     Arpegio,
-    AudioContext = window.AudioContext || window.webkitAudioContext,
-    audioContext = new AudioContext(),
     Bass,
     Disco,
     Drumbox,
