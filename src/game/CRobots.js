@@ -245,9 +245,12 @@ var before;
         console.log("Before: " + Drumbox.position);
         Rec.record();
         console.log("After: " + Drumbox.position);
+        instance = LoopInstanceArray[RobotSelected];
         if (LoopInstanceArray[RobotSelected].hasOwnProperty("setVolume")) {
+          console.log("Has setVolume");
           LoopInstanceArray[RobotSelected].setVolume(0);
         } else {
+          console.log("Doesn't have setVolume");
           LoopInstanceArray[RobotSelected].volume(0);
         }
         LoopInstanceArray[RobotSelected] = beablib.Audio.Play("");
