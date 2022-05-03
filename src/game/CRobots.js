@@ -218,37 +218,34 @@ var before;
   //-----------------------------------------------------------------------------------------------
 
   if (navigator.mediaDevices.getUserMedia) {
-    let chunks = [];
-    let onSuccess = function (stream) {
-      Rec = new MediaRecorder(stream);
-      Rec.onstart = function (e) {
-        console.log("After: " + Drumbox.position);
-      };
-      Rec.ondataavailable = function (e) {
-        chunks.push(e.data);
-      };
-      Rec.onstop = function (e) {
-        const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
-        chunks = [];
-        const audioURL = window.URL.createObjectURL(blob);
-        Recordings[RobotSelected] = audioURL;
-        GetRecordings();
-        console.log(audioURL);
-      };
-      CRobots.prototype.Record = function (number) {
-        RobotSelected = number;
-        AboutToRecord = true;
-      };
-    };
-
-    let onError = function (err) {
-      CRobots.prototype.Record = function (number) {};
-      console.log("The following error occured: " + err);
-    };
-
     navigator.mediaDevices
       .getUserMedia({ audio: true })
-      .then(onSuccess, onError);
+      .then(function (stream) {
+        let chunks = [];
+        Rec = new MediaRecorder(stream);
+        Rec.onstart = function (e) {
+          console.log("After: " + Drumbox.position);
+        };
+        Rec.ondataavailable = function (e) {
+          chunks.push(e.data);
+        };
+        Rec.onstop = function (e) {
+          const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
+          chunks = [];
+          const audioURL = window.URL.createObjectURL(blob);
+          Recordings[RobotSelected] = audioURL;
+          GetRecordings();
+          console.log(audioURL);
+        };
+        CRobots.prototype.Record = function (number) {
+          RobotSelected = number;
+          AboutToRecord = true;
+        };
+      })
+      .catch(function (err) {
+        CRobots.prototype.Record = function (number) {};
+        console.log("The following error occured: " + err);
+      });
   } else {
     CRobots.prototype.Record = function (number) {};
     console.log("getUserMedia not supported on your browser!");
