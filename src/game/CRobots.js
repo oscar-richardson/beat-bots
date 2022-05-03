@@ -64,6 +64,22 @@ var before;
     TheStage.SetDirty();
   };
 
+  var GetRecordings = function () {
+    console.log(Recordings);
+    for (var i = 0; i < 6; i++) {
+      if (Recordings[i]) {
+        LoopInstanceArray[i] = new Howl({
+          src: [Recordings[i]],
+          format: ["wav"],
+        });
+        LoopInstanceArray[i].play();
+        if (!RobotDancing[i]) {
+          LoopInstanceArray[i].volume(0);
+        }
+      }
+    }
+  };
+
   //-----------------------------------------------------------------------------------------------
   //	Object definition.
   //-----------------------------------------------------------------------------------------------
@@ -202,11 +218,23 @@ var before;
   //-----------------------------------------------------------------------------------------------
 
   if (navigator.mediaDevices.getUserMedia) {
+    let chunks = [];
     let onSuccess = function (stream) {
-      let input = audioContext.createMediaStreamSource(stream);
-      Rec = new Recorder(input, {
-        numChannels: 1,
-      });
+      Rec = new MediaRecorder(stream);
+      Rec.onstart = function (e) {
+        console.log("After: " + Drumbox.position);
+      };
+      Rec.ondataavailable = function (e) {
+        chunks.push(e.data);
+      };
+      Rec.onstop = function (e) {
+        const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
+        chunks = [];
+        const audioURL = window.URL.createObjectURL(blob);
+        Recordings[RobotSelected] = audioURL;
+        GetRecordings();
+        console.log(audioURL);
+      };
       CRobots.prototype.Record = function (number) {
         RobotSelected = number;
         AboutToRecord = true;
@@ -231,21 +259,13 @@ var before;
   CRobots.prototype.OnLoop = function () {
     if (RecordingInProgress) {
       Rec.stop();
-      Rec.exportWAV(function (blob) {
-        const audioURL = (URL || webkitURL).createObjectURL(blob);
-        Recordings[RobotSelected] = audioURL;
-        GetRecordings();
-        Rec.clear();
-        console.log(audioURL);
-      });
       Game.ReActivateRecord();
       RecordingInProgress = false;
     } else {
       GetRecordings();
       if (AboutToRecord) {
         console.log("Before: " + Drumbox.position);
-        Rec.record();
-        console.log("After: " + Drumbox.position);
+        Rec.start();
         instance = LoopInstanceArray[RobotSelected];
         if (LoopInstanceArray[RobotSelected].hasOwnProperty("setVolume")) {
           LoopInstanceArray[RobotSelected].setVolume(0);
@@ -255,22 +275,6 @@ var before;
         LoopInstanceArray[RobotSelected] = beablib.Audio.Play("");
         AboutToRecord = false;
         RecordingInProgress = true;
-      }
-    }
-
-    function GetRecordings() {
-      console.log(Recordings);
-      for (var i = 0; i < 6; i++) {
-        if (Recordings[i]) {
-          LoopInstanceArray[i] = new Howl({
-            src: [Recordings[i]],
-            format: ["wav"],
-          });
-          LoopInstanceArray[i].play();
-          if (!RobotDancing[i]) {
-            LoopInstanceArray[i].volume(0);
-          }
-        }
       }
     }
 
