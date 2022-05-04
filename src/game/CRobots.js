@@ -28,6 +28,7 @@
     Limit = 0.05,
     LoopInstanceArray = [],
     Offset = 0,
+    PreviousMinimPosition = 0,
     Rec,
     RecordingInProgress = false,
     Recordings = [false, false, false, false, false, false],
@@ -373,8 +374,27 @@
 
     gsap.ticker.add(tick);
 
+    let MinimDuration = Drumbox.duration / 16;
+    let MinimArray = [];
+
+    for (var i = 1; i <= 16; i++) {
+      MinimArray.push(i * MinimDuration);
+    }
+
     function tick() {
-      // console.log(Drumbox.position);
+      let MinimPosition;
+      if (AboutToRecord) {
+        for (var i = 0; i < 16; i++) {
+          if (Drumbox.position < MinimArray[i]) {
+            MinimPosition = i;
+            break;
+          }
+        }
+        if (MinimPosition != PreviousMinimPosition) {
+          console.log("Recording starting in: " + (16 - MinimPosition));
+          PreviousMinimPosition = MinimPosition;
+        }
+      }
     }
   };
 
