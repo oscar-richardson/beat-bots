@@ -24,8 +24,10 @@
     Bass,
     Disco,
     Drumbox,
+    FirstOffset = 0,
     Limit = 0.05,
     LoopInstanceArray = [],
+    Offset = 0,
     Rec,
     RecordingInProgress = false,
     Recordings = [false, false, false, false, false, false],
@@ -69,7 +71,17 @@
           format: ["wav"],
         });
         LoopInstanceArray[i].play();
-        LoopInstanceArray[i].seek(Math.min(Drumbox.position / 1000, Limit));
+        if (RecordingInProgress) {
+          LoopInstanceArray[i].seek(
+            Math.min(Drumbox.position / 1000, Limit) + FirstOffset
+          );
+          console.log(Math.min(Drumbox.position / 1000, Limit) + FirstOffset);
+        } else {
+          LoopInstanceArray[i].seek(
+            Math.min(Drumbox.position / 1000, Limit) + Offset
+          );
+          console.log(Math.min(Drumbox.position / 1000, Limit) + Offset);
+        }
         if (!RobotDancing[i]) {
           LoopInstanceArray[i].volume(0);
         }
