@@ -391,7 +391,7 @@
             break;
           }
         }
-        if (MinimPosition != PreviousMinimPosition) {
+        if (MinimPosition != PreviousMinimPosition && !isNaN(MinimPosition)) {
           console.log("Recording starting in: " + (16 - MinimPosition));
           PreviousMinimPosition = MinimPosition;
         }
