@@ -230,12 +230,12 @@
         let chunks = [];
         Rec = new MediaRecorder(stream);
         Rec.onstart = function (e) {
-          Drumbox.setPosition(0);
-          Arpegio.setPosition(0);
-          Strings.setPosition(0);
-          Bass.setPosition(0);
-          Tinkle.setPosition(0);
-          Disco.setPosition(0);
+          Drumbox.position = 0;
+          Arpegio.position = 0;
+          Strings.position = 0;
+          Bass.position = 0;
+          Tinkle.position = 0;
+          Disco.position = 0;
           for (var i = 0; i < 6; i++) {
             if (Recordings[i]) {
               LoopInstanceArray[i].seek(0);
