@@ -241,6 +241,9 @@
               LoopInstanceArray[i].seek(0);
             }
           }
+          console.log(
+            "Started recording onto Robot number " + (RobotSelected + 1)
+          );
         };
         Rec.ondataavailable = function (e) {
           chunks.push(e.data);
@@ -252,6 +255,7 @@
           Recordings[RobotSelected] = audioURL;
           GetRecordings();
           RecordingInProgress = false;
+          console.log("Stopped recording");
           // console.log(audioURL);
         };
         CRobots.prototype.Record = function (number) {
