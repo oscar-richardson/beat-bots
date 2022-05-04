@@ -39214,6 +39214,3 @@ global.PIXI = exports; // eslint-disable-line
 
 },{"./accessibility":35,"./core":58,"./deprecation":124,"./extract":126,"./extras":134,"./filters":146,"./interaction":152,"./loaders":2,"./mesh":159,"./particles":163,"./polyfill":170,"./prepare":174}]},{},[178])(178)
 });
-
-
-//# sourceMappingURL=pixi.js.map
