@@ -273,7 +273,7 @@
     var numId = data.numId;
     if (RecordModeOn) {
       RobotSelected = numId;
-      // console.log("The selected Robot is :: " + RobotSelected);
+      console.log("Robot number " + (RobotSelected + 1) + " is selected");
     } else {
       if (!RobotBtnArray[numId].delayActive) {
         this.RobotAction(numId);
@@ -303,7 +303,7 @@
   CGUI.prototype.ExitClicked = function (event) {
     if (RecordModeOn) {
       RecordModeOn = false;
-      console.log("Record Mode :: " + RecordModeOn);
+      console.log("Record mode off");
     }
   };
 
@@ -312,7 +312,7 @@
   CGUI.prototype.RecordModeClicked = function (event) {
     if (!RecordModeOn) {
       RecordModeOn = true;
-      console.log("Record Mode :: " + RecordModeOn);
+      console.log("Record mode on");
     }
   };
 
