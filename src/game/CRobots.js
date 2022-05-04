@@ -283,6 +283,7 @@
       GetRecordings();
       if (AboutToRecord) {
         Rec.start();
+        Recordings[RobotSelected] = false;
         if (LoopInstanceArray[RobotSelected].hasOwnProperty("setVolume")) {
           LoopInstanceArray[RobotSelected].volume = 0;
         } else {
