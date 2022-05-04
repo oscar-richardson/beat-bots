@@ -303,8 +303,8 @@
   CGUI.prototype.ExitClicked = function (event) {
     if (RecordModeOn) {
       RecordModeOn = false;
-      console.log("Record mode off");
     }
+    console.log("Record mode off");
   };
 
   //-----------------------------------------------------------------------------------------------
@@ -312,8 +312,8 @@
   CGUI.prototype.RecordModeClicked = function (event) {
     if (!RecordModeOn) {
       RecordModeOn = true;
-      console.log("Record mode on");
     }
+    console.log("Record mode on");
   };
 
   //-----------------------------------------------------------------------------------------------

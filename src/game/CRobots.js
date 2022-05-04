@@ -295,7 +295,7 @@
       }
     }
 
-    console.log("Loop!");
+    console.warn("LOOP");
   };
 
   //-----------------------------------------------------------------------------------------------
@@ -305,6 +305,7 @@
       LoopInstanceArray[number].volume = 0;
     } else {
       LoopInstanceArray[number].volume(0);
+      console.log("Reverted Robot number " + (number + 1) + " to default");
     }
     LoopInstanceArray[number] = [
       Drumbox,
