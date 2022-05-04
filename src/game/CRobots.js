@@ -279,7 +279,7 @@
       if (AboutToRecord) {
         Rec.start();
         if (LoopInstanceArray[RobotSelected].hasOwnProperty("setVolume")) {
-          LoopInstanceArray[RobotSelected].setVolume(0);
+          LoopInstanceArray[RobotSelected].volume = 0;
         } else {
           LoopInstanceArray[RobotSelected].volume(0);
         }
@@ -296,7 +296,7 @@
 
   CRobots.prototype.Revert = function (number) {
     if (LoopInstanceArray[number].hasOwnProperty("setVolume")) {
-      LoopInstanceArray[number].setVolume(0);
+      LoopInstanceArray[number].volume = 0;
     } else {
       LoopInstanceArray[number].volume(0);
     }
@@ -309,7 +309,7 @@
       Disco,
     ][number];
     if (RobotDancing[number]) {
-      LoopInstanceArray[number].setVolume(1);
+      LoopInstanceArray[number].volume = 1;
     }
     Recordings[number] = false;
   };
@@ -356,12 +356,12 @@
     Tinkle = beablib.Audio.Play("Tinkle", { Loop: true });
     Disco = beablib.Audio.Play("Disco", { Loop: true });
 
-    Drumbox.setVolume(0);
-    Arpegio.setVolume(0);
-    Strings.setVolume(0);
-    Bass.setVolume(0);
-    Tinkle.setVolume(0);
-    Disco.setVolume(0);
+    Drumbox.volume = 0;
+    Arpegio.volume = 0;
+    Strings.volume = 0;
+    Bass.volume = 0;
+    Tinkle.volume = 0;
+    Disco.volume = 0;
 
     LoopInstanceArray = [Drumbox, Arpegio, Strings, Bass, Tinkle, Disco];
 
@@ -395,7 +395,7 @@
 
       gsap.delayedCall(1, function () {
         if (LoopInstanceArray[number].hasOwnProperty("setVolume")) {
-          LoopInstanceArray[number].setVolume(1);
+          LoopInstanceArray[number].volume = 1;
         } else {
           LoopInstanceArray[number].volume(1);
         }
@@ -444,7 +444,7 @@
 
       gsap.delayedCall(0.01, function () {
         if (LoopInstanceArray[number].hasOwnProperty("setVolume")) {
-          LoopInstanceArray[number].setVolume(0);
+          LoopInstanceArray[number].volume = 0;
         } else {
           LoopInstanceArray[number].volume(0);
         }
