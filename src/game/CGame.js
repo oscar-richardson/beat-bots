@@ -35,7 +35,7 @@
   //-----------------------------------------------------------------------------------------------
 
   Game.Init = function () {
-    beablib.log("Game::Init::Enter");
+    // beablib.log("Game::Init::Enter");
 
     //	Configure beablib.
     beablib.PauseEnabled = true;
@@ -103,7 +103,7 @@
     Game.GUICanvas.EnablePointerEvents(true);
     // Game.GUIStage.nextStage		=	Game.GameStage;
 
-    beablib.log("Game::Init::Exit");
+    // beablib.log("Game::Init::Exit");
   };
 
   //-----------------------------------------------------------------------------------------------
@@ -121,7 +121,7 @@
   Game.RobotClicked = function (number) {
     TheRobots.RobotClicked(number);
 
-    console.log("Game.RobotClicked :: " + number);
+    // console.log("Game.RobotClicked :: " + number);
   };
 
   //-----------------------------------------------------------------------------------------------
@@ -135,7 +135,7 @@
   Game.Record = function (number) {
     TheRobots.Record(number);
 
-    console.log("Game.Record :: " + number);
+    // console.log("Game.Record :: " + number);
   };
 
   //-----------------------------------------------------------------------------------------------

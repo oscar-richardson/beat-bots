@@ -63,7 +63,6 @@
   };
 
   var GetRecordings = function () {
-    console.log(Recordings);
     for (var i = 0; i < 6; i++) {
       if (Recordings[i]) {
         LoopInstanceArray[i] = new Howl({
@@ -75,12 +74,10 @@
           LoopInstanceArray[i].seek(
             Math.min(Drumbox.position / 1000, Limit) + FirstOffset
           );
-          console.log(Math.min(Drumbox.position / 1000, Limit) + FirstOffset);
         } else {
           LoopInstanceArray[i].seek(
             Math.min(Drumbox.position / 1000, Limit) + Offset
           );
-          console.log(Math.min(Drumbox.position / 1000, Limit) + Offset);
         }
         if (!RobotDancing[i]) {
           LoopInstanceArray[i].volume(0);
@@ -255,7 +252,7 @@
           Recordings[RobotSelected] = audioURL;
           GetRecordings();
           RecordingInProgress = false;
-          console.log(audioURL);
+          // console.log(audioURL);
         };
         CRobots.prototype.Record = function (number) {
           RobotSelected = number;
@@ -280,7 +277,6 @@
     } else {
       GetRecordings();
       if (AboutToRecord) {
-        console.log("Before: " + Drumbox.position);
         Rec.start();
         if (LoopInstanceArray[RobotSelected].hasOwnProperty("setVolume")) {
           LoopInstanceArray[RobotSelected].setVolume(0);
@@ -390,7 +386,7 @@
 
       RobotDancing[number] = true;
 
-      console.log("CRobots number :: " + number);
+      // console.log("CRobots number :: " + number);
 
       RobotAsleepArray[number].alpha = 0;
       RobotAsleepArray[number].position.y =
@@ -456,7 +452,7 @@
 
       RobotDancing[number] = false;
 
-      console.log("CRobots number :: " + number);
+      // console.log("CRobots number :: " + number);
 
       RobotAsleepArray[number].alpha = 1;
       RobotDanceArray[number].alpha = 0;

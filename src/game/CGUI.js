@@ -137,7 +137,7 @@
   //-----------------------------------------------------------------------------------------------
 
   CGUI.prototype.PlayLogoAnim = function () {
-    console.log("PlayLogoAnim");
+    // console.log("PlayLogoAnim");
 
     this.Logo.gotoAndPlayDuration("loop", { duration: 2.3, stage: TheStage });
   };
@@ -273,7 +273,7 @@
     var numId = data.numId;
     if (RecordModeOn) {
       RobotSelected = numId;
-      console.log("The selected Robot is :: " + RobotSelected);
+      // console.log("The selected Robot is :: " + RobotSelected);
     } else {
       if (!RobotBtnArray[numId].delayActive) {
         this.RobotAction(numId);
@@ -285,7 +285,7 @@
   //-----------------------------------------------------------------------------------------------
 
   CGUI.prototype.RobotAction = function (numId) {
-    console.log("I clicked Robot number :: " + numId);
+    // console.log("I clicked Robot number :: " + numId);
 
     Game.RobotClicked(numId);
 
@@ -335,7 +335,8 @@
       ExitBtn.SetButtonMode(false, this.ExitClicked, this, false);
       RevertBtn.SetButtonMode(false, this.RevertClicked, this, false);
       RecordBtn.SetButtonMode(false, this.RecordClicked, this, false);
-      console.log("Recording onto Robot number :: " + RobotSelected);
+      console.log("Recording cued");
+      // console.log("Recording onto Robot number :: " + RobotSelected);
     }
   };
 

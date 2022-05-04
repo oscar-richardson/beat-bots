@@ -91,7 +91,7 @@ beablib.Game			=	beablib.Game			|| {};
 
 	var	Init				=	function( load_q )
 	{
-		console.log( "beablib::Initialising Audio" );
+		// console.log( "beablib::Initialising Audio" );
 
 		load_q.installPlugin( createjs.Sound );
 		createjs.Sound.alternateExtensions = ["ogg"];
@@ -1367,7 +1367,7 @@ beablib.Game		=	beablib.Game	|| {};
 											//	Nope, add/remove the listener...
 											if( state )
 											{
-												console.log( "Adding tick handler" );
+												// console.log( "Adding tick handler" );
 												gsap.ticker.add( tick_handler );
 
 												//	Make sure the timer stuff is initialised.
@@ -1390,7 +1390,7 @@ beablib.Game		=	beablib.Game	|| {};
 										{
 											if( temp_timeline===null )
 											{
-												console.log( "Pausing Tweens" );
+												// console.log( "Pausing Tweens" );
 												temp_timeline	=	gsap.exportRoot( {}, true );
 												temp_timeline.pause( null, false );
 											}
@@ -1403,7 +1403,7 @@ beablib.Game		=	beablib.Game	|| {};
 										{
 											if( temp_timeline!==null )
 											{
-												console.log( "Resuming Tweens" );
+												// console.log( "Resuming Tweens" );
 												temp_timeline.resume();
 												temp_timeline	=	null;
 
@@ -4658,7 +4658,7 @@ beablib.Renderer		=	beablib.Renderer	|| {};
 
 	var initialise			=	function()
 		{
-			beablib.log( "Initialising Beablib_Core_Camelot" );
+			// beablib.log( "Initialising Beablib_Core_Camelot" );
 
 			//-----------------------------------------------------------------------------------------------
 			//	Make a note on whether we're mobile or not.
@@ -4840,7 +4840,7 @@ beablib.Renderer		=	beablib.Renderer	|| {};
 						if(paused !== true)
 						{
 							//	Yep, so pause...
-							console.log("Pausing.");
+							// console.log("Pausing.");
 							paused	=	true;
 							//Game.Pause( paused );
 
@@ -4880,7 +4880,7 @@ beablib.Renderer		=	beablib.Renderer	|| {};
 								BLGame.DetectInput	=	input_state;
 
 								//	...& unpause.
-								console.log( "UnPausing." );
+								// console.log( "UnPausing." );
 								paused	=	false;
 								//Game.Pause( paused );
 
