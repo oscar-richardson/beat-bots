@@ -71,7 +71,7 @@
           format: ["wav"],
         });
         LoopInstanceArray[i].play();
-        if (RecordingInProgress) {
+        if (RecordingInProgress && i == RobotSelected) {
           LoopInstanceArray[i].seek(
             Math.min(Drumbox.position / 1000, Limit) + FirstOffset
           );
