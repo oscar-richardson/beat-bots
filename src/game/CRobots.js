@@ -275,7 +275,9 @@
           Disco.position = 0;
           for (var i = 0; i < 6; i++) {
             if (Recordings[i]) {
-              LoopInstanceArray[i].seek(0);
+              LoopInstanceArray[i].seek(
+                Math.min(Drumbox.position / 1000, Limit) + Offset
+              );
             }
           }
           console.log(
