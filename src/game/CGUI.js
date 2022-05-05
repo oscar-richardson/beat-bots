@@ -188,11 +188,11 @@
   //-----------------------------------------------------------------------------------------------
 
   CGUI.prototype.SetUpRobotBtns = function () {
-    var BtnXposArray = [-320, 0, 320, -320, 0, 320];
-    var BtnYposArray = [-160, -160, -160, 160, 160, 160];
+    var BtnXposArray = [-225, 0, 225, -225, 0, 225];
+    var BtnYposArray = [-120, -120, -140, 100, 100, 100];
 
     for (var i = 0; i < 6; i++) {
-      var btn = Renderer.CreateSprite(Game.BackgroundSheet, "RobotBtn", {
+      var btn = Renderer.CreateSprite(Game.BackgroundSheet, "ShadowMC", {
         alpha: 0.01,
         position: { X: BtnXposArray[i], Y: BtnYposArray[i] },
         parent: this.RobotBtnContainer,
@@ -222,14 +222,24 @@
 
   CGUI.prototype.SetUpModeBtns = function () {
     ExitBtn = Renderer.CreateSprite(
-      beablib.CreateSpriteSheet(beablib.SpriteSheetPath["Robot4_AsleepSS"]),
-      "Robot4_Asleep001",
-      { alpha: 1, position: { X: -480, Y: 0 }, parent: this.ModeBtnContainer }
+      beablib.CreateSpriteSheet(beablib.SpriteSheetPath["Robot3_AsleepSS"]),
+      "Robot3_Asleep001",
+      {
+        alpha: 1,
+        position: { X: -480, Y: 0 },
+        scale: 0.75,
+        parent: this.ModeBtnContainer,
+      }
     );
     var RecordModeBtn = Renderer.CreateSprite(
-      beablib.CreateSpriteSheet(beablib.SpriteSheetPath["Robot6_AsleepSS"]),
-      "Robot6_Asleep001",
-      { alpha: 1, position: { X: 480, Y: 0 }, parent: this.ModeBtnContainer }
+      beablib.CreateSpriteSheet(beablib.SpriteSheetPath["Robot5_AsleepSS"]),
+      "Robot5_Asleep001",
+      {
+        alpha: 1,
+        position: { X: 480, Y: 0 },
+        scale: 0.75,
+        parent: this.ModeBtnContainer,
+      }
     );
 
     ExitBtn.SetButtonMode(true, this.ExitClicked, this, false);
@@ -246,7 +256,8 @@
       "Robot4_Asleep001",
       {
         alpha: 1,
-        position: { X: 0, Y: -275 },
+        position: { X: -350, Y: 225 },
+        scale: 0.75,
         parent: this.RecordingBtnContainer,
       }
     );
@@ -255,7 +266,8 @@
       "Robot6_Asleep001",
       {
         alpha: 1,
-        position: { X: 320, Y: -275 },
+        position: { X: 350, Y: 225 },
+        scale: 0.75,
         parent: this.RecordingBtnContainer,
       }
     );

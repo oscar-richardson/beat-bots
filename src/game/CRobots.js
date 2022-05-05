@@ -99,21 +99,57 @@
 
     TheStage.addChild(this.RobotContainer);
 
-    var shadowXposArray = [-244, 10, 244, -250, 7, 250];
-    var shadowYposArray = [-10, -10, -10, 268, 268, 268];
-    var asleepXposArray = [-250, 0, 250, -250, 10, 250];
-    var asleepYposArray = [178, -98, -114, -63, 170, 217];
-    var wakeUpXposArray = [-253, -3, 253, -250, 3, 222.5];
-    var wakeUpYposArray = [140, -136, -152, -93, 133, 138];
-    var danceXposArray = [-247, 3, 233, -252, 1, 268];
-    var danceYposArray = [142, -134, -152, -95, 154, 144];
+    let x = 0.75;
+    let a = 50;
+    let b = 30;
+    let c = 60;
+    let d = 15;
+    let e = 10;
+    let f = 25;
+
+    var shadowXposArray = [-244 + f, 10, 244 - f, -250 + f, 7, 250 - f];
+    var shadowYposArray = [
+      -10 - a - b,
+      -10 - a - b,
+      -10 - a - b,
+      268 - a - b - c,
+      268 - a - b - c,
+      268 - a - b - c,
+    ];
+    var asleepXposArray = [-250 + f, 0, 250 - f, -250 + f, 10, 250 - f];
+    var asleepYposArray = [
+      178 - a - c,
+      -98 - a,
+      -114 - a,
+      -63 - a,
+      170 - a - c,
+      217 - a - c - d,
+    ];
+    var wakeUpXposArray = [-253 + f, -3, 253 - f, -250 + f, 3, 222.5 + e - f];
+    var wakeUpYposArray = [
+      140 - a - c,
+      -136 - a,
+      -152 - a,
+      -93 - a,
+      133 - a - c,
+      138 - a - c,
+    ];
+    var danceXposArray = [-247 + f, 3, 233 - f, -252 + f, 1, 268 - f];
+    var danceYposArray = [
+      142 - a - c,
+      -134 - a,
+      -152 - a,
+      -95 - a,
+      154 - a - c,
+      144 - a - c,
+    ];
     var danceDurationArray = [0.7, 0.46, 0.5, 0.5, 0.5, 0.6];
 
     ////////////
     for (var i = 0; i < 6; i++) {
       var shadow = Renderer.CreateSprite(Game.BackgroundSheet, "ShadowMC", {
         alpha: 0.66,
-        scaleX: 1.08,
+        scaleX: 1.08 * x,
         scaleY: 0.18,
         position: { X: shadowXposArray[i], Y: shadowYposArray[i] },
         parent: this.RobotContainer,
@@ -141,7 +177,7 @@
       RobotAsleepArray.push(
         Renderer.CreateSprite(self.RobotAsleepSpriteSheet, "loop", {
           alpha: 1,
-          scale: 1,
+          scale: x,
           position: { X: asleepXposArray[i], Y: asleepYposArray[i] },
           parent: self.RobotContainer,
         })
@@ -172,7 +208,7 @@
       RobotWakeUpArray.push(
         Renderer.CreateSprite(self.RobotWakeUpSpriteSheet, "loop", {
           alpha: 0,
-          scale: 1,
+          scale: x,
           position: { X: wakeUpXposArray[i], Y: wakeUpYposArray[i] },
           parent: self.RobotContainer,
         })
@@ -203,7 +239,7 @@
       RobotDanceArray.push(
         Renderer.CreateSprite(self.RobotDanceSpriteSheet, "loop", {
           alpha: 0,
-          scale: 1,
+          scale: x,
           position: { X: danceXposArray[i], Y: danceYposArray[i] },
           parent: self.RobotContainer,
         })
