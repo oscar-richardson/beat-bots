@@ -23,15 +23,21 @@
     Arpegio,
     Bass,
     Disco,
+    Distort,
     Drumbox,
     FirstOffset = 0.2,
+    Flang,
+    HighPass,
     Limit = 0.05,
+    LowPass,
     LoopInstanceArray = [],
-    Offset = 0.15,
+    PingPong,
+    SubsequentOffset = 0.15,
     PreviousMinimPosition = 0,
     Rec,
     RecordingInProgress = false,
     Recordings = [false, false, false, false, false, false],
+    RingMod,
     RobotAsleepArray = [],
     RobotDanceArray = [],
     RobotDancing = [false, false, false, false, false, false],
@@ -66,12 +72,16 @@
   var GetRecordings = function () {
     for (var i = 0; i < 6; i++) {
       if (Recordings[i]) {
-        LoopInstanceArray[i] = new Howl({
-          src: [Recordings[i]],
-          format: ["wav"],
+        let Offset =
+          RecordingInProgress && i == RobotSelected
+            ? FirstOffset
+            : SubsequentOffset;
+        var newSound = new Pizzicato.Sound(Recordings[i], function () {
+          // Sound loaded!
+          newSound.play(0, Math.min(Drumbox.position / 1000, Limit) + Offset);
         });
-        LoopInstanceArray[i].play();
-        if (RecordingInProgress && i == RobotSelected) {
+        LoopInstanceArray[i] = newSound;
+        /* if (RecordingInProgress && i == RobotSelected) {
           LoopInstanceArray[i].seek(
             Math.min(Drumbox.position / 1000, Limit) + FirstOffset
           );
@@ -79,9 +89,9 @@
           LoopInstanceArray[i].seek(
             Math.min(Drumbox.position / 1000, Limit) + Offset
           );
-        }
+        } */
         if (!RobotDancing[i]) {
-          LoopInstanceArray[i].volume(0);
+          LoopInstanceArray[i].volume = 0;
         }
       }
     }
@@ -276,7 +286,7 @@
           for (var i = 0; i < 6; i++) {
             if (Recordings[i]) {
               LoopInstanceArray[i].seek(
-                Math.min(Drumbox.position / 1000, Limit) + Offset
+                Math.min(Drumbox.position / 1000, Limit) + SubsequentOffset
               );
             }
           }
@@ -292,10 +302,12 @@
           chunks = [];
           const audioURL = window.URL.createObjectURL(blob);
           Recordings[RobotSelected] = audioURL;
+          console.log(RecordingInProgress);
           GetRecordings();
           RecordingInProgress = false;
+          console.log(RecordingInProgress);
           console.log("Stopped recording");
-          // console.log(audioURL);
+          console.log(audioURL);
         };
         CRobots.prototype.Record = function (number) {
           RobotSelected = number;
@@ -322,7 +334,7 @@
       if (AboutToRecord) {
         Rec.start();
         Recordings[RobotSelected] = false;
-        if (LoopInstanceArray[RobotSelected].hasOwnProperty("setVolume")) {
+        if (true) {
           LoopInstanceArray[RobotSelected].volume = 0;
         } else {
           LoopInstanceArray[RobotSelected].volume(0);
@@ -339,7 +351,7 @@
   //-----------------------------------------------------------------------------------------------
 
   CRobots.prototype.Revert = function (number) {
-    if (LoopInstanceArray[number].hasOwnProperty("setVolume")) {
+    if (true) {
       LoopInstanceArray[number].volume = 0;
     } else {
       LoopInstanceArray[number].volume(0);
@@ -412,6 +424,37 @@
 
     Drumbox.on("loop", this.OnLoop);
 
+    HighPass = Pizzicato.Effects.HighPassFilter({
+      frequency: 350,
+      peak: 1,
+    });
+    RingMod = new Pizzicato.Effects.RingModulator({
+      speed: 30,
+      distortion: 1,
+      mix: 0.5,
+    });
+    Flang = new Pizzicato.Effects.Flanger({
+      time: 0.45,
+      speed: 0.2,
+      depth: 0.1,
+      feedback: 0.1,
+      mix: 0.5,
+    });
+    LowPass = new Pizzicato.Effects.LowPassFilter({
+      frequency: 350,
+      peak: 1,
+    });
+    PingPong = new Pizzicato.Effects.PingPongDelay({
+      feedback: 0.5,
+      time: 0.3,
+      mix: 0.5,
+    });
+    Distort = new Pizzicato.Effects.Distortion({
+      gain: 0.5,
+    });
+
+    EffectsArray = [HighPass, RingMod, Flang, LowPass, PingPong, Distort];
+
     gsap.ticker.add(tick);
 
     let MinimDuration = Drumbox.duration / 16;
@@ -458,7 +501,7 @@
       RobotWakeUpArray[number].alpha = 1;
 
       gsap.delayedCall(1, function () {
-        if (LoopInstanceArray[number].hasOwnProperty("setVolume")) {
+        if (true) {
           LoopInstanceArray[number].volume = 1;
         } else {
           LoopInstanceArray[number].volume(1);
@@ -507,7 +550,7 @@
       });
 
       gsap.delayedCall(0.01, function () {
-        if (LoopInstanceArray[number].hasOwnProperty("setVolume")) {
+        if (true) {
           LoopInstanceArray[number].volume = 0;
         } else {
           LoopInstanceArray[number].volume(0);
