@@ -1,5 +1,4 @@
 //-----------------------------------------------------------------------------------------------
-var instance;
 
 (function () {
   "use strict";
@@ -272,6 +271,9 @@ var instance;
           Tinkle.position = 0;
           Disco.position = 0;
           PlayRecordings();
+          LoopInstanceArray[RobotSelected].volume = 0;
+          LoopInstanceArray[RobotSelected] = beablib.Audio.Play("");
+          RecordingInProgress = true;
           console.log(
             "Started recording onto Robot number " + (RobotSelected + 1)
           );
@@ -280,21 +282,24 @@ var instance;
           chunks.push(e.data);
         };
         Rec.onstop = function (e) {
-          const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
-          const audioURL = window.URL.createObjectURL(blob);
-          let NewRecording = new Pizzicato.Sound(audioURL, function () {
-            NewRecording.addEffect(EffectsArray[RobotSelected]);
-            LoopInstanceArray[RobotSelected] = NewRecording;
-            if (!RobotDancing[RobotSelected]) {
-              LoopInstanceArray[RobotSelected].volume = 0;
+          LoopInstanceArray[RobotSelected] = new Pizzicato.Sound(
+            window.URL.createObjectURL(
+              new Blob(chunks, { type: "audio/ogg; codecs=opus" })
+            ),
+            function () {
+              LoopInstanceArray[RobotSelected].addEffect(
+                EffectsArray[RobotSelected]
+              );
+              if (!RobotDancing[RobotSelected]) {
+                LoopInstanceArray[RobotSelected].volume = 0;
+              }
+              Recordings[RobotSelected] = true;
+              PlayRecordings();
+              RecordingInProgress = false;
             }
-            Recordings[RobotSelected] = true;
-            PlayRecordings();
-            RecordingInProgress = false;
-          });
+          );
           chunks = [];
           console.log("Stopped recording");
-          console.log(audioURL);
         };
         CRobots.prototype.Record = function (number) {
           RobotSelected = number;
@@ -318,11 +323,7 @@ var instance;
       Game.ReActivateRecord();
     } else if (AboutToRecord) {
       Rec.start();
-      LoopInstanceArray[RobotSelected].volume = 0;
-      LoopInstanceArray[RobotSelected] = beablib.Audio.Play("");
-      Recordings[RobotSelected] = false;
       AboutToRecord = false;
-      RecordingInProgress = true;
     } else {
       PlayRecordings();
     }
