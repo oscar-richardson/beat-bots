@@ -334,12 +334,7 @@
   //-----------------------------------------------------------------------------------------------
 
   CRobots.prototype.Revert = function (number) {
-    if (true) {
-      LoopInstanceArray[number].volume = 0;
-    } else {
-      LoopInstanceArray[number].volume(0);
-      console.log("Reverted Robot number " + (number + 1) + " to default");
-    }
+    LoopInstanceArray[number].volume = 0;
     LoopInstanceArray[number] = [
       Drumbox,
       Arpegio,
@@ -484,11 +479,7 @@
       RobotWakeUpArray[number].alpha = 1;
 
       gsap.delayedCall(1, function () {
-        if (true) {
-          LoopInstanceArray[number].volume = 1;
-        } else {
-          LoopInstanceArray[number].volume(1);
-        }
+        LoopInstanceArray[number].volume = 1;
       });
 
       ///// set this duration as a variable /////
@@ -533,11 +524,7 @@
       });
 
       gsap.delayedCall(0.01, function () {
-        if (true) {
-          LoopInstanceArray[number].volume = 0;
-        } else {
-          LoopInstanceArray[number].volume(0);
-        }
+        LoopInstanceArray[number].volume = 0;
       });
 
       RobotDancing[number] = false;
