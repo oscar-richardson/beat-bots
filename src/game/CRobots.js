@@ -25,6 +25,7 @@
     Disco,
     Distort,
     Drumbox,
+    EffectsArray,
     FirstOffset = 0.2,
     Flang,
     HighPass,
@@ -72,24 +73,16 @@
   var GetRecordings = function () {
     for (var i = 0; i < 6; i++) {
       if (Recordings[i]) {
+        let Effect = EffectsArray[i];
         let Offset =
           RecordingInProgress && i == RobotSelected
             ? FirstOffset
             : SubsequentOffset;
         var newSound = new Pizzicato.Sound(Recordings[i], function () {
-          // Sound loaded!
+          newSound.addEffect(Effect);
           newSound.play(0, Math.min(Drumbox.position / 1000, Limit) + Offset);
         });
         LoopInstanceArray[i] = newSound;
-        /* if (RecordingInProgress && i == RobotSelected) {
-          LoopInstanceArray[i].seek(
-            Math.min(Drumbox.position / 1000, Limit) + FirstOffset
-          );
-        } else {
-          LoopInstanceArray[i].seek(
-            Math.min(Drumbox.position / 1000, Limit) + Offset
-          );
-        } */
         if (!RobotDancing[i]) {
           LoopInstanceArray[i].volume = 0;
         }
@@ -285,7 +278,8 @@
           Disco.position = 0;
           for (var i = 0; i < 6; i++) {
             if (Recordings[i]) {
-              LoopInstanceArray[i].seek(
+              LoopInstanceArray[i].play(
+                0,
                 Math.min(Drumbox.position / 1000, Limit) + SubsequentOffset
               );
             }
@@ -424,7 +418,7 @@
 
     Drumbox.on("loop", this.OnLoop);
 
-    HighPass = Pizzicato.Effects.HighPassFilter({
+    HighPass = new Pizzicato.Effects.HighPassFilter({
       frequency: 350,
       peak: 1,
     });
