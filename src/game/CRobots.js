@@ -78,8 +78,9 @@
           RecordingInProgress && i == RobotSelected
             ? FirstOffset
             : SubsequentOffset;
-        var newSound = new Pizzicato.Sound(Recordings[i], function () {
+        let newSound = new Pizzicato.Sound(Recordings[i], function () {
           newSound.addEffect(Effect);
+          console.log(newSound);
           newSound.play(0, Math.min(Drumbox.position / 1000, Limit) + Offset);
         });
         LoopInstanceArray[i] = newSound;
