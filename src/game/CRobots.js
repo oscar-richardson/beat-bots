@@ -1,4 +1,5 @@
 //-----------------------------------------------------------------------------------------------
+var instance;
 
 (function () {
   "use strict";
@@ -70,23 +71,16 @@
     TheStage.SetDirty();
   };
 
-  var GetRecordings = function () {
+  var PlayRecordings = function () {
     for (var i = 0; i < 6; i++) {
       if (Recordings[i]) {
-        let Effect = EffectsArray[i];
-        let Offset =
-          RecordingInProgress && i == RobotSelected
+        LoopInstanceArray[i].play(
+          0,
+          Math.min(Drumbox.position / 1000, Limit) + RecordingInProgress &&
+            i == RobotSelected
             ? FirstOffset
-            : SubsequentOffset;
-        let newSound = new Pizzicato.Sound(Recordings[i], function () {
-          newSound.addEffect(Effect);
-          console.log(newSound);
-          newSound.play(0, Math.min(Drumbox.position / 1000, Limit) + Offset);
-        });
-        LoopInstanceArray[i] = newSound;
-        if (!RobotDancing[i]) {
-          LoopInstanceArray[i].volume = 0;
-        }
+            : SubsequentOffset
+        );
       }
     }
   };
@@ -277,14 +271,7 @@
           Bass.position = 0;
           Tinkle.position = 0;
           Disco.position = 0;
-          for (var i = 0; i < 6; i++) {
-            if (Recordings[i]) {
-              LoopInstanceArray[i].play(
-                0,
-                Math.min(Drumbox.position / 1000, Limit) + SubsequentOffset
-              );
-            }
-          }
+          PlayRecordings();
           console.log(
             "Started recording onto Robot number " + (RobotSelected + 1)
           );
@@ -294,13 +281,18 @@
         };
         Rec.onstop = function (e) {
           const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
-          chunks = [];
           const audioURL = window.URL.createObjectURL(blob);
-          Recordings[RobotSelected] = audioURL;
-          console.log(RecordingInProgress);
-          GetRecordings();
-          RecordingInProgress = false;
-          console.log(RecordingInProgress);
+          let NewRecording = new Pizzicato.Sound(audioURL, function () {
+            NewRecording.addEffect(EffectsArray[RobotSelected]);
+            LoopInstanceArray[RobotSelected] = NewRecording;
+            if (!RobotDancing[RobotSelected]) {
+              LoopInstanceArray[RobotSelected].volume = 0;
+            }
+            Recordings[RobotSelected] = true;
+            PlayRecordings();
+            RecordingInProgress = false;
+          });
+          chunks = [];
           console.log("Stopped recording");
           console.log(audioURL);
         };
@@ -324,20 +316,15 @@
     if (RecordingInProgress) {
       Rec.stop();
       Game.ReActivateRecord();
+    } else if (AboutToRecord) {
+      Rec.start();
+      LoopInstanceArray[RobotSelected].volume = 0;
+      LoopInstanceArray[RobotSelected] = beablib.Audio.Play("");
+      Recordings[RobotSelected] = false;
+      AboutToRecord = false;
+      RecordingInProgress = true;
     } else {
-      GetRecordings();
-      if (AboutToRecord) {
-        Rec.start();
-        Recordings[RobotSelected] = false;
-        if (true) {
-          LoopInstanceArray[RobotSelected].volume = 0;
-        } else {
-          LoopInstanceArray[RobotSelected].volume(0);
-        }
-        LoopInstanceArray[RobotSelected] = beablib.Audio.Play("");
-        AboutToRecord = false;
-        RecordingInProgress = true;
-      }
+      PlayRecordings();
     }
 
     console.warn("LOOP");
