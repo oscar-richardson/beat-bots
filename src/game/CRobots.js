@@ -22,6 +22,10 @@
   var AboutToRecord = false,
     Arpegio,
     Bass,
+    CONFIG = {
+      duration: 0.1,
+      fps: 50,
+    },
     Disco,
     Distort,
     Drumbox,
@@ -97,9 +101,6 @@
     const DATA_ARR = new Uint8Array(ANALYSER.frequencyBinCount);
     // Connect the analyser
     SOURCE.connect(ANALYSER);
-    const CONFIG = {
-      duration: 0.1,
-    };
     let timeline = gsap.timeline();
     const BARS = [];
     const BAR_WIDTH = 4;
@@ -111,7 +112,7 @@
         max_height: 0.8,
       },
       pixelsPerSecond: PIXELS_PER_SECOND,
-      barDelay: (1 / PIXELS_PER_SECOND) * BAR_WIDTH,
+      barDelay: 1 / CONFIG.fps,
     };
     const drawBar = ({ x, size }) => {
       const POINT_X = x - BAR_WIDTH / 2;
@@ -140,7 +141,9 @@
           {
             x: `-=${455 + VIZ_CONFIG.bar.width}`,
             ease: "none",
-            duration: 450 / VIZ_CONFIG.pixelsPerSecond,
+            duration:
+              (455 + VIZ_CONFIG.bar.width) /
+              (VIZ_CONFIG.bar.width * CONFIG.fps),
           },
           BARS.length * VIZ_CONFIG.barDelay
         );
@@ -526,6 +529,7 @@
 
     EffectsArray = [HighPass, RingMod, Flang, LowPass, PingPong, Distort];
 
+    gsap.ticker.fps(CONFIG.fps);
     gsap.ticker.add(tick);
 
     let MinimDuration = Drumbox.duration / 16;
