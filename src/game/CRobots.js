@@ -28,6 +28,7 @@
     EffectsArray,
     FirstOffset = 0.2,
     Flang,
+    graphics,
     HighPass,
     Limit = 0.05,
     LowPass,
@@ -94,7 +95,10 @@
 
     this.RobotContainer = Renderer.CreateContainer({ alpha: 0 });
 
+    this.WaveformContainer = Renderer.CreateContainer({ alpha: 0 });
+
     TheStage.addChild(this.RobotContainer);
+    TheStage.addChild(this.WaveformContainer);
 
     let x = 0.75;
     let a = 50;
@@ -243,6 +247,13 @@
       );
     });
 
+    graphics = new PIXI.Graphics();
+    graphics.beginFill(404055);
+    graphics.lineStyle(5, 0o00000);
+    graphics.drawRect(-225, 200, 450, 75);
+
+    this.WaveformContainer.addChild(graphics);
+
     var update = function () {
       TheStage.SetDirty();
     }.bind(this);
@@ -358,6 +369,12 @@
     );
     this.RobotContainer.SetScale(scale);
 
+    this.WaveformContainer.SetPosition(
+      TheStage.View.HalfWidth,
+      TheStage.View.HalfHeight
+    );
+    this.WaveformContainer.SetScale(scale);
+
     UpdateStage();
   };
 
@@ -369,6 +386,13 @@
     }.bind(this);
 
     gsap.to(this.RobotContainer, {
+      duration: 1,
+      alpha: 1,
+      ease: Quad.easeOut, // Quad.easeOut probably deprecated!
+      onUpdate: update,
+    });
+
+    gsap.to(this.WaveformContainer, {
       duration: 1,
       alpha: 1,
       ease: Quad.easeOut, // Quad.easeOut probably deprecated!
