@@ -64,6 +64,7 @@
       "wakeUp6",
     ],
     Strings,
+    mytext,
     Tinkle;
 
   //	Functions.
@@ -83,6 +84,32 @@
         );
       }
     }
+  };
+
+  var ANALYSE = (stream) => {
+    // Create an AudioContext
+    const CONTEXT = new AudioContext();
+    // Create the Analyser
+    const ANALYSER = CONTEXT.createAnalyser();
+    // Connect a media stream source to connect to the analyser
+    const SOURCE = CONTEXT.createMediaStreamSource(stream);
+    // Create a Uint8Array based on the frequencyBinCount(fftSize / 2)
+    const DATA_ARR = new Uint8Array(ANALYSER.frequencyBinCount);
+    // Connect the analyser
+    SOURCE.connect(ANALYSER);
+    // REPORT is a function run on each animation frame until recording === false
+    const REPORT = () => {
+      ANALYSER.getByteFrequencyData(DATA_ARR);
+      const VOLUME = Math.floor((Math.max(...DATA_ARR) / 255) * 100);
+      mytext.text = `${VOLUME}%`;
+      if (RecordingInProgress) requestAnimationFrame(REPORT);
+      else {
+        CONTEXT.close();
+        mytext.text = "0%";
+      }
+    };
+    // Initiate reporting
+    REPORT();
   };
 
   //-----------------------------------------------------------------------------------------------
@@ -252,7 +279,17 @@
     graphics.lineStyle(5, 0o00000);
     graphics.drawRect(-225, 200, 450, 75);
 
+    mytext = new PIXI.Text("This is a PixiJS text", {
+      fontFamily: "Arial",
+      fontSize: 24,
+      fill: 0xff1010,
+      align: "center",
+    });
+
     this.WaveformContainer.addChild(graphics);
+    this.WaveformContainer.addChild(mytext);
+
+    mytext.text = "0%";
 
     var update = function () {
       TheStage.SetDirty();
@@ -285,6 +322,8 @@
           LoopInstanceArray[RobotSelected].volume = 0;
           LoopInstanceArray[RobotSelected] = beablib.Audio.Play("");
           RecordingInProgress = true;
+          const STREAM = Rec.stream;
+          ANALYSE(STREAM);
           console.log(
             "Started recording onto Robot number " + (RobotSelected + 1)
           );
