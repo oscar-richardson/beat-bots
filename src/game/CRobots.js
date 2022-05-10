@@ -105,6 +105,7 @@
         width: 4,
         min_height: 0.04,
         max_height: 0.8,
+        gap: 2,
       },
       pixelsPerSecond: PIXELS_PER_SECOND,
       barDelay: 1 / CONFIG.fps,
@@ -137,7 +138,7 @@
             ease: "none",
             duration:
               (455 + VIZ_CONFIG.bar.width) /
-              (VIZ_CONFIG.bar.width * CONFIG.fps),
+              ((VIZ_CONFIG.bar.width + VIZ_CONFIG.bar.gap) * CONFIG.fps),
           },
           BARS.length * VIZ_CONFIG.barDelay
         );
