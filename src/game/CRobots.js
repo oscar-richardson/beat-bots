@@ -91,15 +91,10 @@
   };
 
   var ANALYSE = (stream) => {
-    // Create an AudioContext
     const CONTEXT = new AudioContext();
-    // Create the Analyser
     const ANALYSER = CONTEXT.createAnalyser();
-    // Connect a media stream source to connect to the analyser
     const SOURCE = CONTEXT.createMediaStreamSource(stream);
-    // Create a Uint8Array based on the frequencyBinCount(fftSize / 2)
     const DATA_ARR = new Uint8Array(ANALYSER.frequencyBinCount);
-    // Connect the analyser
     SOURCE.connect(ANALYSER);
     let timeline = gsap.timeline();
     const BARS = [];
@@ -130,7 +125,6 @@
       if (RecordingInProgress) {
         ANALYSER.getByteFrequencyData(DATA_ARR);
         const VOLUME = Math.floor((Math.max(...DATA_ARR) / 255) * 100);
-        // At this point create a bar and have it added to the timeline
         const BAR = {
           x: 225 + VIZ_CONFIG.bar.width / 2,
           size: gsap.utils.mapRange(0, 100, 5, 75 * 0.8)(VOLUME),
