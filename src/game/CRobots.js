@@ -64,8 +64,8 @@
       "wakeUp6",
     ],
     Strings,
-    mytext,
-    Tinkle;
+    Tinkle,
+    vis;
 
   //	Functions.
   var UpdateStage = function () {
@@ -97,19 +97,38 @@
     const DATA_ARR = new Uint8Array(ANALYSER.frequencyBinCount);
     // Connect the analyser
     SOURCE.connect(ANALYSER);
-    // REPORT is a function run on each animation frame until recording === false
-    const REPORT = () => {
-      ANALYSER.getByteFrequencyData(DATA_ARR);
-      const VOLUME = Math.floor((Math.max(...DATA_ARR) / 255) * 100);
-      mytext.text = `${VOLUME}%`;
-      if (RecordingInProgress) requestAnimationFrame(REPORT);
-      else {
-        CONTEXT.close();
-        mytext.text = "0%";
-      }
+    const CONFIG = {
+      duration: 0.1,
     };
-    // Initiate reporting
-    REPORT();
+    const SQUARE = {
+      size: 75,
+      scale: 1,
+    };
+    const drawSquare = () => {
+      const SQUARE_SIZE = SQUARE.scale * SQUARE.size;
+      const SQUARE_POINT = SQUARE_SIZE / 2;
+      vis.clear();
+      vis.beginFill(PIXI.utils.rgb2hex([SQUARE.scale, 0.5, 1 - SQUARE.scale]));
+      vis.drawRect(
+        0 - SQUARE_POINT,
+        237.5 - SQUARE_POINT,
+        SQUARE_SIZE,
+        SQUARE_SIZE
+      );
+    };
+    const REPORT = () => {
+      if (RecordingInProgress) {
+        ANALYSER.getByteFrequencyData(DATA_ARR);
+        const VOLUME = Math.floor((Math.max(...DATA_ARR) / 255) * 100);
+        gsap.to(SQUARE, {
+          duration: CONFIG.duration,
+          scale: VOLUME / 100,
+        });
+      }
+      // render square
+      drawSquare();
+    };
+    gsap.ticker.add(REPORT);
   };
 
   //-----------------------------------------------------------------------------------------------
@@ -279,17 +298,10 @@
     graphics.lineStyle(5, 0o00000);
     graphics.drawRect(-225, 200, 450, 75);
 
-    mytext = new PIXI.Text("This is a PixiJS text", {
-      fontFamily: "Arial",
-      fontSize: 24,
-      fill: 0xff1010,
-      align: "center",
-    });
+    vis = new PIXI.Graphics();
 
     this.WaveformContainer.addChild(graphics);
-    this.WaveformContainer.addChild(mytext);
-
-    mytext.text = "0%";
+    this.WaveformContainer.addChild(vis);
 
     var update = function () {
       TheStage.SetDirty();
