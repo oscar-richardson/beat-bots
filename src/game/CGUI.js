@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------------------------
 
 (function () {
-  "use strict";
+  ("use strict");
 
   //-----------------------------------------------------------------------------------------------
   //	Const-ish.
@@ -50,11 +50,14 @@
 
     this.RecordingBtnContainer = Renderer.CreateContainer({ alpha: 1 });
 
+    this.WaveformContainer = Renderer.CreateContainer({ alpha: 1 });
+
     //	...& add it to the stage.
     TheStage.addChild(this.LogoContainer);
     TheStage.addChild(this.RobotBtnContainer);
     TheStage.addChild(this.ModeBtnContainer);
     TheStage.addChild(this.RecordingBtnContainer);
+    TheStage.addChild(this.WaveformContainer);
 
     this.StartBtn = Renderer.CreateSprite(Game.BackgroundSheet, "Background", {
       alpha: 0.01,
@@ -131,6 +134,12 @@
     );
     this.RecordingBtnContainer.SetScale(scale);
 
+    this.WaveformContainer.SetPosition(
+      TheStage.View.HalfWidth,
+      TheStage.View.HalfHeight
+    );
+    this.WaveformContainer.SetScale(scale);
+
     UpdateStage();
   };
 
@@ -172,6 +181,7 @@
     this.SetUpRobotBtns();
     this.SetUpModeBtns();
     this.SetUpRecordingBtns();
+    this.SetUpWaveform();
 
     Game.InitRobots();
 
@@ -274,6 +284,19 @@
 
     RevertBtn.SetButtonMode(true, this.RevertClicked, this, false);
     RecordBtn.SetButtonMode(true, this.RecordClicked, this, false);
+
+    UpdateStage();
+  };
+
+  //-----------------------------------------------------------------------------------------------
+
+  CGUI.prototype.SetUpWaveform = function () {
+    var graphics = new PIXI.Graphics();
+    graphics.beginFill(404055);
+    graphics.lineStyle(5, 000000);
+    graphics.drawRect(-225, 200, 450, 75);
+
+    this.WaveformContainer.addChild(graphics);
 
     UpdateStage();
   };
