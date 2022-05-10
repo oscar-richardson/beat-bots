@@ -100,33 +100,52 @@
     const CONFIG = {
       duration: 0.1,
     };
-    const SQUARE = {
-      size: 75,
-      scale: 1,
+    let timeline = gsap.timeline();
+    const BARS = [];
+    const BAR_WIDTH = 4;
+    const PIXELS_PER_SECOND = 100;
+    const VIZ_CONFIG = {
+      bar: {
+        width: 4,
+        min_height: 0.04,
+        max_height: 0.8,
+      },
+      pixelsPerSecond: PIXELS_PER_SECOND,
+      barDelay: (1 / PIXELS_PER_SECOND) * BAR_WIDTH,
     };
-    const drawSquare = () => {
-      const SQUARE_SIZE = SQUARE.scale * SQUARE.size;
-      const SQUARE_POINT = SQUARE_SIZE / 2;
+    const drawBar = ({ x, size }) => {
+      const POINT_X = x - BAR_WIDTH / 2;
+      const POINT_Y = 237.5 - size / 2;
+      vis.beginFill(0xffffff);
+      vis.drawRect(POINT_X, POINT_Y, BAR_WIDTH, size);
+    };
+    const drawBars = () => {
       vis.clear();
-      vis.beginFill(PIXI.utils.rgb2hex([SQUARE.scale, 0.5, 1 - SQUARE.scale]));
-      vis.drawRect(
-        0 - SQUARE_POINT,
-        237.5 - SQUARE_POINT,
-        SQUARE_SIZE,
-        SQUARE_SIZE
-      );
+      for (const BAR of BARS) {
+        drawBar(BAR);
+      }
     };
     const REPORT = () => {
       if (RecordingInProgress) {
         ANALYSER.getByteFrequencyData(DATA_ARR);
         const VOLUME = Math.floor((Math.max(...DATA_ARR) / 255) * 100);
-        gsap.to(SQUARE, {
-          duration: CONFIG.duration,
-          scale: VOLUME / 100,
-        });
+        // At this point create a bar and have it added to the timeline
+        const BAR = {
+          x: 225 + VIZ_CONFIG.bar.width / 2,
+          size: gsap.utils.mapRange(0, 100, 5, 75 * 0.8)(VOLUME),
+        };
+        BARS.push(BAR);
+        timeline.to(
+          BAR,
+          {
+            x: `-=${455 + VIZ_CONFIG.bar.width}`,
+            ease: "none",
+            duration: 450 / VIZ_CONFIG.pixelsPerSecond,
+          },
+          BARS.length * VIZ_CONFIG.barDelay
+        );
+        drawBars();
       }
-      // render square
-      drawSquare();
     };
     gsap.ticker.add(REPORT);
   };
@@ -295,7 +314,6 @@
 
     graphics = new PIXI.Graphics();
     graphics.beginFill(404055);
-    graphics.lineStyle(5, 0o00000);
     graphics.drawRect(-225, 200, 450, 75);
 
     vis = new PIXI.Graphics();
