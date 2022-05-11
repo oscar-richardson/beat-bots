@@ -20,6 +20,7 @@
 
   //  Game data.
   var AboutToRecord = false,
+    Analyser,
     Arpegio,
     Bass,
     CONFIG = {
@@ -29,19 +30,23 @@
     Disco,
     Distort,
     Drumbox,
+    DrumboxDuration,
     EffectsArray,
     FirstOffset = 0.2,
     Flang,
+    FrequencyDataArray,
     graphics,
     HighPass,
     Limit = 0.05,
     LowPass,
     LoopInstanceArray = [],
+    PositionArray = [],
+    MinimDuration,
     PingPong,
     Playhead,
     SubsequentOffset = 0.15,
-    PreviousMinimPosition = 0,
-    Rec,
+    PreviousPosition = 0,
+    Recorder,
     RecordingInProgress = false,
     Recordings = [false, false, false, false, false, false],
     RingMod,
@@ -89,65 +94,6 @@
         );
       }
     }
-  };
-
-  var ANALYSE = (stream) => {
-    const CONTEXT = new AudioContext();
-    const ANALYSER = CONTEXT.createAnalyser();
-    const SOURCE = CONTEXT.createMediaStreamSource(stream);
-    const DATA_ARR = new Uint8Array(ANALYSER.frequencyBinCount);
-    SOURCE.connect(ANALYSER);
-    let timeline = gsap.timeline();
-    const BARS = [];
-    const BAR_WIDTH = 2;
-    const PIXELS_PER_SECOND = 100;
-    const VIZ_CONFIG = {
-      bar: {
-        width: 2,
-        min_height: 0.04,
-        max_height: 0.8,
-        gap: 1,
-      },
-      pixelsPerSecond: PIXELS_PER_SECOND,
-      barDelay: 1 / CONFIG.fps,
-    };
-    const drawBar = ({ x, size }) => {
-      const POINT_X = x - BAR_WIDTH / 2;
-      const POINT_Y = 237.5 - size / 2;
-      vis.beginFill(0xffffff);
-      vis.drawRect(POINT_X, POINT_Y, BAR_WIDTH, size);
-    };
-    const drawBars = () => {
-      vis.clear();
-      for (const BAR of BARS) {
-        drawBar(BAR);
-      }
-    };
-    const REPORT = () => {
-      if (false) {
-        ANALYSER.getByteFrequencyData(DATA_ARR);
-        const VOLUME = Math.floor((Math.max(...DATA_ARR) / 255) * 100);
-
-        const BAR = {
-          x: 225 + VIZ_CONFIG.bar.width / 2,
-          size: gsap.utils.mapRange(0, 100, 5, 75 * 0.8)(VOLUME),
-        };
-        BARS.push(BAR);
-        timeline.to(
-          BAR,
-          {
-            x: `-=${455 + VIZ_CONFIG.bar.width}`,
-            ease: "none",
-            duration:
-              (455 + VIZ_CONFIG.bar.width) /
-              ((VIZ_CONFIG.bar.width + VIZ_CONFIG.bar.gap) * CONFIG.fps),
-          },
-          BARS.length * VIZ_CONFIG.barDelay
-        );
-        drawBars();
-      }
-    };
-    gsap.ticker.add(REPORT);
   };
 
   //-----------------------------------------------------------------------------------------------
@@ -314,7 +260,7 @@
 
     graphics = new PIXI.Graphics();
     graphics.beginFill(404055);
-    graphics.drawRect(-225, 200, 450, 75);
+    graphics.drawRect(-224, 200, 448, 75);
 
     vis = new PIXI.Graphics();
     Playhead = new PIXI.Graphics();
@@ -341,9 +287,14 @@
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then(function (stream) {
+        Recorder = new MediaRecorder(stream);
         let chunks = [];
-        Rec = new MediaRecorder(stream);
-        Rec.onstart = function (e) {
+        const Context = new AudioContext();
+        Analyser = Context.createAnalyser();
+        FrequencyDataArray = new Uint8Array(Analyser.frequencyBinCount);
+        const Source = Context.createMediaStreamSource(stream);
+        Source.connect(Analyser);
+        Recorder.onstart = function (e) {
           Drumbox.position = 0;
           Arpegio.position = 0;
           Strings.position = 0;
@@ -354,16 +305,14 @@
           LoopInstanceArray[RobotSelected].volume = 0;
           LoopInstanceArray[RobotSelected] = beablib.Audio.Play("");
           RecordingInProgress = true;
-          const STREAM = Rec.stream;
-          ANALYSE(STREAM);
           console.log(
             "Started recording onto Robot number " + (RobotSelected + 1)
           );
         };
-        Rec.ondataavailable = function (e) {
+        Recorder.ondataavailable = function (e) {
           chunks.push(e.data);
         };
-        Rec.onstop = function (e) {
+        Recorder.onstop = function (e) {
           LoopInstanceArray[RobotSelected] = new Pizzicato.Sound(
             window.URL.createObjectURL(
               new Blob(chunks, { type: "audio/ogg; codecs=opus" })
@@ -401,10 +350,10 @@
 
   CRobots.prototype.OnLoop = function () {
     if (RecordingInProgress) {
-      Rec.stop();
+      Recorder.stop();
       Game.ReActivateRecord();
     } else if (AboutToRecord) {
-      Rec.start();
+      Recorder.start();
       AboutToRecord = false;
     } else {
       PlayRecordings();
@@ -528,41 +477,54 @@
 
     EffectsArray = [HighPass, RingMod, Flang, LowPass, PingPong, Distort];
 
-    gsap.ticker.fps(CONFIG.fps);
-    gsap.ticker.add(tick);
+    DrumboxDuration = Drumbox.duration;
 
-    let DrumboxDuration = Drumbox.duration;
-    let MinimDuration = DrumboxDuration / 16;
-    let MinimArray = [];
-
-    for (var i = 1; i <= 16; i++) {
-      MinimArray.push(i * MinimDuration);
+    for (var i = 1; i <= 224; i++) {
+      PositionArray.push((i * DrumboxDuration) / 224);
     }
 
     function tick() {
-      Playhead.clear();
-      Playhead.beginFill(0xffffff);
       let DrumboxPosition = Drumbox.position;
-      Playhead.drawRect(
-        -225 + (450 * DrumboxPosition) / DrumboxDuration,
-        200,
-        2,
-        75
-      );
-      let MinimPosition;
-      if (AboutToRecord) {
-        for (var i = 0; i < 16; i++) {
-          if (DrumboxPosition < MinimArray[i]) {
-            MinimPosition = i;
-            break;
-          }
+      let Position;
+      for (var i = 0; i < 224; i++) {
+        if (DrumboxPosition < PositionArray[i]) {
+          Position = i;
+          break;
         }
-        if (MinimPosition != PreviousMinimPosition && !isNaN(MinimPosition)) {
-          console.log("Recording starting in: " + (16 - MinimPosition));
-          PreviousMinimPosition = MinimPosition;
+      }
+      if (Position != PreviousPosition && !isNaN(Position)) {
+        PreviousPosition = Position;
+        if (AboutToRecord) {
+          Playhead.clear();
+          Playhead.beginFill(0xffa500);
+          Playhead.drawRect(-224 + Position * 2, 200, 2, 75);
+        } else if (RecordingInProgress) {
+          Playhead.clear();
+          Playhead.beginFill(0xff0000);
+          Playhead.drawRect(-224 + Position * 2, 200, 2, 75);
+          Analyser.getByteFrequencyData(FrequencyDataArray);
+          const BarHeight = gsap.utils.mapRange(
+            0,
+            100,
+            5,
+            75 * 0.8
+          )(Math.floor((Math.max(...FrequencyDataArray) / 255) * 100));
+          vis.beginFill(0xffffff);
+          vis.drawRect(
+            -224 + Position * 2,
+            237.5 - BarHeight / 2,
+            1.5,
+            BarHeight
+          );
+        } else {
+          Playhead.clear();
+          Playhead.beginFill(0x00ff00);
+          Playhead.drawRect(-224 + Position * 2, 200, 2, 75);
         }
       }
     }
+
+    gsap.ticker.add(tick);
   };
 
   //-----------------------------------------------------------------------------------------------
