@@ -38,6 +38,7 @@
     LowPass,
     LoopInstanceArray = [],
     PingPong,
+    Playhead,
     SubsequentOffset = 0.15,
     PreviousMinimPosition = 0,
     Rec,
@@ -98,14 +99,14 @@
     SOURCE.connect(ANALYSER);
     let timeline = gsap.timeline();
     const BARS = [];
-    const BAR_WIDTH = 4;
+    const BAR_WIDTH = 2;
     const PIXELS_PER_SECOND = 100;
     const VIZ_CONFIG = {
       bar: {
-        width: 4,
+        width: 2,
         min_height: 0.04,
         max_height: 0.8,
-        gap: 2,
+        gap: 1,
       },
       pixelsPerSecond: PIXELS_PER_SECOND,
       barDelay: 1 / CONFIG.fps,
@@ -123,9 +124,10 @@
       }
     };
     const REPORT = () => {
-      if (RecordingInProgress) {
+      if (false) {
         ANALYSER.getByteFrequencyData(DATA_ARR);
         const VOLUME = Math.floor((Math.max(...DATA_ARR) / 255) * 100);
+
         const BAR = {
           x: 225 + VIZ_CONFIG.bar.width / 2,
           size: gsap.utils.mapRange(0, 100, 5, 75 * 0.8)(VOLUME),
@@ -315,9 +317,11 @@
     graphics.drawRect(-225, 200, 450, 75);
 
     vis = new PIXI.Graphics();
+    Playhead = new PIXI.Graphics();
 
     this.WaveformContainer.addChild(graphics);
     this.WaveformContainer.addChild(vis);
+    this.WaveformContainer.addChild(Playhead);
 
     var update = function () {
       TheStage.SetDirty();
@@ -527,7 +531,8 @@
     gsap.ticker.fps(CONFIG.fps);
     gsap.ticker.add(tick);
 
-    let MinimDuration = Drumbox.duration / 16;
+    let DrumboxDuration = Drumbox.duration;
+    let MinimDuration = DrumboxDuration / 16;
     let MinimArray = [];
 
     for (var i = 1; i <= 16; i++) {
@@ -535,10 +540,19 @@
     }
 
     function tick() {
+      Playhead.clear();
+      Playhead.beginFill(0xffffff);
+      let DrumboxPosition = Drumbox.position;
+      Playhead.drawRect(
+        -225 + (450 * DrumboxPosition) / DrumboxDuration,
+        200,
+        2,
+        75
+      );
       let MinimPosition;
       if (AboutToRecord) {
         for (var i = 0; i < 16; i++) {
-          if (Drumbox.position < MinimArray[i]) {
+          if (DrumboxPosition < MinimArray[i]) {
             MinimPosition = i;
             break;
           }
