@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------------------------
 
 (function () {
-  "use strict";
+  ("use strict");
 
   //-----------------------------------------------------------------------------------------------
   //	Const-ish.
@@ -23,10 +23,6 @@
     Analyser,
     Arpegio,
     Bass,
-    CONFIG = {
-      duration: 0.1,
-      fps: 50,
-    },
     Disco,
     Distort,
     Drumbox,
@@ -35,13 +31,11 @@
     FirstOffset = 0.2,
     Flang,
     FrequencyDataArray,
-    graphics,
     HighPass,
     Limit = 0.05,
     LowPass,
     LoopInstanceArray = [],
     PositionArray = [],
-    MinimDuration,
     PingPong,
     Playhead,
     SubsequentOffset = 0.15,
@@ -49,6 +43,7 @@
     Recorder,
     RecordingInProgress = false,
     Recordings = [false, false, false, false, false, false],
+    Rectangle,
     RingMod,
     RobotAsleepArray = [],
     RobotDanceArray = [],
@@ -73,9 +68,9 @@
       "wakeUp9",
       "wakeUp6",
     ],
+    RobotWaveformArray,
     Strings,
-    Tinkle,
-    vis;
+    Tinkle;
 
   //	Functions.
   var UpdateStage = function () {
@@ -258,15 +253,24 @@
       );
     });
 
-    graphics = new PIXI.Graphics();
-    graphics.beginFill(404055);
-    graphics.drawRect(-224, 200, 448, 75);
-
-    vis = new PIXI.Graphics();
+    Rectangle = new PIXI.Graphics();
+    Rectangle.beginFill(404055);
+    Rectangle.drawRect(-224, 200, 448, 75);
     Playhead = new PIXI.Graphics();
+    RobotWaveformArray = [
+      new PIXI.Graphics(),
+      new PIXI.Graphics(),
+      new PIXI.Graphics(),
+      new PIXI.Graphics(),
+      new PIXI.Graphics(),
+      new PIXI.Graphics(),
+    ];
 
-    this.WaveformContainer.addChild(graphics);
-    this.WaveformContainer.addChild(vis);
+    this.WaveformContainer.addChild(Rectangle);
+    for (var i = 0; i < RobotWaveformArray.length; i++) {
+      RobotWaveformArray[i].alpha = 0;
+      this.WaveformContainer.addChild(RobotWaveformArray[i]);
+    }
     this.WaveformContainer.addChild(Playhead);
 
     var update = function () {
@@ -304,6 +308,7 @@
           PlayRecordings();
           LoopInstanceArray[RobotSelected].volume = 0;
           LoopInstanceArray[RobotSelected] = beablib.Audio.Play("");
+          RobotWaveformArray[RobotSelected].clear();
           RecordingInProgress = true;
           console.log(
             "Started recording onto Robot number " + (RobotSelected + 1)
@@ -377,6 +382,7 @@
     if (RobotDancing[number]) {
       LoopInstanceArray[number].volume = 1;
     }
+    RobotWaveformArray[number].clear();
     Recordings[number] = false;
   };
 
@@ -509,8 +515,8 @@
             5,
             75 * 0.8
           )(Math.floor((Math.max(...FrequencyDataArray) / 255) * 100));
-          vis.beginFill(0xffffff);
-          vis.drawRect(
+          RobotWaveformArray[RobotSelected].beginFill(0xffffff);
+          RobotWaveformArray[RobotSelected].drawRect(
             -224 + Position * 2,
             237.5 - BarHeight / 2,
             1.5,
@@ -613,6 +619,17 @@
       UpdateStage();
 
       return;
+    }
+  };
+
+  //-----------------------------------------------------------------------------------------------
+
+  CRobots.prototype.RobotShowWaveform = function (number) {
+    for (var i = 0; i < RobotWaveformArray.length; i++) {
+      RobotWaveformArray[i].alpha = 0;
+    }
+    if (number) {
+      RobotWaveformArray[number].alpha = 1;
     }
   };
 

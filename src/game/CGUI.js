@@ -285,6 +285,7 @@
     var numId = data.numId;
     if (RecordModeOn) {
       RobotSelected = numId;
+      Game.RobotShowWaveform(numId);
       console.log("Robot number " + (RobotSelected + 1) + " is selected");
     } else {
       if (!RobotBtnArray[numId].delayActive) {
@@ -314,6 +315,7 @@
 
   CGUI.prototype.ExitClicked = function (event) {
     if (RecordModeOn) {
+      Game.RobotShowWaveform(false);
       RecordModeOn = false;
     }
     console.log("Record mode off");
@@ -323,6 +325,7 @@
 
   CGUI.prototype.RecordModeClicked = function (event) {
     if (!RecordModeOn) {
+      Game.RobotShowWaveform(RobotSelected);
       RecordModeOn = true;
     }
     console.log("Record mode on");

@@ -140,6 +140,12 @@
 
   //-----------------------------------------------------------------------------------------------
 
+  Game.RobotShowWaveform = function (number) {
+    TheRobots.RobotShowWaveform(number);
+  };
+
+  //-----------------------------------------------------------------------------------------------
+
   Game.ReActivateRecord = function (number) {
     TheGUI.ReActivateRecord();
   };
