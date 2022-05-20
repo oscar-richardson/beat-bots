@@ -1,77 +1,71 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta
-      name="viewport"
-      content="initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, width=device-width, minimal-ui"
-    />
+    <meta name="viewport" content="initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, width=device-width, minimal-ui" />
 
-    <title>GAMENAME</title>
+    <title>Beat Bots</title>
 
-    <script src="src/thirdParty/Sound.js"></script>
-    <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"
-      integrity="sha512-6+YN/9o9BWrk6wSfGxQGpt3EUK6XeHi6yeHV+TYD2GR0Sj/cggRpXr1BrAQf0as6XslxomMUxXp2vIl+fv0QRA=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
-    <script src="src\thirdParty\howler-plugin-effect-chain.js"></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/tunajs/1.0.4/tuna-min.js"
-      integrity="sha512-ykRTxSmbfw/plgnclxkbzl6JixtMLztcXLccX2WDKjUFsLo7Io2ruAWVEZ+pxf/SD26AccS3DPykksasWPq33Q=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
+    <script src="src\thirdParty\Sound.js"></script>
+    <script src="src\thirdParty\recorder.js"></script>
     <script src="src\thirdParty\Pizzicato.js"></script>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="src\thirdParty\iwg_0_2_0.min.css"
-    />
-    <link rel="stylesheet" type="text/css" href="src/GAMENAME.css" />
-    <script src="https://www.macguffinandshemp.com/dev/client/camelot/CamelotHTML5Loader/v2/iwg_0_2_0.js"></script>
+    <link rel="stylesheet" type="text/css" href="src\thirdParty\iwg_0_2_0.min.css" />
+    <link rel="stylesheet" type="text/css" href="src\thirdParty\GAMENAME.css" />
 
     <script>
-      var queue = new createjs.LoadQueue();
-      queue.loadManifest([
-        { src: "src/imports/audio/CleanTines_1.wav", id: "Arpegio" },
-        { src: "src/imports/audio/EightiesBass_1.wav", id: "Bass" },
-        { src: "src/imports/audio/IndieDisco_1.wav", id: "Disco" },
-        { src: "src/imports/audio/SweetElectricPad_1.wav", id: "Tinkle" },
-        { src: "src/imports/audio/SynthPopStrings_1.wav", id: "Strings" },
-        { src: "src/imports/audio/Techno808_1.wav", id: "Drumbox" },
-      ]);
-
-      var params = {};
-      params.orientation = "L";
-      params.isWager = false;
-      params.id = "00000000000005900010";
-      params.gameUrl = "/gth/GetGameFeed/000000004TQCQ";
-      params.endUrl = "/gth/gametesting/playoutMovie.do";
-      params.ticketCreateUrl = "";
-      params.globalPath = "";
-      params.globalPath = "";
-      params.gamePath = "";
-      params.ticketType = "xml";
-      params.qualityHi = true;
-      params.offline = true;
-      params.oLp = undefined;
-      //set to fix size on desktop
-      params.width = "960";
-      params.height = "640";
-      //set to see console.logs
-      params.dev = true;
-      // params.debug = true;
+        var queue = new createjs.LoadQueue();
+        queue.loadManifest([{
+            src: "src/imports/audio/CleanTines_1.wav",
+            id: "Arpeggio",
+        }, {
+            src: "src/imports/audio/EightiesBass_1.wav",
+            id: "Bass",
+        }, {
+            src: "src/imports/audio/IndieDisco_1.wav",
+            id: "Disco",
+        }, {
+            src: "src/imports/audio/SweetElectricPad_1.wav",
+            id: "Tinkle",
+        }, {
+            src: "src/imports/audio/SynthPopStrings_1.wav",
+            id: "Strings",
+        }, {
+            src: "src/imports/audio/Techno808_1.wav",
+            id: "Drumbox",
+        }, ]);
     </script>
-  </head>
+    <script src="https://www.macguffinandshemp.com/dev/client/camelot/CamelotHTML5Loader/v2/iwg_0_2_0.js"></script>
+    <script>
+        var params = {};
+        params.orientation = "L";
+        params.isWager = false;
+        params.id = "00000000000005900010";
+        params.gameUrl = "/gth/GetGameFeed/000000004TQCQ";
+        params.endUrl = "/gth/gametesting/playoutMovie.do";
+        params.ticketCreateUrl = "";
+        params.globalPath = "";
+        params.globalPath = "";
+        params.gamePath = "";
+        params.ticketType = "xml";
+        params.qualityHi = true;
+        params.offline = true;
+        params.oLp = undefined;
+        //set to fix size on desktop
+        params.width = "960";
+        params.height = "640";
+        //set to see console.logs
+        params.dev = true;
+        // params.debug = true;
+    </script>
+</head>
 
-  <body onload="window.com.camelot.core.IWGLoader.load_dev(params)">
+<body onload="window.com.camelot.core.IWGLoader.load_dev(params)">
     <div id="IWGholder">
-      <canvas id="IWGcanvas" class="IWGcanvas"></canvas>
+        <canvas id="IWGcanvas" class="IWGcanvas"></canvas>
     </div>
     <div id="wm" class="warningMessage clearfix"></div>
-  </body>
+</body>
+
 </html>

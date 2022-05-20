@@ -1,71 +1,42 @@
-//-----------------------------------------------------------------------------------------------
+(function() {
+    ("use strict");
 
-(function () {
-  "use strict";
+    var Game = beablib.Game,
+        Renderer = beablib.Renderer;
 
-  //-----------------------------------------------------------------------------------------------
-  //	Const-ish.
-  //-----------------------------------------------------------------------------------------------
+    var TheStage = null;
 
-  //-----------------------------------------------------------------------------------------------
-  //	Private statics.
-  //-----------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------
 
-  //	Beablib object aliases.
-  var Game = beablib.Game,
-    Renderer = beablib.Renderer;
+    var CBackground = function(stage) {
+        TheStage = stage;
 
-  var TheStage = null;
+        this.Background = Renderer.CreateSprite(Game.BackgroundSheet, "Background");
+        this.GUIDE = Renderer.CreateSprite(Game.BackgroundSheet, "ActiveGUIDE");
+        this.GUIDE.alpha = 0;
 
-  //-----------------------------------------------------------------------------------------------
-  //	Object definition.
-  //-----------------------------------------------------------------------------------------------
+        TheStage.addChild(this.Background);
+        TheStage.addChild(this.GUIDE);
 
-  var CBackground = function (stage) {
-    //	Make a note of the stage.
-    TheStage = stage;
+        beablib.SetRepositionable(this);
+    };
 
-    //	Create the background sprite...
-    this.Background = Renderer.CreateSprite(Game.BackgroundSheet, "Background");
-    this.GUIDE = Renderer.CreateSprite(Game.BackgroundSheet, "ActiveGUIDE");
-    this.GUIDE.alpha = 0;
+    //-----------------------------------------------------------------------------------------------
 
-    //	...& add it to the stage.
-    TheStage.addChild(this.Background);
-    TheStage.addChild(this.GUIDE);
+    CBackground.prototype.Reposition = function(scale) {
+        this.Background.SetPosition(
+            TheStage.View.HalfWidth,
+            TheStage.View.HalfHeight
+        );
+        this.Background.SetScale(scale);
 
-    //	Make sure we're repositionable.
-    beablib.SetRepositionable(this);
-  };
+        this.GUIDE.SetPosition(TheStage.View.HalfWidth, TheStage.View.HalfHeight);
+        this.GUIDE.SetScale(scale);
 
-  //-----------------------------------------------------------------------------------------------
-  //	Public.
-  //-----------------------------------------------------------------------------------------------
+        TheStage.SetDirty();
+    };
 
-  CBackground.prototype.Reposition = function (scale) {
-    this.Background.SetPosition(
-      TheStage.View.HalfWidth,
-      TheStage.View.HalfHeight
-    );
-    this.Background.SetScale(scale);
+    //-----------------------------------------------------------------------------------------------
 
-    this.GUIDE.SetPosition(TheStage.View.HalfWidth, TheStage.View.HalfHeight);
-    this.GUIDE.SetScale(scale);
-
-    TheStage.SetDirty();
-  };
-
-  //-----------------------------------------------------------------------------------------------
-  //	Statics.
-  //-----------------------------------------------------------------------------------------------
-
-  //-----------------------------------------------------------------------------------------------
-  //	Namespace path.
-  //-----------------------------------------------------------------------------------------------
-
-  Game.CBackground = CBackground;
-
-  //-----------------------------------------------------------------------------------------------
+    Game.CBackground = CBackground;
 })();
-
-//-----------------------------------------------------------------------------------------------
