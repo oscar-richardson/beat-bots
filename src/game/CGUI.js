@@ -292,9 +292,9 @@
         if (!RecordModeOn) {
             Game.RobotShowWaveform(RobotSelected);
             RecordModeOn = true;
+            console.log("Record mode on");
+            console.log("Robot number " + (RobotSelected + 1) + " is selected");
         }
-        console.log("Record mode on");
-        console.log("Robot number " + (RobotSelected + 1) + " is selected");
     };
 
     //-----------------------------------------------------------------------------------------------
